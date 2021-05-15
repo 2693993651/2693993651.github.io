@@ -58,7 +58,7 @@
 
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
-    var CONFIG = {"hostname":"2693993651.github.io","root":"/","version":"1.8.10","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null}}};
+    var CONFIG = {"hostname":"2693993651.github.io","root":"/","version":"1.8.10","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":"§ "},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null}}};
   </script>
   <script  src="/js/utils.js" ></script>
   <script  src="/js/color-schema.js" ></script>
@@ -304,7 +304,7 @@
 </li>
 </ul>
 <p>使用git创建ssh密钥，然后将这个密钥添加到github用户的账号中，这样用户即可实现用git免密登录管理gitHubl了</p>
-<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs awk"><span class="hljs-regexp">//</span>值得一提的是生成密钥的命令，常常如下：<br>  <br>ssh-keygen -t rsa -C <span class="hljs-string">&quot;你的邮箱&quot;</span><br>  <br>  <br>-t 用来指定加密算法为 rsa；<br>-C 后面是个注释信息，并不一定要和你 Git 账户的邮箱或者 Git 账户名保持一致，只是常常是和你账户邮箱保持一致，这样设置，就能知道这个公钥被绑定在哪个 Git 账户上了<br></code></pre></td></tr></table></figure></li>
+<figure class="highlight awk"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs awk"><span class="hljs-regexp">//</span>值得一提的是生成密钥的命令，常常如下：<br>  <br>ssh-keygen -t rsa -C <span class="hljs-string">&quot;你的邮箱&quot;</span><br>  <br>  <br>-t 用来指定加密算法为 rsa；<br>-C 后面是个注释信息，并不一定要和你 Git 账户的邮箱或者 Git 账户名保持一致，只是常常是和你账户邮箱保持一致，这样设置，就能知道这个公钥被绑定在哪个 Git 账户上了<br></code></pre></div></td></tr></table></figure></li>
 </ul>
 <ul>
 <li><p>使用hexo搭建博客</p>
@@ -324,7 +324,7 @@
 <p>部署文件，即将静态博客上传到服务器上。部署主要是根据在 <code>_config.yml</code> 中配置的git仓库，将博客中的文件上传至 github 或者 coding 中。然后再根据上面的 github 提供的 pages 服务呈现出页面。</p>
 <ul>
 <li><p>如果出现本地预览与部署到服务器上不同的情况，按F12发现css效果缺失，这是由于博客的config配置文件中指名一些css的地址只在localhost下是正确的，而指向服务器的仓库时是错误的，解决办法如下</p>
-<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs awk"><span class="hljs-regexp">//</span>在配置文件url那一部分中加入<br><br> root：/<br></code></pre></td></tr></table></figure>
+<figure class="highlight awk"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs awk"><span class="hljs-regexp">//</span>在配置文件url那一部分中加入<br><br> root：/<br></code></pre></div></td></tr></table></figure>
 
 <p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/imges/Blog%E6%8F%92%E5%9B%BE0.pn1" srcset="/img/loading.gif" lazyload alt="img"></p>
 <p>意思就是叫浏览器从根目录下慢慢找…不是很聪明的办法但很省事</p>
@@ -333,7 +333,7 @@
 </li>
 </ul>
 <p>​        后续将md类型的文件加入到该文件\source\_posts中即可对博客内容进行修改。具体样式还需要查看博客主题的的设置，默认的博客主题为landscape。</p>
-<figure class="highlight dts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs dts">整个流程中关于_config.yml配置的配置很关键<br>空格不能少，很坑喔<br><span class="hljs-symbol">deploy:</span> <br><span class="hljs-symbol">    type:</span> git<br><span class="hljs-symbol">    repo:</span> https:<span class="hljs-comment">//github.com/2693993651/2693993651.github.io.git</span><br><span class="hljs-symbol">    branch:</span> main<br>这个配置好之后，即可使用hexo d 命令了<br>另外，因为githu在国内很难访问，hexo的许多命令都可能因不能链接到服务器而失败，需要重试几次。而且，为了有逼格的域名与访问速度还需要去租域名，服务器（或部署gitee）<br></code></pre></td></tr></table></figure></li>
+<figure class="highlight dts"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs dts">整个流程中关于_config.yml配置的配置很关键<br>空格不能少，很坑喔<br><span class="hljs-symbol">deploy:</span> <br><span class="hljs-symbol">    type:</span> git<br><span class="hljs-symbol">    repo:</span> https:<span class="hljs-comment">//github.com/2693993651/2693993651.github.io.git</span><br><span class="hljs-symbol">    branch:</span> main<br>这个配置好之后，即可使用hexo d 命令了<br>另外，因为githu在国内很难访问，hexo的许多命令都可能因不能链接到服务器而失败，需要重试几次。而且，为了有逼格的域名与访问速度还需要去租域名，服务器（或部署gitee）<br></code></pre></div></td></tr></table></figure></li>
 </ul>
 <hr>
 <h3 id="博客的优化"><a href="#博客的优化" class="headerlink" title="博客的优化"></a>博客的优化</h3><hr>
@@ -362,7 +362,7 @@
 <p>​    <em>完成之后可在github对应仓库里的设置里查看是否有CNAME文件，网址是否已经保存</em></p>
 </li>
 <li><p>最后重新部署文件</p>
-<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs awk"><span class="hljs-regexp">//</span>即输入以下命令<br><br>hexo clean<br><span class="hljs-regexp">//</span>每次部署前都建议输入这个命令清除缓存文件和已生成的静态文件，以防修改不起作用<br>hexo g<br>hexo s<span class="hljs-regexp">//</span>先本地预览，先查看方便及时修改<br>hexo d<br></code></pre></td></tr></table></figure></li>
+<figure class="highlight awk"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs awk"><span class="hljs-regexp">//</span>即输入以下命令<br><br>hexo clean<br><span class="hljs-regexp">//</span>每次部署前都建议输入这个命令清除缓存文件和已生成的静态文件，以防修改不起作用<br>hexo g<br>hexo s<span class="hljs-regexp">//</span>先本地预览，先查看方便及时修改<br>hexo d<br></code></pre></div></td></tr></table></figure></li>
 </ul>
 <p>成功之后即可实现在浏览器中输入域名访问自己的博客了</p>
 <hr>
@@ -465,6 +465,42 @@
   
 
   
+<div>
+  <span id="timeDate">载入天数...</span>
+  <span id="times">载入时分秒...</span>
+  <script>
+  var now = new Date();
+  function createtime(){
+      var grt= new Date("05/14/2021 10:42:10");//此处修改你的建站时间或者网站上线时间
+      now.setTime(now.getTime()+250);
+      days = (now - grt ) / 1000 / 60 / 60 / 24;
+      dnum = Math.floor(days);
+      hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum);
+      hnum = Math.floor(hours);
+      if(String(hnum).length ==1 ){
+          hnum = "0" + hnum;
+      }
+      minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum);
+      mnum = Math.floor(minutes);
+      if(String(mnum).length ==1 ){
+                mnum = "0" + mnum;
+      }
+      seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum);
+      snum = Math.round(seconds);
+      if(String(snum).length ==1 ){
+                snum = "0" + snum;
+      }
+      document.getElementById("timeDate").innerHTML = "🚀 for&nbsp"+dnum+"&nbspdays";  //此次自定义显示内容
+      document.getElementById("times").innerHTML = hnum + "&nbsphr&nbsp" + mnum + "&nbspmin&nbsp" + snum + "&nbspsec";
+  }  //此次自定义显示内容
+  setInterval("createtime()",250);
+  </script>
+</div>
+<div class="text-center py-1">   
+  <div>
+    <span>Copyright © 2021</span></a>
+    <span>Egg‘s nest</span></a>    <br>
+  </div>
 </footer>
 
 
