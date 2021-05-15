@@ -1,613 +1,430 @@
+
+
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-default-color-scheme=&#34;auto&#34;>
+
+
+
 <head>
   <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
-<meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 5.4.0">
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
-  <link rel="mask-icon" href="/images/logo.svg" color="#222">
-
-<link rel="stylesheet" href="/css/main.css">
-
-
-<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
-
-<script id="hexo-configurations">
-    var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"2693993651.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
-  </script>
-
-  <meta name="description" content="俺的个人博客">
-<meta property="og:type" content="website">
-<meta property="og:title" content="蛋窝窝">
-<meta property="og:url" content="https://2693993651.github.io/index.html">
-<meta property="og:site_name" content="蛋窝窝">
-<meta property="og:description" content="俺的个人博客">
-<meta property="og:locale" content="zh_CN">
-<meta property="article:author" content="陈恒伟">
-<meta property="article:tag" content="Blog">
-<meta name="twitter:card" content="summary">
-
-<link rel="canonical" href="https://2693993651.github.io/">
-
-
-<script id="page-configurations">
-  // https://hexo.io/docs/variables.html
-  CONFIG.page = {
-    sidebar: "",
-    isHome : true,
-    isPost : false,
-    lang   : 'zh-CN'
-  };
-</script>
-
-  <title>蛋窝窝</title>
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
   
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="俺的个人博客">
+  <meta name="author" content="陈恒伟">
+  <meta name="keywords" content="Blog">
+  
+  <title>蛋窝窝</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
 
 
 
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
 
 
 
-  <noscript>
-  <style>
-  .use-motion .brand,
-  .use-motion .menu-item,
-  .sidebar-inner,
-  .use-motion .post-block,
-  .use-motion .pagination,
-  .use-motion .comments,
-  .use-motion .post-header,
-  .use-motion .post-body,
-  .use-motion .collection-header { opacity: initial; }
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
 
-  .use-motion .site-title,
-  .use-motion .site-subtitle {
-    opacity: initial;
-    top: initial;
-  }
 
-  .use-motion .logo-line-before i { left: initial; }
-  .use-motion .logo-line-after i { right: initial; }
-  </style>
-</noscript>
+<link  rel="stylesheet" href="/css/main.css" />
 
-</head>
+<!-- 自定义样式保持在最底部 -->
 
-<body itemscope itemtype="http://schema.org/WebPage">
-  <div class="container use-motion">
-    <div class="headband"></div>
 
-    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
-      <div class="header-inner"><div class="site-brand-container">
-  <div class="site-nav-toggle">
-    <div class="toggle" aria-label="切换导航栏">
-      <span class="toggle-line toggle-line-first"></span>
-      <span class="toggle-line toggle-line-middle"></span>
-      <span class="toggle-line toggle-line-last"></span>
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"2693993651.github.io","root":"/","version":"1.8.10","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null}}};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body>
+  <header style="height: 100vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>Fluid</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" data-toggle="modal" data-target="#modalSearch">&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;</a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
     </div>
   </div>
-
-  <div class="site-meta">
-
-    <a href="/" class="brand" rel="start">
-      <span class="logo-line-before"><i></i></span>
-      <h1 class="site-title">蛋窝窝</h1>
-      <span class="logo-line-after"><i></i></span>
-    </a>
-      <p class="site-subtitle" itemprop="description">欢迎~</p>
-  </div>
-
-  <div class="site-nav-right">
-    <div class="toggle popup-trigger">
-    </div>
-  </div>
-</div>
-
-
-
-
-<nav class="site-nav">
-  <ul id="menu" class="main-menu menu">
-        <li class="menu-item menu-item-home">
-
-    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
-
-  </li>
-        <li class="menu-item menu-item-tags">
-
-    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
-
-  </li>
-        <li class="menu-item menu-item-categories">
-
-    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
-
-  </li>
-        <li class="menu-item menu-item-archives">
-
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
-
-  </li>
-  </ul>
 </nav>
 
-
-
-
-</div>
-    </header>
-
-    
-  <div class="back-to-top">
-    <i class="fa fa-arrow-up"></i>
-    <span>0%</span>
-  </div>
-
-
-    <main class="main">
-      <div class="main-inner">
-        <div class="content-wrap">
-          
-
-          <div class="content index posts-expand">
-            
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://2693993651.github.io/2021/05/14/helloworld/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/imges/winter.jpg">
-      <meta itemprop="name" content="陈恒伟">
-      <meta itemprop="description" content="俺的个人博客">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="蛋窝窝">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/05/14/helloworld/" class="post-title-link" itemprop="url">helloworld!</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="An elegant Material-Design theme for Hexo">
               
-
-              <time title="创建时间：2021-05-14 20:38:07 / 修改时间：20:44:34" itemprop="dateCreated datePublished" datetime="2021-05-14T20:38:07+08:00">2021-05-14</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AE%9E%E9%AA%8C/" itemprop="url" rel="index"><span itemprop="name">实验</span></a>
-                </span>
             </span>
 
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="十分是否搜索"><a href="#十分是否搜索" class="headerlink" title="十分是否搜索"></a>十分是否搜索</h1><p>收费的公司</p>
-<p>是粉色粉色给阿迪王</p>
-<p>大王发发生</p>
-<p>阿瓦达沃达丰</p>
-<p>啊打发</p>
-<p>方式vd</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://2693993651.github.io/2021/05/11/%E5%8D%9A%E5%AE%A2%E7%9A%84%E6%90%AD%E5%BB%BA/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/imges/winter.jpg">
-      <meta itemprop="name" content="陈恒伟">
-      <meta itemprop="description" content="俺的个人博客">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="蛋窝窝">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/05/11/%E5%8D%9A%E5%AE%A2%E7%9A%84%E6%90%AD%E5%BB%BA/" class="post-title-link" itemprop="url">未命名</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-05-11 21:34:59" itemprop="dateCreated datePublished" datetime="2021-05-11T21:34:59+08:00">2021-05-11</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-05-14 20:34:18" itemprop="dateModified" datetime="2021-05-14T20:34:18+08:00">2021-05-14</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h3 id="搭建自己的博客"><a href="#搭建自己的博客" class="headerlink" title="搭建自己的博客"></a>搭建自己的博客</h3><hr>
-<p><em>记录一下自己第一次搭建静态博客的经历</em></p>
-<h6 id="本文不会记录详细的操作过程-只是整理流程与记录心得"><a href="#本文不会记录详细的操作过程-只是整理流程与记录心得" class="headerlink" title="本文不会记录详细的操作过程,只是整理流程与记录心得 ^_^"></a>本文不会记录详细的操作过程,只是整理流程与记录心得 ^_^</h6><hr>
-<h3 id="开始之前"><a href="#开始之前" class="headerlink" title="开始之前"></a>开始之前</h3><hr>
-<ul>
-<li><p>所用主机</p>
-<ul>
-<li>win10</li>
-</ul>
-</li>
-<li><p>所用软件</p>
-<ul>
-<li><p>git </p>
-<ul>
-<li><p>git是什么？</p>
-<p>​        版本控制工具，方便在不同版本进行切换修改，类似文件分不同时间备份让后需要时找回其中一份代替，同时git所带的<code>git bash</code>方便用户在windows下使用git命令的模拟终端（windows自带的cmd功能太弱）linux、unix可以直接使用git。</p>
-</li>
-</ul>
-</li>
-<li><p>node.js(JavaScript 运行环境,)</p>
-</li>
-<li><p>随node.js一同安装的包管理工具npm,使用npm安装的模块hexo</p>
-<ul>
-<li><p>什么是包管理工具？ </p>
-<p>​      也叫包管理器,它允许用户在操作系统上安装、删除、升级、配置和管理软件包。软件包管理器可以是像“软件中心”这样的图形化应用，也可以是像 <a target="_blank" rel="noopener" href="https://itsfoss.com/apt-vs-apt-get-difference/">    apt-get</a> 或 <a target="_blank" rel="noopener" href="https://itsfoss.com/pacman-command/">pacman</a> 这样的命令行工具,python中的pip即为一种包管理工具。</p>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<ul>
-<li><p>所借助的平台</p>
-<ul>
-<li><p>github</p>
-<ul>
-<li><p>github是什么？</p>
-<p><del>同性交友网站</del></p>
-<p>利用git进行代码管理的托管平台</p>
-</li>
-<li><p>为什么选择github?</p>
-<p>github有一个很有爱的项目,叫做<code>github pages</code>,这个项目是给开发者建立一个私人页面,所以许多人都拿来搭博客用了,在创建仓库的时候将仓库名名为:用户名.github.io时开启</p>
-<p>即用github pages项目代替了服务器,缺点就是功能不完全,只能控制小部分范围,但这对搭建个人静态博客够用了,用码云gitee同理。</p>
-</li>
-</ul>
-</li>
-</ul>
-<p>​    </p>
-</li>
-</ul>
-<hr>
-<h3 id="实现原理"><a href="#实现原理" class="headerlink" title="实现原理"></a>实现原理</h3><hr>
-<p><em>简单来说就是在本地计算机搭建Hexo环境，Hexo通过generate命令将*.md文件渲染成静态的html页面，然后Hexo通过deploy命令触发git用户通过公钥免密登陆服务器(这里的github即作为托管服务器)，进而将静态页面推送到服务器的git仓库（repository）中。然后，服务器再通过钩子（git-hooks） 将静态页面checkout到网站的根目录下，进而实现博客的自动部署。</em></p>
-<hr>
-<h3 id="实际流程"><a href="#实际流程" class="headerlink" title="实际流程"></a>实际流程</h3><hr>
-<ul>
-<li><p>下载git,配置用户信息</p>
-<p>这里需要配置用户名和邮箱,这里的信息并不是起权限验证的作用,其中一个作用是为了记录操作过程，就是方便给人看的，如记录某某上传了什么或者干了别的什么。可以随便输入用户名和邮箱但不推荐。</p>
-</li>
-<li><p>将git与github进行ssh key链接</p>
-<ul>
-<li><p><em>为什么这里会有一个小圆圈呢，这是由于我的强迫症和markdown语法冲突产生的….</em></p>
-<ul>
-<li><p><em>SSH 为 Secure Shell （安全外壳协议）的缩写，SSH 是较可靠，专为远程登录会话和其他网络服务提供安全性的协议。利用 SSH 协议可以有效防止远程管理过程中的信息泄露问题。即可用ssh协议远程登陆主机，这里的远程主机即为github仓库。</em></p>
-</li>
-<li><p>为什么GitHub需要SSH Key呢？因为GitHub需要识别出你推送的提交确实是你推送的，而不是别人冒充的，而Git支持SSH协议，所以，GitHub只要知道了你的公钥，就可以确认只有你自己才能推送。</p>
-<p>当然，GitHub允许你添加多个Key。假定你有若干电脑，你一会儿在公司提           交，一会儿在家里提交，只要把每台电脑的Key都添加到GitHub，就可以在每台电脑上往GitHub推送了。</p>
-</li>
-</ul>
-</li>
-</ul>
-<p>使用git创建ssh密钥，然后将这个密钥添加到github用户的账号中，这样用户即可实现用git免密登录管理gitHubl了</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">//值得一提的是生成密钥的命令，常常如下：</span><br><span class="line">  </span><br><span class="line">ssh-keygen -t rsa -C &quot;你的邮箱&quot;</span><br><span class="line">  </span><br><span class="line">  </span><br><span class="line">-t 用来指定加密算法为 rsa；</span><br><span class="line">-C 后面是个注释信息，并不一定要和你 Git 账户的邮箱或者 Git 账户名保持一致，只是常常是和你账户邮箱保持一致，这样设置，就能知道这个公钥被绑定在哪个 Git 账户上了</span><br></pre></td></tr></table></figure></li>
-</ul>
-<ul>
-<li><p>使用hexo搭建博客</p>
-<p>通过在git bash 中使用一些hexo命令。即可实现博客的搭建与上传。</p>
-<p>hexo的工作流程：</p>
-<ul>
-<li><p>hexo  init  文件名 ：</p>
-<p>​        创建一个初始化的文件，里面有搭建hexo博客所需的基本文件，后续操作以及关于博客的修改都在这个文件中进行。</p>
-</li>
-<li><p>hexo g：</p>
-<p>​        生成静态文件。将我们的数据和界面相结合生成静态文件的过程。会遍历主题文件中的 <code>source</code> 文件夹（js、css、img 等静态资源），然后建立索引，然后根据索引生成 <code>pubild</code> 文件夹中，此时的 <code>publid</code> 文件是由 html、 js、css、img 建立的纯静态文件可以通过 <code>index.html</code> 作为入口访问你的博客。</p>
-</li>
-<li><p>hexo s:</p>
-<p>生成本地预览文件，通过浏览器搜索localhost:4000即可查看生成的静态博客* *</p>
-</li>
-<li><p>hexo d：</p>
-<p>部署文件，即将静态博客上传到服务器上。部署主要是根据在 <code>_config.yml</code> 中配置的git仓库，将博客中的文件上传至 github 或者 coding 中。然后再根据上面的 github 提供的 pages 服务呈现出页面。</p>
-<ul>
-<li><p>如果出现本地预览与部署到服务器上不同的情况，按F12发现css效果缺失，这是由于博客的config配置文件中指名一些css的地址只在localhost下是正确的，而指向服务器的仓库时是错误的，解决办法如下</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">//在配置文件url那一部分中加入</span><br><span class="line"></span><br><span class="line"> root：/</span><br></pre></td></tr></table></figure>
-
-<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/imges/Blog%E6%8F%92%E5%9B%BE0.pn1" alt="img"></p>
-<p>意思就是叫浏览器从根目录下慢慢找…不是很聪明的办法但很省事</p>
-</li>
-</ul>
-</li>
-</ul>
-<p>​        后续将md类型的文件加入到该文件\source\_posts中即可对博客内容进行修改。具体样式还需要查看博客主题的的设置，默认的博客主题为landscape。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">整个流程中关于_config.yml配置的配置很关键</span><br><span class="line">空格不能少，很坑喔</span><br><span class="line">deploy: </span><br><span class="line">    type: git</span><br><span class="line">    repo: https://github.com/2693993651/2693993651.github.io.git</span><br><span class="line">    branch: main</span><br><span class="line">这个配置好之后，即可使用hexo d 命令了</span><br><span class="line">另外，因为githu在国内很难访问，hexo的许多命令都可能因不能链接到服务器而失败，需要重试几次。而且，为了有逼格的域名与访问速度还需要去租域名，服务器（或部署gitee）</span><br></pre></td></tr></table></figure></li>
-</ul>
-<hr>
-<h3 id="博客的优化"><a href="#博客的优化" class="headerlink" title="博客的优化"></a>博客的优化</h3><hr>
-<ul>
-<li><p>关于主题</p>
-<p>需要下载主题并配置，关于博客的优化还需要查阅所选主题的官方文档来进行操作</p>
-</li>
-</ul>
-<hr>
-<h3 id="购买域名"><a href="#购买域名" class="headerlink" title="购买域名"></a>购买域名</h3><hr>
-<p>万网上注册账号，买一个域名</p>
-<ul>
-<li><p>在万网控制台添加解析记录</p>
-<p>这里的解析记录有两条分别为CNAME和A记录</p>
-<ul>
-<li><p>CNAME</p>
-<p>购买的域名  ——&gt; 用户名.github.io</p>
-</li>
-<li><p>A</p>
-</li>
-</ul>
-</li>
-</ul>
-<ul>
-<li><p>在博客文件夹里的source里添加CNAME文件，里面写上购买的域名</p>
-<p>​    <em>完成之后可在github对应仓库里的设置里查看是否有CNAME文件，网址是否已经保存</em></p>
-</li>
-<li><p>最后重新部署文件</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">//即输入以下命令</span><br><span class="line"></span><br><span class="line">hexo clean</span><br><span class="line">//每次部署前都建议输入这个命令清除缓存文件和已生成的静态文件，以防修改不起作用</span><br><span class="line">hexo g</span><br><span class="line">hexo s//先本地预览，先查看方便及时修改</span><br><span class="line">hexo d</span><br></pre></td></tr></table></figure></li>
-</ul>
-<p>成功之后即可实现在浏览器中输入域名访问自己的博客了</p>
-<hr>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-
-  
-
-
-
+            
           </div>
+
           
-
-<script>
-  window.addEventListener('tabs:register', () => {
-    let { activeClass } = CONFIG.comments;
-    if (CONFIG.comments.storage) {
-      activeClass = localStorage.getItem('comments_active') || activeClass;
-    }
-    if (activeClass) {
-      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
-      if (activeTab) {
-        activeTab.click();
-      }
-    }
-  });
-  if (CONFIG.comments.storage) {
-    window.addEventListener('tabs:click', event => {
-      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
-      let commentClass = event.target.classList[1];
-      localStorage.setItem('comments_active', commentClass);
-    });
-  }
-</script>
-
+            <div class="scroll-down-bar">
+              <i class="iconfont icon-arrowdown"></i>
+            </div>
+          
         </div>
-          
-  
-  <div class="toggle sidebar-toggle">
-    <span class="toggle-line toggle-line-first"></span>
-    <span class="toggle-line toggle-line-middle"></span>
-    <span class="toggle-line toggle-line-last"></span>
-  </div>
-
-  <aside class="sidebar">
-    <div class="sidebar-inner">
-
-      <ul class="sidebar-nav motion-element">
-        <li class="sidebar-nav-toc">
-          文章目录
-        </li>
-        <li class="sidebar-nav-overview">
-          站点概览
-        </li>
-      </ul>
-
-      <!--noindex-->
-      <div class="post-toc-wrap sidebar-panel">
       </div>
-      <!--/noindex-->
+    </div>
+  </header>
 
-      <div class="site-overview-wrap sidebar-panel">
-        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <img class="site-author-image" itemprop="image" alt="陈恒伟"
-      src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/imges/winter.jpg">
-  <p class="site-author-name" itemprop="name">陈恒伟</p>
-  <div class="site-description" itemprop="description">俺的个人博客</div>
-</div>
-<div class="site-state-wrap motion-element">
-  <nav class="site-state">
-      <div class="site-state-item site-state-posts">
-          <a href="/archives/">
+  <main>
+    
+      <div class="container nopadding-x-md">
+        <div class="py-5" id="board"
+          style=margin-top:0>
+          
+          <div class="container">
+            <div class="row">
+              <div class="col-12 col-md-10 m-auto">
+                
+
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
         
-          <span class="site-state-item-count">2</span>
-          <span class="site-state-item-name">日志</span>
+        <a href="/2021/05/14/helloworld/" target="_self">
+          helloworld!
         </a>
-      </div>
-      <div class="site-state-item site-state-categories">
-            <a href="/categories/">
+      </h1>
+
+      <p class="index-excerpt">
+        <a href="/2021/05/14/helloworld/" target="_self">
           
-        <span class="site-state-item-count">1</span>
-        <span class="site-state-item-name">分类</span></a>
-      </div>
-      <div class="site-state-item site-state-tags">
-            <a href="/tags/">
           
-        <span class="site-state-item-count">2</span>
-        <span class="site-state-item-name">标签</span></a>
+            
+          
+          十分是否搜索收费的公司
+是粉色粉色给阿迪王
+大王发发生
+阿瓦达沃达丰
+啊打发
+方式vd
+
+阿迪王啊
+
+
+123456title: helloworld!date: 2021-05-14 20:38:07tags:  - 叭叭叭  - 啦啦啦categories: 实验ada 
+
+title: helloworld!date: 2021-05-14 20:38:07tags:
+
+叭叭叭
+啦啦啦cat
+        </a>
+      </p>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2021-05-14 20:38" pubdate>
+              2021-05-14
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
+            
+              <a href="/categories/%E5%AE%9E%E9%AA%8C/">实验</a>
+            
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/%E5%8F%AD%E5%8F%AD%E5%8F%AD/">叭叭叭</a>
+            
+              <a href="/tags/%E5%95%A6%E5%95%A6%E5%95%A6/">啦啦啦</a>
+            
+          </div>
+        
       </div>
-  </nav>
-</div>
-  <div class="links-of-author motion-element">
-      <span class="links-of-author-item">
-        <a href="https://github.com/2693993651" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;2693993651" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
-      </span>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2021/05/11/%E5%8D%9A%E5%AE%A2%E7%9A%84%E6%90%AD%E5%BB%BA/" target="_self">
+          
+        </a>
+      </h1>
+
+      <p class="index-excerpt">
+        <a href="/2021/05/11/%E5%8D%9A%E5%AE%A2%E7%9A%84%E6%90%AD%E5%BB%BA/" target="_self">
+          
+          
+            
+          
+          搭建自己的博客
+记录一下自己第一次搭建静态博客的经历
+本文不会记录详细的操作过程,只是整理流程与记录心得 ^_^
+        </a>
+      </p>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2021-05-11 21:34" pubdate>
+              2021-05-11
+            </time>
+          </div>
+        
+        
+        
+      </div>
+    </article>
   </div>
 
 
-  <div class="links-of-blogroll motion-element">
-    <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
-      Links
+
+
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+
+    
+      <a id="scroll-top-button" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
     </div>
-    <ul class="links-of-blogroll-list">
-        <li class="links-of-blogroll-item">
-          <a href="https://qm.qq.com/cgi-bin/qm/qr?k=bCuien_5ZZkNaKAhEW1MEb2TMGbgjjsl&noverify=0" title="https:&#x2F;&#x2F;qm.qq.com&#x2F;cgi-bin&#x2F;qm&#x2F;qr?k&#x3D;bCuien_5ZZkNaKAhEW1MEb2TMGbgjjsl&amp;noverify&#x3D;0" rel="noopener" target="_blank">QQ</a>
-        </li>
-    </ul>
   </div>
-
-      </div>
-
-    </div>
-  </aside>
-  <div id="sidebar-dimmer"></div>
-
-
-      </div>
-    </main>
-
-    <footer class="footer">
-      <div class="footer-inner">
-        
-
-        
-
-<div class="copyright">
-  
-  &copy; 
-  <span itemprop="copyrightYear">2021</span>
-  <span class="with-love">
-    <i class="fa fa-heart"></i>
-  </span>
-  <span class="author" itemprop="copyrightHolder">陈恒伟</span>
 </div>
-  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
   </div>
-
-        
-
-
-
-
-
-
-
-
-      </div>
-    </footer>
-  </div>
-
   
-  <script src="/lib/anime.min.js"></script>
-  <script src="/lib/velocity/velocity.min.js"></script>
-  <script src="/lib/velocity/velocity.ui.min.js"></script>
-
-<script src="/js/utils.js"></script>
-
-<script src="/js/motion.js"></script>
-
-
-<script src="/js/schemes/pisces.js"></script>
-
-
-<script src="/js/next-boot.js"></script>
-
-
-
 
   
 
+  
+</footer>
 
 
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
 
 
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
 
 
-
-
-
-
-
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
 
 
 
   
 
-  
+
+
+
+
+
+
+
+
+  <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2.0.8/dist/clipboard.min.js" ></script>
+
+
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2.0.11/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+      typing(title)
+      
+    })(window, document);
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    (function () {
+      var path = "/local-search.xml";
+      $('#local-search-input').on('click', function() {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      });
+      $('#modalSearch').on('shown.bs.modal', function() {
+        $('#local-search-input').focus();
+      });
+    })()
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
 
 </body>
 </html>
