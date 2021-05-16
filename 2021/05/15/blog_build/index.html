@@ -16,7 +16,8 @@
   <meta name="theme-color" content="#2f4154">
   <meta name="description" content="
 记录一下自己第一次搭建静态博客的经历
-本文不会记录详细的操作过程,只是整理流程与记录心得 ^_^">
+本文不会记录详细的操作过程,只是整理流程与记录心得 ^_^
+">
   <meta name="author" content="Eggs">
   <meta name="keywords" content="Blog">
   
@@ -214,7 +215,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      23
+      24
        分钟
     </span>
   
@@ -249,7 +250,8 @@
             <div class="markdown-body">
               <hr>
 <p><em>记录一下自己第一次搭建静态博客的经历</em></p>
-<h6 id="本文不会记录详细的操作过程-只是整理流程与记录心得"><a href="#本文不会记录详细的操作过程-只是整理流程与记录心得" class="headerlink" title="本文不会记录详细的操作过程,只是整理流程与记录心得 ^_^"></a>本文不会记录详细的操作过程,只是整理流程与记录心得 ^_^</h6><hr>
+<p><strong>本文不会记录详细的操作过程,只是整理流程与记录心得 ^_^</strong></p>
+<hr>
 <span id="more"></span> 
 
 <h3 id="开始之前"><a href="#开始之前" class="headerlink" title="开始之前"></a>开始之前</h3><hr>
@@ -364,10 +366,13 @@
 
 <p>另：可顺便执行hexo new page “about”命令，完善博客的模块结构，以上三条命令执行后博客就会有三个新模块生效了，分别是分类，标签，关于。而执行之前这三个模块是不能启用的,甚至在启用某些主题时页面完全失效。</p>
 <p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/imges/illustration01.png" srcset="/img/loading.gif" lazyload></p>
-<figure class="highlight awk"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs awk"><span class="hljs-regexp">//</span>建议用下条命令生成新文章<br>hexo new 文章名<br><span class="hljs-regexp">//</span>执行后会在_post文件夹下生成一个新的md文件，虽然前文说到之间把新的md文件拖到这个文件夹也许，但还是建议用这个命令生成之后，再对这个文件修改，以下为原因<br></code></pre></div></td></tr></table></figure>
+<figure class="highlight awk"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs awk"><span class="hljs-regexp">//</span>建议用下条命令生成新文章<br>hexo n [布局名称] &lt;文档名称&gt;<br></code></pre></div></td></tr></table></figure>
 
-<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/imges/illustration02.png" srcset="/img/loading.gif" lazyload></p>
-<p>​            这样生成的文章有标准的开头格式，方便对文章进行规范与整理，还能顺手加个封面</p>
+<p>其中布局名称可以省略，如果省略则默认为post布局。对post进行修改或者创建新的布局，在写文章时会方便很多</p>
+<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/imges/blog_illustration.png" srcset="/img/loading.gif" lazyload></p>
+<p>执行后会在_post文件夹下生成一个新的md文件，虽然前文说到之间把新的md文件拖到这个文件夹也许，但还是建议用这个命令生成之后，再对这个文件修改，以下为原因：<img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/imges/illustration02.png" srcset="/img/loading.gif" lazyload></p>
+<p>​            </p>
+<p>这样生成的文章有自己规范的开头格式，方便对文章进行规范与整理，还能顺手加个封面</p>
 </li>
 <li><p>关于主题</p>
 <p>需要下载主题并配置，关于博客的优化还需要查阅所选主题的官方文档来进行操作，去goole看看别人是怎么使用这个主题的会有很大帮助。另外要记得搭建博客的初心啊！！写文章就好不需要太花哨</p>
@@ -408,6 +413,8 @@
                     
                       <a class="hover-with-bg" href="/categories/%E5%AD%A6%E4%B9%A0/">学习</a>
                     
+                      <a class="hover-with-bg" href="/categories/%E5%AD%A6%E4%B9%A0/%E8%AF%BE%E5%A4%96/">课外</a>
+                    
                   </div>
                 
                 
@@ -415,8 +422,6 @@
                     <i class="iconfont icon-tags"></i>
                     
                       <a class="hover-with-bg" href="/tags/%E8%BD%BB%E9%87%8F%E7%BA%A7/">轻量级</a>
-                    
-                      <a class="hover-with-bg" href="/tags/Blog/">Blog</a>
                     
                   </div>
                 
@@ -433,15 +438,15 @@
                   <article class="post-prev col-6">
                     
                     
+                      <a href="/2021/05/16/did-I-need-photo/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">照片</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
                   </article>
                   <article class="post-next col-6">
                     
-                    
-                      <a href="/2021/05/14/helloworld/">
-                        <span class="hidden-mobile">helloworld!</span>
-                        <span class="visible-mobile">下一篇</span>
-                        <i class="iconfont icon-arrowright"></i>
-                      </a>
                     
                   </article>
                 </div>
@@ -537,7 +542,7 @@
       if(String(snum).length ==1 ){
                 snum = "0" + snum;
       }
-      document.getElementById("timeDate").innerHTML = "🚀 for&nbsp"+dnum+"&nbspdays";  //此次自定义显示内容
+      document.getElementById("timeDate").innerHTML = "🐣 for&nbsp"+dnum+"&nbspdays";  //此次自定义显示内容
       document.getElementById("times").innerHTML = hnum + "&nbsphr&nbsp" + mnum + "&nbspmin&nbsp" + snum + "&nbspsec";
   }  //此次自定义显示内容
   setInterval("createtime()",250);
