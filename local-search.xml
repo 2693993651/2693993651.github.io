@@ -4,6 +4,52 @@
   
   
   <entry>
+    <title>temp</title>
+    <link href="/2021/05/19/temp/"/>
+    <url>/2021/05/19/temp/</url>
+    
+    <content type="html"><![CDATA[<span id="more"></span><p>巴拉巴</p><html><p>hello world!</p></html>]]></content>
+    
+    
+    <categories>
+      
+      <category>碎碎念</category>
+      
+    </categories>
+    
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>sql_injection</title>
+    <link href="/2021/05/19/sql-injection/"/>
+    <url>/2021/05/19/sql-injection/</url>
+    
+    <content type="html"><![CDATA[<span id="more"></span><ul><li><strong>判断是否有注入</strong><ul><li>可控参数的改变是否能够影响页面显示结果</li><li>输入的sql语句是否能报错——通过数据库的报错，能看到数据库的一些语句痕迹</li><li>输入的sql语句能否不报错——判断我们的语句是否能成功闭合</li></ul></li><li>什么类型的注入</li><li><strong>语句是否能够被恶意修改</strong></li><li><strong>是否能够成功执行</strong></li><li>获取我们想要的数据</li></ul>]]></content>
+    
+    
+    <categories>
+      
+      <category>学习</category>
+      
+      <category>网安</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>sql注入</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>不为五斗米取照片</title>
     <link href="/2021/05/16/did-I-need-photo/"/>
     <url>/2021/05/16/did-I-need-photo/</url>
