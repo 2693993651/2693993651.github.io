@@ -14,11 +14,12 @@
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
   <meta name="theme-color" content="#2f4154">
-  <meta name="description" content="俺的个人博客">
+  <meta name="description" content="sqli_labs，一个印度老哥搭建的sql注入的靶场。
+由于确实没啥基础，做这个题还是靠网上教程。争取总结到位，有自己的思考，能够理解。环境搭建过程省略了。因为老哥搭建这个靶场的年代偏久，所以按网上建议在虚拟机中下载的低版本phpstudy来搭建，做题中用到了火狐插件hackbar作为辅助工具。因为避免当脚本小子所以就没用一些成熟自动化的攻击工具。">
   <meta name="author" content="Eggs">
   <meta name="keywords" content="Blog">
   
-  <title>sql_injection - 蛋窝窝</title>
+  <title>SQL注入入门——sqli-labs通关历程 - 蛋窝窝</title>
 
   <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
 
@@ -158,12 +159,12 @@
 </nav>
 
     <div class="banner" id="banner" parallax=true
-         style="background: url('/img/default.png') no-repeat center center;
+         style="background: url('https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/imges/sql_injection0.png') no-repeat center center;
            background-size: cover;">
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
           <div class="page-header text-center fade-in-up">
-            <span class="h2" id="subtitle" title="sql_injection">
+            <span class="h2" id="subtitle" title="SQL注入入门——sqli-labs通关历程">
               
             </span>
 
@@ -190,7 +191,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      118 字
+      526 字
     </span>
   
 
@@ -200,7 +201,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      1
+      5
        分钟
     </span>
   
@@ -230,11 +231,15 @@
         <div class="py-5" id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">sql_injection</h1>
+            <h1 style="display: none">SQL注入入门——sqli-labs通关历程</h1>
             
             <div class="markdown-body">
-              <span id="more"></span>
+              <p>sqli_labs，一个印度老哥搭建的sql注入的靶场。</p>
+<p>由于确实没啥基础，做这个题还是靠网上教程。争取总结到位，有自己的思考，能够理解。环境搭建过程省略了。因为老哥搭建这个靶场的年代偏久，所以按网上建议在虚拟机中下载的低版本phpstudy来搭建，做题中用到了火狐插件hackbar作为辅助工具。因为避免当脚本小子所以就没用一些成熟自动化的攻击工具。</p>
+<span id="more"></span>
 
+<hr>
+<h3 id="sql注入常规流程"><a href="#sql注入常规流程" class="headerlink" title="sql注入常规流程"></a>sql注入常规流程</h3><p><em>先附上我在b站看到的一位up主总结的sql注入大体流程</em></p>
 <ul>
 <li><strong>判断是否有注入</strong><ul>
 <li>可控参数的改变是否能够影响页面显示结果</li>
@@ -242,11 +247,38 @@
 <li>输入的sql语句能否不报错——判断我们的语句是否能成功闭合</li>
 </ul>
 </li>
-<li>什么类型的注入</li>
+<li>判断是什么类型的注入</li>
 <li><strong>语句是否能够被恶意修改</strong></li>
 <li><strong>是否能够成功执行</strong></li>
 <li>获取我们想要的数据</li>
 </ul>
+<hr>
+<h3 id="心得体会"><a href="#心得体会" class="headerlink" title="心得体会"></a>心得体会</h3><hr>
+<h4 id="1-4"><a href="#1-4" class="headerlink" title="1~4"></a>1~4</h4><ul>
+<li><p>输入单双引号，观察报错信息，构造命令使语句闭合</p>
+</li>
+<li><p>使用 order by 语句判断字段数，接着union select 1,2,…观察能显示的数据</p>
+</li>
+<li><p>构造语句查询数据库的信息,以查询数据库AA中BB表的字段CC和DD为例</p>
+<p>（当然，AA,BB,CC和DD是一步步爆出来的）：</p>
+<figure class="highlight axapta"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs axapta"><span class="hljs-keyword">select</span> group_concat(schema_name) <span class="hljs-keyword">from</span> information_schema.schemata<br><br><span class="hljs-comment">//查询所有的数据库名</span><br></code></pre></div></td></tr></table></figure>
+
+
+
+<figure class="highlight csharp"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs csharp"><span class="hljs-function"><span class="hljs-keyword">select</span> <span class="hljs-title">group_concat</span>(<span class="hljs-params">table_name</span>) <span class="hljs-keyword">from</span> information_schema.tables <span class="hljs-keyword">where</span> table_schema</span>=<span class="hljs-string">&#x27;AA&#x27;</span><br><br><span class="hljs-comment">//查询名为‘AA’的数据库下所有的表名</span><br></code></pre></div></td></tr></table></figure>
+
+
+
+<figure class="highlight pgsql"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs pgsql"><span class="hljs-keyword">select</span> group_concat(<span class="hljs-built_in">column_name</span>) <span class="hljs-keyword">from</span> information_schema.<span class="hljs-keyword">columns</span> <span class="hljs-keyword">where</span> <span class="hljs-built_in">table_name</span>=<span class="hljs-string">&#x27;BB&#x27;</span><br><br>//查询名为‘BB’的表下所有的列名<br>//若不同库下有同名表下同名列，则查询时<span class="hljs-keyword">where</span>语句后加上 <span class="hljs-keyword">and</span> table_schema=<span class="hljs-string">&#x27;AA&#x27;</span><br></code></pre></div></td></tr></table></figure>
+
+
+
+<figure class="highlight axapta"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs axapta"><span class="hljs-keyword">select</span> group_concat(concat_ws(<span class="hljs-string">&#x27;~&#x27;</span>,CC,DD)) <span class="hljs-keyword">from</span> AA.BB<br><br><span class="hljs-comment">//查询 数据库AA中的BB表中字段名为CC和DD的所有数据并用‘~’隔开</span><br></code></pre></div></td></tr></table></figure></li>
+</ul>
+<hr>
+<hr>
+<h3 id="通关过程"><a href="#通关过程" class="headerlink" title="通关过程"></a>通关过程</h3><hr>
+<p>1~4  GET - Error base 类型的，没啥好说的</p>
 
             </div>
             <hr>
@@ -267,6 +299,8 @@
                     <i class="iconfont icon-tags"></i>
                     
                       <a class="hover-with-bg" href="/tags/sql%E6%B3%A8%E5%85%A5/">sql注入</a>
+                    
+                      <a class="hover-with-bg" href="/tags/%E6%B8%97%E9%80%8F/">渗透</a>
                     
                   </div>
                 
