@@ -263,8 +263,7 @@
 </ul>
 </li>
 <li><p>node.js(JavaScript 运行环境,)</p>
-</li>
-<li><p>随node.js一同安装的包管理工具npm,使用npm安装的模块hexo</p>
+<p>随node.js一同安装的包管理工具npm,使用npm安装的模块hexo</p>
 <ul>
 <li><p>什么是包管理工具？ </p>
 <p>​      也叫包管理器,它允许用户在操作系统上安装、删除、升级、配置和管理软件包。软件包管理器可以是像“软件中心”这样的图形化应用，也可以是像 <a target="_blank" rel="noopener" href="https://itsfoss.com/apt-vs-apt-get-difference/">    apt-get</a> 或 <a target="_blank" rel="noopener" href="https://itsfoss.com/pacman-command/">pacman</a> 这样的命令行工具,python中的pip即为一种包管理工具。</p>
@@ -300,27 +299,34 @@
 <h3 id="实际流程"><a href="#实际流程" class="headerlink" title="实际流程"></a>实际流程</h3><hr>
 <ul>
 <li><p>下载git,配置用户信息</p>
-<p>这里需要配置用户名和邮箱,这里的信息并不是起权限验证的作用,这么做的一个目的是为了记录操作过程，就是方便给人看的，如记录某某上传了什么或者干了别的什么。可以随便输入用户名和邮箱但不推荐。</p>
+<p>这里需要配置用户名和邮箱。而这些信息并不是起权限验证的作用,这么做的一个目的是为了记录操作过程，就是方便给人看的，如记录某某上传了什么或者干了别的什么。可以随便输入用户名和邮箱但不推荐。</p>
 </li>
+<li><p>将git与github链接在一起</p>
+<ul>
 <li><p>将git与github进行ssh key链接</p>
 <ul>
-<li><p><em>为什么这里会有一个小圆圈呢，这是由于我的强迫症和markdown语法冲突产生的….</em></p>
-<ul>
-<li><blockquote>
+<li><p>什么是ssh？</p>
+<blockquote>
 <p><em>SSH 为 Secure Shell （安全外壳协议）的缩写，SSH 是较可靠，专为远程登录会话和其他网络服务提供安全性的协议。利用 SSH 协议可以有效防止远程管理过程中的信息泄露问题。即可用ssh协议远程登陆主机，这里的远程主机即为github仓库。</em>—摘自《百度百科》</p>
 </blockquote>
 </li>
-<li><blockquote>
-<p>为什么GitHub需要SSH Key呢？因为GitHub需要识别出你推送的提交确实是你推送的，而不是别人冒充的，而Git支持SSH协议，所以，GitHub只要知道了你的公钥，就可以确认只有你自己才能推送。当然，GitHub允许你添加多个Key。假定你有若干电脑，你一会儿在公司提           交，一会儿在家里提交，只要把每台电脑的Key都添加到GitHub，就可以在每台电脑上往GitHub推送了。—摘自廖雪峰老师网站</p>
-<p>​                                                                                      </p>
+<li><p>为什么GitHub需要SSH Key呢？</p>
+<blockquote>
+<p>因为GitHub需要识别出你推送的提交确实是你推送的，而不是别人冒充的，而Git支持SSH协议，所以，GitHub只要知道了你的公钥，就可以确认只有你自己才能推送。当然，GitHub允许你添加多个Key。假定你有若干电脑，你一会儿在公司提           交，一会儿在家里提交，只要把每台电脑的Key都添加到GitHub，就可以在每台电脑上往GitHub推送了。—摘自廖雪峰老师网站</p>
 </blockquote>
+<p>​                                                                                 </p>
+</li>
+</ul>
 </li>
 </ul>
 </li>
 </ul>
 <p>使用git创建ssh密钥，然后将这个密钥添加到github用户的账号中，这样用户即可实现用git免密登录管理gitHubl了</p>
-<figure class="highlight awk"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs awk"><span class="hljs-regexp">//</span>值得一提的是生成密钥的命令，常常如下：<br>  <br>ssh-keygen -t rsa -C <span class="hljs-string">&quot;你的邮箱&quot;</span><br>  <br>  <br>-t 用来指定加密算法为 rsa；<br>-C 后面是个注释信息，并不一定要和你 Git 账户的邮箱或者 Git 账户名保持一致，只是常常是和你账户邮箱保持一致，这样设置，就能知道这个公钥被绑定在哪个 Git 账户上了<br></code></pre></div></td></tr></table></figure></li>
-</ul>
+<figure class="highlight awk"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs awk"><span class="hljs-regexp">//</span>值得一提的是生成密钥的命令，常常如下：<br><br>ssh-keygen -t rsa -C <span class="hljs-string">&quot;你的邮箱&quot;</span><br><br><br>-t 用来指定加密算法为 rsa；<br>-C 后面是个注释信息，并不一定要和你 Git 账户的邮箱或者 Git 账户名保持一致，只是常常是和你账户邮箱保持一致，这样设置，就能知道这个公钥被绑定在哪个 Git 账户上了<br></code></pre></div></td></tr></table></figure>
+
+
+
+
 <ul>
 <li><p>使用hexo搭建博客</p>
 <p>通过在git bash 中使用一些hexo命令。即可实现博客的搭建与上传。</p>
@@ -342,7 +348,7 @@
 <figure class="highlight awk"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs awk"><span class="hljs-regexp">//</span>在配置文件url那一部分中加入<br><br> root：/<br></code></pre></div></td></tr></table></figure>
 
 <p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/imges/blog_build_illustration.png" srcset="/img/loading.gif" lazyload></p>
-<p>意思就是叫浏览器从根目录下慢慢找…不是很聪明的办法但很省事</p>
+<p>意思就是叫浏览器从根目录下慢慢找… 很省事的办法（指省我的事不是省电脑的）</p>
 </li>
 </ul>
 </li>
@@ -365,15 +371,15 @@
 <p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/imges/blog_illustration.png" srcset="/img/loading.gif" lazyload></p>
 <p>hexo n 执行后会在_post文件夹下生成一个新的md文件，虽然前文说到直接把新的md文件拖到这个文件夹也行，但还是建议用hexo n命令生成文件之后，再对这个文件修改，以下为原因：<img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/imges/illustration02.png" srcset="/img/loading.gif" lazyload></p>
 <p>​            </p>
-<p>这样生成的文章有自己规范的开头格式，方便对文章进行规范与整理，还能顺手加个封面</p>
-</li>
-<li><p>关于主题</p>
-<p>需要下载主题并配置，关于博客的优化还需要查阅所选主题的官方文档来进行操作，去goole看看别人是怎么使用这个主题的会有很大帮助。另外要记得搭建博客的初心啊！！写文章就好不需要太花哨</p>
+<p>这样生成的文章有自己规范的开头格式，方便对文章进行规范与整理，还能顺手加个more标签</p>
+<p>关于主题</p>
+<p>需要下载主题并配置，关于博客的优化还需要查阅所选主题的官方文档来进行操作，去goole看看别人是怎么使用这个主题的会有很大帮助。</p>
+<p>另外要记得搭建博客的初心啊！！写文章就好不需要太花哨</p>
 </li>
 </ul>
 <hr>
 <h3 id="购买域名"><a href="#购买域名" class="headerlink" title="购买域名"></a>购买域名</h3><hr>
-<p>万网上注册账号，买一个域名</p>
+<p>域名网站上注册账号，买一个域名</p>
 <ul>
 <li><p>在万网控制台添加解析记录</p>
 <p>这里的解析记录有两条分别为CNAME和A记录</p>
