@@ -353,16 +353,16 @@
 </ul>
 </li>
 </ul>
-<p>​        后续将md类型的文件加入到该文件\source\_posts中即可对博客内容进行修改。具体样式还需要查看博客主题的的设置，默认的博客主题为landscape。</p>
+<p>​        后续将md类型的文件加入到该文件\source\_posts中即可对博客内容进行修改（不推荐这么做，后文有写原因）。具体样式还需要查看博客主题的的设置，默认的博客主题为landscape。</p>
 <figure class="highlight dts"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs dts">整个流程中关于_config.yml配置的配置很关键<br>空格不能少，很坑喔<br><span class="hljs-symbol">deploy:</span> <br><span class="hljs-symbol">    type:</span> git<br><span class="hljs-symbol">    repo:</span> https:<span class="hljs-comment">//github.com/2693993651/2693993651.github.io.git</span><br><span class="hljs-symbol">    branch:</span> main<br>这个配置好之后，即可使用hexo d 命令了<br>另外，因为githu在国内很难访问，hexo的许多命令都可能因不能链接到服务器而失败，需要重试几次。而且，为了有逼格的域名与访问速度还需要去租域名，服务器（或部署gitee）<br></code></pre></div></td></tr></table></figure></li>
 </ul>
 <hr>
 <h3 id="博客的优化"><a href="#博客的优化" class="headerlink" title="博客的优化"></a>博客的优化</h3><hr>
 <ul>
 <li><p>关于文章</p>
-<figure class="highlight haxe"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs haxe"><span class="hljs-comment">//建议写文章前先执行以下两条命令</span><br>hexo <span class="hljs-keyword">new</span> <span class="hljs-type">page</span> categories<br>hexo <span class="hljs-keyword">new</span> <span class="hljs-type">page</span> tags<br></code></pre></div></td></tr></table></figure>
+<figure class="highlight haxe"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs haxe"><span class="hljs-comment">//建议写文章前先执行以下命令</span><br>hexo <span class="hljs-keyword">new</span> <span class="hljs-type">page</span> categories<br>hexo <span class="hljs-keyword">new</span> <span class="hljs-type">page</span> tags<br>hexo <span class="hljs-keyword">new</span> <span class="hljs-type">page</span> about<br></code></pre></div></td></tr></table></figure>
 
-<p>另：可顺便执行hexo new page about命令，完善博客的模块结构，以上三条命令执行后博客就会有三个新模块生效了，分别是分类，标签，关于。而执行之前这三个模块是不能启用的,甚至在启用某些主题时页面完全失效。（关于页面还需要到对应的主题配置里面设置才能生效，如遇困难可对照主题的官方文档，因为不是所有主题的about页面设置都一样，所以官方可能会写明使用方法）</p>
+<p>执行这些命令完善博客的模块结构，以上三条命令执行后博客就会有三个新模块生效了，分别是分类，标签，关于。而执行之前这三个模块是不能启用的,甚至在启用某些主题时页面完全失效。（关于页面还需要到对应的主题配置里面设置才能生效，如遇困难可对照主题的官方文档，因为不是所有主题的about页面设置都一样，所以官方可能会写明使用方法）</p>
 <p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/imges/blog_illustration02.png" srcset="/img/loading.gif" lazyload></p>
 <p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/imges/illustration01.png" srcset="/img/loading.gif" lazyload></p>
 <figure class="highlight awk"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs awk"><span class="hljs-regexp">//</span>建议用下条命令生成新文章<br>hexo n [布局名称] &lt;文档名称&gt;<br></code></pre></div></td></tr></table></figure>
@@ -375,7 +375,7 @@
 <p>关于主题</p>
 <p>需要下载主题并配置，关于博客的优化还需要查阅所选主题的官方文档来进行操作，去goole看看别人是怎么使用这个主题的会有很大帮助。</p>
 <p>另外要记得搭建博客的初心啊！！写文章就好不需要太花哨</p>
-<p>（花里胡哨的俺也搞不来啊）</p>
+<p>（花里胡哨的俺也搞不来）</p>
 </li>
 </ul>
 <hr>
