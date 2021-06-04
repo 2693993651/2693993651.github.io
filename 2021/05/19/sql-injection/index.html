@@ -258,7 +258,7 @@
 </ul>
 <hr>
 <h3 id="通关历程"><a href="#通关历程" class="headerlink" title="通关历程"></a>通关历程</h3><hr>
-<h4 id="1-4"><a href="#1-4" class="headerlink" title="1~4"></a>1~4</h4><ul>
+<h3 id="1-4"><a href="#1-4" class="headerlink" title="1~4"></a>1~4</h3><ul>
 <li><p>输入单双引号，观察报错信息，构造命令使语句闭合</p>
 </li>
 <li><p>使用 order by 语句判断字段数，接着union select 1,2,…观察能显示的数据</p>
@@ -280,7 +280,7 @@
 <figure class="highlight n1ql"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs n1ql">... union <span class="hljs-keyword">select</span>  <span class="hljs-number">1</span>,<span class="hljs-number">2</span>, group_concat(concat_ws(<span class="hljs-string">&#x27;~&#x27;</span>,<span class="hljs-keyword">password</span>,username)) <span class="hljs-keyword">from</span> security.users %<span class="hljs-number">23</span><br><br>//查询数据库security中uers表的列<span class="hljs-keyword">password</span>和username的所有字段并用‘~’隔开<br></code></pre></div></td></tr></table></figure></li>
 </ul>
 <hr>
-<h3 id="5-6"><a href="#5-6" class="headerlink" title="5~ 6"></a>5~ 6</h3><p>输入的正常查询语句不再显示有用的信息，但报错语句仍有提示。此时根据题目类型“double injection”采用双查询注入的方法</p>
+<h3 id="5-6"><a href="#5-6" class="headerlink" title="5~6"></a>5~6</h3><p>输入的正常查询语句不再显示有用的信息，但报错语句仍有提示。此时根据题目类型“double injection”采用双查询注入的方法</p>
 <blockquote>
 <p><em>若SQL语句正确，则页面正常返回，但返回的页面中不包含任何有用的信息，而当SQL语句错误时，页面会显示SQL错误信息。在这种情况下，Double Injection是十分有用的。</em>    <img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/imges/20210529133753.png" srcset="/img/loading.gif" lazyload></p>
 <p>​                <em>———查询有关double injection的详细信息请点击这里<a target="_blank" rel="noopener" href="https://blog.werner.wiki/principle-of-double-injection-in-mysql/">Mysql中Double Injection原理浅析</a></em></p>
@@ -307,6 +307,7 @@
 <figure class="highlight n1ql"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs n1ql">...union <span class="hljs-keyword">select</span> <span class="hljs-number">1</span>,<span class="hljs-built_in">count</span>(*),concat((<span class="hljs-keyword">select</span> concat_ws(<span class="hljs-string">&#x27;~&#x27;</span>,username,<span class="hljs-keyword">password</span>)<span class="hljs-keyword">from</span> security.users <span class="hljs-keyword">limit</span> <span class="hljs-number">0</span>,<span class="hljs-number">1</span>),<span class="hljs-built_in">floor</span>(rand(<span class="hljs-number">14</span>)*<span class="hljs-number">2</span>))a <span class="hljs-keyword">from</span> information_schema.columns <span class="hljs-keyword">group</span> <span class="hljs-keyword">by</span> a %<span class="hljs-number">23</span><br>//查询security.users下第一行的username和<span class="hljs-keyword">password</span>并用“~”隔开<br></code></pre></div></td></tr></table></figure></li>
 </ul>
 <hr>
+<h3 id="7"><a href="#7" class="headerlink" title="7~"></a>7~</h3><hr>
 <h3 id="简单总结"><a href="#简单总结" class="headerlink" title="简单总结"></a>简单总结</h3><hr>
 <ul>
 <li>1~4  GET - Error base 类型，很直白的把信息都显示出来，没啥好说的。</li>
@@ -314,7 +315,7 @@
 <ul>
 <li><p>5~6  GET -double injection 类型，输入的正常查询语句不再显示有用的信息，但报错语句仍有提示。用到了mysql数据库rand,group_by,count函数结合使用的特性（bug？），原理有点复杂，就结果而言和1~4相比其实就是order by后面的步骤中，</p>
 <p><code>union select 1,2...</code> 变成了</p>
-<p><code>union select count(*),concat( (select ..), floor(rand(14)*2))as c,... from 任一一个表名 group by c) </code></p>
+<p><code>union select count(*),concat( (select ..), floor(rand(14)*2))as c,... from 任一一个表名 group by c </code></p>
 <p>另外，group_concat拼接在语句中会失效（不知道为啥），使用limit语句作为代替来查询 more than 1 row 的数据。</p>
 </li>
 </ul>
@@ -355,6 +356,12 @@
                 <div class="post-prevnext">
                   <article class="post-prev col-6">
                     
+                    
+                      <a href="/2021/06/04/cloud-music/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">原来分开的日子，你数的这么清楚</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
                     
                   </article>
                   <article class="post-next col-6">
