@@ -4,6 +4,37 @@
   
   
   <entry>
+    <title>用python编写一个sql注入脚本</title>
+    <link href="/2021/06/16/py-script-injection/"/>
+    <url>/2021/06/16/py-script-injection/</url>
+    
+    <content type="html"><![CDATA[<p>现在我已经会print（“hello world”）了，下面让我们来试下一下用python写一个sql注入的脚本吧！</p><span id="more"></span><p>不久前做到sqli-labs第八关盲注时，实在是受不了纯手注了。所以暂时搁置一段，先来学学怎么写个sql注入的自动化脚本。</p><p>虽然已经有sqlmap这种成熟的工具，但毕竟是别人的，功能再全面在某些地方也有局限。我认为与其去学怎么用别人工具还不如自己掌握技术，练练编写脚本的本事。</p><p><em>首先感谢这位老哥的博客，给了我很多帮助[<a href="https://uuzdaisuki.com/"> <strong>Leticia’s Blog</strong> </a>]</em></p><p><em>希望俺的博客以后也能帮到别人😊</em></p><hr><h3 id="能力要求："><a href="#能力要求：" class="headerlink" title="能力要求："></a>能力要求：</h3><ul><li><p>会 <code>print（“hello world”）</code>不会有人幼儿园没学过这个吧，不会吧不会吧</p><p>（开个玩笑，不过现在是真能卷，网上看到个小学生教数据库的，我大二才学数据库….）</p></li><li><p>能连上存在sql注入的靶场，我这里即sqli-labs</p><p>（我是在虚拟机环境搭建的靶场，主机运行的python环境。幸好vm虚拟机网络这方面整的好，把搭建靶场的虚拟机防火墙关了就能连上。过段时间再补补网络的知识。）</p></li></ul><h3 id="接下来要学到的："><a href="#接下来要学到的：" class="headerlink" title="接下来要学到的："></a>接下来要学到的：</h3><ul><li><strong>在盲注中使用的一系列命令</strong></li><li><strong>python 中request库的使用，其实也就是要会写个简单的爬虫</strong></li></ul><hr><h4 id="sql盲注命令部分："><a href="#sql盲注命令部分：" class="headerlink" title="sql盲注命令部分："></a>sql盲注命令部分：</h4><p><em>以下关于命令的部分内容截取自</em></p><p><em><a href="https://www.w3school.com.cn/sql/sql_functions.asp">SQL 函数 (w3school.com.cn)</a></em></p><p><em><a href="https://my.oschina.net/zz006/blog/810112">sql中substr与substring函数用法 - 周大壮 - OSCHINA - 中文开源技术交流社区</a></em></p><ul><li><p>用来截取字符串的函数：</p><ul><li><strong><code>mid()</code></strong></li></ul><p>​       </p><figure class="highlight pgsql"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs pgsql"><span class="hljs-keyword">SELECT</span> MID(<span class="hljs-built_in">column_name</span>,<span class="hljs-keyword">start</span>[,length]) <span class="hljs-keyword">FROM</span> <span class="hljs-built_in">table_name</span><br></code></pre></div></td></tr></table></figure><table><thead><tr><th align="left">参数</th><th align="left">描述</th></tr></thead><tbody><tr><td align="left">column_name</td><td align="left">必需。要提取字符的字段。</td></tr><tr><td align="left">start</td><td align="left">必需。规定开始位置（起始值是 1）。</td></tr><tr><td align="left">length</td><td align="left">可选。要返回的字符数。如果省略，则 MID() 函数返回剩余文本。</td></tr></tbody></table><p>如：</p><figure class="highlight stylus"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs stylus"><span class="hljs-function"><span class="hljs-title">mid</span><span class="hljs-params">(database()</span></span>,<span class="hljs-number">1</span>,<span class="hljs-number">1</span>)<br><span class="hljs-comment">//返回数据库第一位</span><br><span class="hljs-function"><span class="hljs-title">mid</span><span class="hljs-params">(database()</span></span>,<span class="hljs-number">1</span>,<span class="hljs-number">1</span>)&gt;<span class="hljs-string">&#x27;a&#x27;</span><br><span class="hljs-comment">//返回数据库名的第一位并与a的ascii作比较。</span><br></code></pre></div></td></tr></table></figure><ul><li><strong><code>substr()</code>和<code>substring()</code></strong></li></ul><figure class="highlight livecodeserver"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs livecodeserver">substr(<span class="hljs-keyword">string</span>,<span class="hljs-built_in">start</span>,<span class="hljs-built_in">length</span>)<br>substr(<span class="hljs-keyword">string</span>, <span class="hljs-built_in">start</span>, <span class="hljs-built_in">length</span>)<br></code></pre></div></td></tr></table></figure><p>string - 指定的要截取的字符串。<br>start - 必需，规定在字符串的何处开始。<br>正数 - 在字符串的指定位置开始<br>负数 - 在从字符串结尾的指定位置开始<br>0 - 在字符串中的第一个字符处开始<br>length - 指定要截取的字符串长度</p><p>可以看出用法同mid()类似</p><p>如：</p><figure class="highlight pgsql"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs pgsql">substr(<span class="hljs-keyword">database</span>(),<span class="hljs-number">2</span>,<span class="hljs-number">1</span>)&gt;<span class="hljs-string">&#x27;a&#x27;</span><br>//返回数据库的第二位，然后与a的ascii值比较<br>substr((<span class="hljs-keyword">SELECT</span> <span class="hljs-built_in">table_name</span> <span class="hljs-keyword">from</span> information_schema.<span class="hljs-keyword">tables</span> <span class="hljs-keyword">where</span> table_schema=<span class="hljs-type">text</span> <span class="hljs-keyword">LIMIT</span> <span class="hljs-number">0</span>,<span class="hljs-number">1</span>),<span class="hljs-number">1</span>,<span class="hljs-number">1</span>)&gt;<span class="hljs-string">&#x27;a&#x27;</span><br>//查找test数据库的第一个表名并提取表名的第一位,然后与a的ascii值作比较。<br></code></pre></div></td></tr></table></figure></li><li><p>用来针对基于时间的盲注的函数：</p><ul><li><code>sleep()</code></li></ul></li></ul><h4 id="python脚本部分："><a href="#python脚本部分：" class="headerlink" title="python脚本部分："></a>python脚本部分：</h4><ul><li><p>安装request库</p><figure class="highlight awk"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs awk">pip install request<br><span class="hljs-regexp">//</span>win <span class="hljs-number">10</span>下 ctrl+r 输入cmd 运行<br></code></pre></div></td></tr></table></figure></li></ul>]]></content>
+    
+    
+    <categories>
+      
+      <category>学习</category>
+      
+      <category>网安</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>sql注入</tag>
+      
+      <tag>渗透</tag>
+      
+      <tag>py脚本</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>俺的博客满月了！</title>
     <link href="/2021/06/13/for-a-month/"/>
     <url>/2021/06/13/for-a-month/</url>
