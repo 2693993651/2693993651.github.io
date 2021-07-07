@@ -197,7 +197,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      2.3k 字
+      2.4k 字
     </span>
   
 
@@ -207,7 +207,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      25
+      26
        分钟
     </span>
   
@@ -259,6 +259,7 @@
 <ul>
 <li><p>git是什么？</p>
 <p>​        版本控制工具，方便在不同版本进行切换修改，类似文件分不同时间备份让后需要时找回其中一份代替，同时git所带的<code>git bash</code>方便用户在windows下使用git命令的模拟终端（windows自带的cmd功能太弱）linux、unix可以直接使用git。</p>
+<p><strong>在搭建博客的过程中也主要使用的这个模拟终端的功能，甚至用于版本控制的git命令都用不上。有点像买部手机就用来当照明灯使（当然这里的git很具有适用性）。</strong></p>
 </li>
 </ul>
 </li>
@@ -295,6 +296,7 @@
 <hr>
 <h3 id="实现原理"><a href="#实现原理" class="headerlink" title="实现原理"></a>实现原理</h3><hr>
 <p><em>简单来说就是在本地计算机搭建Hexo环境，Hexo通过generate命令将*.md文件渲染成静态的html页面，然后Hexo通过deploy命令触发git用户通过公钥免密登陆服务器(这里的github即作为托管服务器)，进而将静态页面推送到服务器的git仓库（repository）中。然后，服务器再通过钩子（git-hooks） 将静态页面checkout到网站的根目录下，进而实现博客的自动部署。</em></p>
+<p><strong>就是敲几个命令，让git和hexo帮你把几件事办完了。</strong></p>
 <hr>
 <h3 id="实际流程"><a href="#实际流程" class="headerlink" title="实际流程"></a>实际流程</h3><hr>
 <ul>
@@ -321,7 +323,7 @@
 </ul>
 </li>
 </ul>
-<p>使用git创建ssh密钥，然后将这个密钥添加到github用户的账号中，这样用户即可实现用git免密登录管理gitHubl了</p>
+<p>使用git创建ssh密钥，然后将这个密钥添加到github用户的账号中，这样用户即可实现用git免密登录管理github了</p>
 <figure class="highlight awk"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs awk"><span class="hljs-regexp">//</span>值得一提的是生成密钥的命令，常常如下：<br><br>ssh-keygen -t rsa -C <span class="hljs-string">&quot;你的邮箱&quot;</span><br><br><br>-t 用来指定加密算法为 rsa；<br>-C 后面是个注释信息，并不一定要和你 Git 账户的邮箱或者 Git 账户名保持一致，只是常常是和你账户邮箱保持一致，这样设置，就能知道这个公钥被绑定在哪个 Git 账户上了<br></code></pre></div></td></tr></table></figure>
 
 
