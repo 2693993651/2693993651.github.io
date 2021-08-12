@@ -398,7 +398,7 @@
 <ul>
 <li><p>1~4 GET - Error base 类型，很直白的把信息都显示出来，没啥好说的。</p>
 </li>
-<li><p>5<del>6 GET -double 类型，输入的正常查询语句不再显示有用的信息，但报错语句仍有提示。用到了mysql数据库rand,group_by,count函数结合使用的特性（bug？），原理有点复杂，就结果而言和1</del>4相比其实就是order by后面的步骤中，</p>
+<li><p>5~6 GET -double 类型，输入的正常查询语句不再显示有用的信息，但报错语句仍有提示。用到了mysql数据库rand,group_by,count函数结合使用的特性（bug？），原理有点复杂，和前面基础类型相比，就结果而言其实就是order by后面的步骤中，</p>
 <p><code>union select 1,2...</code> 变成了</p>
 <p><code>union select count(*),concat( (select ..), floor(rand(14)*2))as c from 任一一个表名 group by c</code></p>
 <p>另外，group_concat拼接在语句中会失效（不知道为啥），使用limit语句作为代替来查询 more than 1 row 的数据。</p>
