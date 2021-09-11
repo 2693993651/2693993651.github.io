@@ -18,7 +18,7 @@
   <meta name="author" content="Eggs">
   <meta name="keywords" content="Blog">
   
-  <title>sql_ilabs闯关历程 - 蛋窝窝</title>
+  <title>sql_ilabs闯关历程第一页（1~20） - 蛋窝窝</title>
 
   <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
 
@@ -167,7 +167,7 @@
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
           <div class="page-header text-center fade-in-up">
-            <span class="h2" id="subtitle" title="sql_ilabs闯关历程">
+            <span class="h2" id="subtitle" title="sql_ilabs闯关历程第一页（1~20）">
               
             </span>
 
@@ -194,7 +194,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      4.2k 字
+      5.1k 字
     </span>
   
 
@@ -204,7 +204,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      50
+      60
        分钟
     </span>
   
@@ -234,7 +234,7 @@
         <div class="py-5" id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">sql_ilabs闯关历程</h1>
+            <h1 style="display: none">sql_ilabs闯关历程第一页（1~20）</h1>
             
             <div class="markdown-body">
               <p>sqli_labs，一个印度老哥搭建的sql注入靶场，十分方便学习SQL注入，我将在本文持续更新我的闯关历程。</p>
@@ -316,7 +316,7 @@
 <p>（正常的话应该会显示绿色的对话框提示链接成功的）</p>
 <p>因为是直接上传了木马，链接成功的话就能直接控制服务器了。sql注入这个文件上传的漏洞威胁显然是很大的，我感觉以后遇到的情况会很少。</p>
 <hr>
-<h3 id="8-10"><a href="#8-10" class="headerlink" title="8~10"></a>8~10</h3><p> 这里开始接触盲注，（盲注：后台使用了一些方法屏蔽了把偶从信息，此时无法通过报错信息进行注入的判断）同时这也是最常见的sql注入。</p>
+<h3 id="8-10"><a href="#8-10" class="headerlink" title="8~10"></a>8~10</h3><p> 这里开始接触盲注，（盲注：后台使用了一些方法屏蔽了报错信息，此时无法通过报错信息进行注入的判断）同时这也是最常见的sql注入。</p>
 <p>盲注又大概分为布尔型和时间型，其中第8关是布尔型，9、10关是时间型。</p>
 <p><strong>另外因为盲注会比较繁琐，所以有必要学会使用，编写脚本。</strong></p>
 <p>接下来我会从手注并配合python脚本的方式来完成。</p>
@@ -388,12 +388,55 @@
 
 <p><a target="_blank" rel="noopener" href="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/imges/20210725152947.png"><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/imges/20210725152947.png" srcset="/img/loading.gif" lazyload alt="img"></a></p>
 <hr>
-<h3 id="17"><a href="#17" class="headerlink" title="17"></a>17</h3><p><strong>去学查看源码</strong></p>
-<p>报错注入；</p>
-<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_43606134/article/details/106126537">(45条消息) sqli-labs-master第17关_m_ing-CSDN博客</a>；</p>
-<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/AmoBlogs/p/8673748.html%EF%BC%9B">https://www.cnblogs.com/AmoBlogs/p/8673748.html；</a></p>
+<h3 id="17"><a href="#17" class="headerlink" title="17"></a>17</h3><p><em>历时很久做到了这里，我越发觉得需要多看看php，这样看看源码应该会对闯关有很大的帮助，不然每道题都是百度谷歌必应轮流转…于是乎我看了段时间的php…然而好像并没有什么明显的帮助，网站能用到函数太多了0.0..遇到了再去了解吧…</em></p>
+<p>这道题有提示说是password reset，通过尝试登录可以发现这关会检测你输入的用户名，当用户名错误的时候会友好提示并鼓励你😤</p>
+<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/imges/20210910211641.png" srcset="/img/loading.gif" lazyload></p>
+<p>而用户名正确时会弹出不一样的界面：</p>
+<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/imges/20210910211808.png" srcset="/img/loading.gif" lazyload></p>
+<p>它会提示你密码已更新。（事实上是真的更新了，这也可能也是我无意间把这个网站的数据库中password搞没的条件..后面会提到）</p>
+<p>阅读源码可知注入点就在password处。</p>
+<p>（然而我看起来很吃力。。百度看别人的<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_43399807/article/details/116276217"> sqlilabs第17关_wh1sper、的博客-CSDN博客_sqlilabs第17关</a>）</p>
+<p>然后在password处构造一些基本的sql注入语句，都失败了。如图所示order by字段数都查不了。</p>
+<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/imges/20210910213407.png" srcset="/img/loading.gif" lazyload></p>
+<p>于是在这里又需要掌握一种新的方法——报错注入</p>
+<p>（其实第5、6关也能用报错注入，在有报错语句提示的时候也许就能用上的方法）</p>
+<p>报错注入可分别使用以下两种函数 ：</p>
+<ul>
+<li>extractvalue（）</li>
+<li> updatexml（）</li>
+</ul>
+<p>基本格式：</p>
+<figure class="highlight smali"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs smali">?id=1<span class="hljs-built_in"> and/or </span>updatexml(1,(payload),1)<br>?id=1<span class="hljs-built_in"> and/or </span>extractvalue(1,concat(0x7e,(payload),0x7e))<span class="hljs-comment">#</span><br>//仍然需要先尝试使用单双引号来先闭合语句再来构造sql注入语句<br>//extractvalue()比updatexml()少一个参数,concat()函数有时可加有时不能加，直接记住第二种是最万能的<br></code></pre></div></td></tr></table></figure>
+
+<p>在这里执行语句如下</p>
+<p>(你会发现下面三种语句好像都不是固定的语法，我找了下规则还是觉得</p>
+<p>**<code>extractvalue(1,concat(0x7e,(payload),0x7e))#</code>**这一种形式就好了)</p>
+<figure class="highlight csharp"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs csharp"><span class="hljs-comment">//查询当前数据库</span><br>passwd=<span class="hljs-number">1&#x27;</span><span class="hljs-function"><span class="hljs-keyword">and</span> <span class="hljs-title">extractvalue</span>(<span class="hljs-params"><span class="hljs-number">1</span>,concat(<span class="hljs-number">0x7e</span>,(database(</span>))))#</span><br><span class="hljs-function"><span class="hljs-comment">//查询所有的数据库名</span></span><br><span class="hljs-function">passwd</span>=<span class="hljs-number">1&#x27;</span><span class="hljs-function"><span class="hljs-keyword">and</span> <span class="hljs-title">updatexml</span>(<span class="hljs-params"><span class="hljs-number">1</span>,(<span class="hljs-keyword">select</span> group_concat(schema_name</span>) <span class="hljs-keyword">from</span> information_schema.schemata),1)#</span><br><span class="hljs-function"><span class="hljs-comment">//查user下的表名</span></span><br><span class="hljs-function">passwd</span>=<span class="hljs-number">1&#x27;</span><span class="hljs-function"><span class="hljs-keyword">and</span> <span class="hljs-title">extractvalue</span>(<span class="hljs-params"><span class="hljs-number">1</span>,(<span class="hljs-keyword">select</span> group_concat(column_name</span>) <span class="hljs-keyword">from</span> information_schema.columns <span class="hljs-keyword">where</span> table_name</span>=<span class="hljs-string">&#x27;users&#x27;</span>))<span class="hljs-meta">#</span><br></code></pre></div></td></tr></table></figure>
+
+<p><img src="C:\Users\26939\AppData\Roaming\Typora\typora-user-images\image-20210910222943565.png" srcset="/img/loading.gif" lazyload alt="image-20210910222943565"></p>
+<p> <img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/imges/20210910222833.png" srcset="/img/loading.gif" lazyload></p>
+<p>值得注意的是，这关不让直接查user表，当sql语句为    <code> and extractvalue(1,concat(0x7e,(select group_concat(username) from security.users),0x7e))#</code>会弹出如下结果：<img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/imges/20210911105416.png" srcset="/img/loading.gif" lazyload></p>
+<p>所以需要换个名字绕过</p>
+<p><code>and extractvalue(1,concat(0x7e,(select username from (select username from users)a limit 0,1),0x7e))</code></p>
+<p>另外我发现我数据库中好像所有的password都没了，像是这样。。。</p>
+<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/imges/20210911154244.png" srcset="/img/loading.gif" lazyload></p>
 <hr>
-<h3 id="18-19"><a href="#18-19" class="headerlink" title="18~19"></a>18~19</h3><hr>
+<h3 id="18-20"><a href="#18-20" class="headerlink" title="18~20"></a>18~20</h3><p>通过提示并查看源码可知第18关的注入点不在username和password上了，而在数据包的User-Agent处。</p>
+<p>通过尝试构造sql注入语句发现有报错信息，所以继续采取报错注入</p>
+<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/imges/20210911152728.png" srcset="/img/loading.gif" lazyload></p>
+<p><code>User-Agent: 1&#39;and extractvalue(1,concat(0x7e,(database()),0x7e)) and &#39;1&#39;=&#39;1</code></p>
+<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/imges/20210911152654.png" srcset="/img/loading.gif" lazyload></p>
+<p>成功查询到当前数据库名。</p>
+<p>另外这里的语句末尾并不是用注释符#闭合，而是’1‘=’1来闭合。</p>
+<p>剩下的步骤就是利用报错注入，不再重复。</p>
+<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/imges/20210911153419.png" srcset="/img/loading.gif" lazyload></p>
+<p>而第19关就从ua变成了Referer</p>
+<p><code>Referer: &#39;and extractvalue(1,concat(0x7e,(database()),0x7e))  and&#39;1&#39;=&#39;1</code></p>
+<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/imges/20210911154938.png" srcset="/img/loading.gif" lazyload></p>
+<p>不再赘述。</p>
+<p>20关是在cooki处</p>
+<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/imges/20210911155830.png" srcset="/img/loading.gif" lazyload></p>
+<hr>
 <h3 id="简单总结"><a href="#简单总结" class="headerlink" title="简单总结"></a>简单总结</h3><hr>
 <ul>
 <li><p>1~4 GET - Error base 类型，很直白的把信息都显示出来，没啥好说的。</p>
@@ -414,16 +457,22 @@
 </li>
 <li><p>9~10 GET - Blind - Time Based 类型 掌握sleep函数，并要学会写脚本解决。</p>
 <p>盲注是最常见的sql注入类型，所以有必要仔细掌握。从这开始也就要学会写脚本工具了。</p>
-<p>盲注采取的工具语句并没什么变化，知识多了截取字符与字典比较的过程，这种爆破的思路很适合用脚本解决。</p>
+<p>盲注采取的攻击语句并没什么变化，只是多了截取字符与字典比较的过程，这种爆破的思路很适合用脚本解决。</p>
 </li>
-<li><p>11~12 POST-Error Based 类型 接触到post类型的注入，最大的变化是不通过url地址栏，而是通过上传数据的表单进行注入攻击了，语句也不再通过浏览器url解析，#直接用就行。</p>
+<li><p>11~12 POST-Error Based 类型 接触到post类型的注入，最大的变化是不通过url地址栏，而是通过上传数据的表单进行注入攻击了，语句也不再通过浏览器url解析，如注释符“#”直接用而不再是用“%23”。</p>
 </li>
 <li><p>13~14 POST-double 类型。方法同get。</p>
 </li>
 <li><p>15~16 POST-Blind 类型。（虽说关卡名字说是布尔注入，但我没找到语句正确与错误时返回页面的不同，可能需要抓包来看了）。同样用python脚本解决，对python的掌握程度要求并不高。</p>
 </li>
+<li><p>17 POST-Update类型。利用已有账户，对其修改密码处注入，注入方式为报错注入。用到了extractvalue()或updatexml()函数</p>
+</li>
+<li><p>18~20 POST header/cookie 类型。就是注入的位置不在明显的页面中，而在数据包内。后面这几关都是采取的报错注入的方式。</p>
+</li>
 </ul>
 <hr>
+<p>断断续续弄了这么久，终于做完了前20关…有缘再写后面的了</p>
+<p>完结 : )🐣</p>
 
             </div>
             <hr>
