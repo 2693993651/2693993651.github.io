@@ -14,11 +14,11 @@
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
   <meta name="theme-color" content="#2f4154">
-  <meta name="description" content="艹！怎么过了半个月了！">
+  <meta name="description" content=" upload-labs,一个专门用于训练文件上传漏洞的靶场。上传漏洞,就是攻击者可上传一个可执行文件,如木马，病毒，恶意脚本，WebShell等到服务器执行，并最终获得网站控制权限的高危漏洞。">
   <meta name="author" content="Eggs">
   <meta name="keywords" content="Blog">
   
-  <title>艹！ - 蛋窝窝</title>
+  <title>upload labs通关历程 - 蛋窝窝</title>
 
   <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
 
@@ -162,12 +162,12 @@
 </nav>
 
     <div class="banner" id="banner" parallax=true
-         style="background: url('https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/scotland-landscape-scenic-mountains-preview.jpg') no-repeat center center;
+         style="background: url('https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/bVye7CFilTNnE1G.png') no-repeat center center;
            background-size: cover;">
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
           <div class="page-header text-center fade-in-up">
-            <span class="h2" id="subtitle" title="艹！">
+            <span class="h2" id="subtitle" title="upload labs通关历程">
               
             </span>
 
@@ -182,8 +182,8 @@
   
     <span class="post-meta">
       <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-      <time datetime="2021-07-26 20:50" pubdate>
-        2021年7月26日 晚上
+      <time datetime="2021-10-27 21:21" pubdate>
+        2021年10月27日 晚上
       </time>
     </span>
   
@@ -194,7 +194,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      194 字
+      1.8k 字
     </span>
   
 
@@ -204,7 +204,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      1
+      19
        分钟
     </span>
   
@@ -234,17 +234,84 @@
         <div class="py-5" id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">艹！</h1>
+            <h1 style="display: none">upload labs通关历程</h1>
             
             <div class="markdown-body">
-              <p>艹！怎么过了半个月了！</p>
+              <p> upload-labs,一个专门用于训练文件上传漏洞的靶场。上传漏洞,就是攻击者可上传一个可执行文件,如木马，病毒，恶意脚本，WebShell等到服务器执行，并最终获得网站控制权限的高危漏洞。</p>
 <span id="more"></span>
 
-<p>虽说早有预料到自己暑假恐怕又是无所事事混吃等死，可我这次，艹，势必不成功便成仁！</p>
-<p>我写博客记录自己的学习经历，生活的趣事，是想用来督促我自己，让自己不要浪费生命，要活得精彩一些。</p>
-<p>距离上次写技术文都好久了…长期一直在写的sqli labs的文章进度也保持稳定龟速…</p>
-<p> 我也不喜欢写那些玩的事…玩是好玩，没必要写文章扯什么感悟折磨自己，而单纯的记录好傻哦，我怎么记嘛…不过玩的这几天，我也不后悔，以后还是得玩啊啊哈哈哈。</p>
-<p>加油加油加油！</p>
+<p>这篇文章记录我通关这个靶场的历程。</p>
+<p><del>上次说记录通关历程的sqlilabs我好像就停在了20关🤔</del></p>
+<hr>
+<p>从第一关，开冲！</p>
+<h3 id="1"><a href="#1" class="headerlink" title="1"></a>1</h3><p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20211027231935.png" srcset="/img/loading.gif" lazyload></p>
+<p>（简洁又美观的靶场）</p>
+<p>很常见的界面，首先直接传入一个写入一句话木马的php文件试试。</p>
+<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20211027232317.png" srcset="/img/loading.gif" lazyload></p>
+<p>弹出了一个JavaScript的alter，告诉我们限制了文件的类型不能为php。可以尝试把木马的php后缀改为jpg，然后用burp抓包，修改数据再把包发出去。即将下图中的“a.jpg”改为“a.php”。</p>
+<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20211027232640.png" srcset="/img/loading.gif" lazyload></p>
+<p>接着用蚁剑连接即可。</p>
+<p>另外值得注意的是上传后的文件路径可以在response中找到，这样蚁剑才能连接成功。</p>
+<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20211027233052.png" srcset="/img/loading.gif" lazyload></p>
+<p>另外这也说明了<strong>这关上传文件的限制代码并没有进行HTTP请求去访问服务器<br> 所以可判断这是前端js验证，验证代码在我们的浏览器上</strong></p>
+<p>我们也可以直接禁用浏览器的JavaScript或删除部分相关的js代码</p>
+<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20211027233354.png" srcset="/img/loading.gif" lazyload></p>
+<p>然后直接上传“a.php”，显示上传成功。</p>
+<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20211027233447.png" srcset="/img/loading.gif" lazyload></p>
+<p>所以针对有前端限制的代码，可以用burp修改数据包绕过前端的限制，也可以直接通过浏览器禁用前端相关的限制代码。</p>
+<hr>
+<h3 id="2"><a href="#2" class="headerlink" title="2"></a>2</h3><p>这关同样可以采取修改第一关的方法，上传后缀为jpg的木马文件，burp抓包后再修改回php，即可实现上传。</p>
+<p>但不同的是这次不是通过前端JavaScript代码限制，而是在服务器端对数据包进行了MIME检测。</p>
+<p><em>MIME是一种标准，用来表示文档、文件或字节流的性质和格式</em></p>
+<p>不同类型的文件类型在传输时，有着不同的mime类型，这样浏览器就知道该用什么方式来打开它，和文件后缀的作用一致，只不过文件后缀是让操作系统知道这是什么类型文件，MIME是让信息的接收方知道这是什么类型的文件。</p>
+<p>MIME在数据包中体现在了这一部分：content-type</p>
+<p>如jpg类型的文件在content-type这一栏是image/jpeg</p>
+<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20211028163015.png" srcset="/img/loading.gif" lazyload></p>
+<p>而php类型的文件在这一栏是application/octet-stream</p>
+<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20211028162641.png" srcset="/img/loading.gif" lazyload></p>
+<p>所以除了刚才修改文件后缀的方法，我们也可以通过修改content-type这一属性来实现文件上传。直接上传php文件，然后再把数据包中content-type改为jpg的对应形式，即image/jpeg。</p>
+<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/image-20211028181237168.png" srcset="/img/loading.gif" lazyload></p>
+<hr>
+<h3 id="3"><a href="#3" class="headerlink" title="3"></a>3</h3><p>这关在服务器端进行了黑名单限制。无论我们怎么修改数据包发过去，服务器都会在接收到文件后检查文件类型，如果匹配到了黑名单中的文件类型就会拒绝本次上传。</p>
+<p>而黑名单最大的问题就是不全。</p>
+<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20211028183945.png" srcset="/img/loading.gif" lazyload></p>
+<p>我们可以把后缀改为php3或是phtml上传，上传成功。</p>
+<p>但蚁剑却连接不了。</p>
+<p>原来我的apache服务器的配置文件（httpd_conf）中没有将这类文件当作PHP类型文件来解析，所以解析不了。所以说这个漏洞属于是网站管理人员配置文件时的失误。真实环境中我们应该是没有机会能修改这个配置文件的🤔</p>
+<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20211028204830.png" srcset="/img/loading.gif" lazyload></p>
+<p>将配置文件中这一栏修改为</p>
+<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20211029204603.png" srcset="/img/loading.gif" lazyload>意思让服务器将php3类型的文件当作php类型来解析。</p>
+<p>同时我注意到上传的文件名称变成了一串混乱的数字，这导致了我们并不能用原文件名访问到这个我们上传的木马文件，蚁剑也依然连不上。（而此时如果复制这串奇怪的文件名，用蚁剑连接，是可以成功的，说明了服务器的确将php3文件解析成了php文件。）</p>
+<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20211029204741.png" srcset="/img/loading.gif" lazyload><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20211029205119.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20211029205405.png" srcset="/img/loading.gif" lazyload></p>
+<p>上传包含phpinfo()的php3文件，同样能够执行，但因为文件名变成了一串莫名的数字。用原文件名并不能访问或执行这个文件。</p>
+<p>我网上找了好久，怎么得到新生成的图片地址，原来我们可以在上传界面复制图片地址来得到它。<em>我人麻了是真的找了好久😮</em></p>
+<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20211029210228.png" srcset="/img/loading.gif" lazyload></p>
+<p>既然这样的话我们上传了木马文件，又知道木马的地址，能够使代码执行，这部分文件上传漏洞的任务就算完成了。 </p>
+<hr>
+<h3 id="4"><a href="#4" class="headerlink" title="4"></a>4</h3><p>这关看提示，过滤了很多的文件类型。<img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20211028193733.png" srcset="/img/loading.gif" lazyload></p>
+<p>但是没有过滤掉.htaccess</p>
+<p>.htaccess文件(或者”分布式配置文件”）,全称是Hypertext Access(超文本入口)。提供了针对目录改变配置的方法， 即，在一个特定的文档目录中放置一个包含一个或多个指令的文件， 以作用于此目录及其所有子目录。htaccess文件是Apache服务器中的一个配置文件，它负责相关目录下的网页配置。通过htaccess文件，可以帮我们实现：网页301重定向、自定义404错误页面、改变文件扩展名、允许/阻止特定的用户或者目录的访问、禁止目录列表、配置默认文档等功能。</p>
+<p>我们就可以利用.htaccess文件的特性，上传一个具有目的性的htaccess文件。（当服务器是apache时才有作用）创建一个txt文件，其内容如下，再将文件名改为.htaccess。</p>
+<figure class="highlight apache"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs apache"><span class="hljs-attribute"><span class="hljs-nomarkup">SetHandler</span></span> application/x-httpd-php<br></code></pre></div></td></tr></table></figure>
+
+<p><strong>注意是文件名就为.htaccess，也可以看作文件名为空，后缀为htaccess。</strong></p>
+<p>可能操作系统会告诉你必须要有个文件名，就用burp抓包再把名字改了。</p>
+<p>这个文件的意思是让服务器将所有的文件都当作php文件来解析。这样我们随便上传一个不在黑名单内的文件类型的木马，服务器都会接收并解析成php类型。</p>
+<p>这样的话我们上传一个包含木马的且类型不在黑名单中的文件就行了。（图中只是为了验证上传的是包含phpinfo()函数的php文件）</p>
+<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20211030105921.png" srcset="/img/loading.gif" lazyload></p>
+<p>可以看出访问.png类型的文件时，服务器依然按照php文件解析，证明我们成功了。</p>
+<p>另外上传.htaccess文件对这关配置文件httpd_conf文件也有要求，需要apache加载rewrite模块和允许重写。</p>
+<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20211030110424.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20211030110509.png" srcset="/img/loading.gif" lazyload></p>
+<p>除了上传.htaccess之外，还可以针对apache的解析机制绕过黑名单的检测。</p>
+<p>Apache会将不认识的后缀，如muma.php.xxx.helloworld、test.php.iii等从右向左解析，不认识就往左移一个，最终移到php时apache认识了就会将该文件当作php文件来解析。</p>
+<p>所以我们上传一个文件后缀为.php.xxxx的木马即可。当然这是在第4关没有针对这点做限制的前提下。</p>
+<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20211028210833.png" srcset="/img/loading.gif" lazyload></p>
+<p><strong>同时请注意</strong>：这需要前文中提到的配置文件httpd_conf中同样的地方<img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20211028204830.png" srcset="/img/loading.gif" lazyload></p>
+<p><strong>将最前面的#号注释符删去才会生效</strong>，如下图</p>
+<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20211029224135.png" srcset="/img/loading.gif" lazyload></p>
+<hr>
 
             </div>
             <hr>
@@ -254,10 +321,19 @@
                   <div class="post-meta mr-3">
                     <i class="iconfont icon-category"></i>
                     
-                      <a class="hover-with-bg" href="/categories/%E7%A2%8E%E7%A2%8E%E5%BF%B5/">碎碎念</a>
+                      <a class="hover-with-bg" href="/categories/%E5%AD%A6%E4%B9%A0/">学习</a>
+                    
+                      <a class="hover-with-bg" href="/categories/%E5%AD%A6%E4%B9%A0/%E7%BD%91%E5%AE%89/">网安</a>
                     
                   </div>
                 
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/">文件上传</a>
+                    
+                  </div>
                 
               </div>
               
@@ -272,18 +348,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2021/10/20/%E4%B8%80%E5%90%8D%E6%87%92%E7%8B%97%E7%9A%84%E8%87%AA%E8%B4%A3/">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">。。。还得过挺快</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2021/07/09/%E5%86%B2%E5%86%B2%E5%86%B2/">
-                        <span class="hidden-mobile">冲冲冲!</span>
+                      <a href="/2021/10/26/delete/">
+                        <span class="hidden-mobile">delete!</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
