@@ -194,7 +194,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      4.9k 字
+      5k 字
     </span>
   
 
@@ -204,7 +204,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      59
+      60
        分钟
     </span>
   
@@ -244,26 +244,37 @@
 <hr>
 <h3 id="sql注入常规流程"><a href="#sql注入常规流程" class="headerlink" title="sql注入常规流程"></a>sql注入常规流程</h3><p><em>先附上我在b站看到的一位up主总结的sql注入大体流程</em></p>
 <ul>
-<li>判断是否有注入<ul>
+<li><p>判断是否有注入</p>
+<ul>
 <li>可控参数的改变是否能够影响页面显示结果</li>
 <li>输入的sql语句是否能报错——通过数据库的报错，能看到数据库的一些语句痕迹</li>
 <li>输入的sql语句能否不报错——判断我们的语句是否能成功闭合</li>
 </ul>
 </li>
-<li>判断是什么类型的注入</li>
-<li><strong>语句是否能够被恶意修改</strong></li>
-<li><strong>是否能够成功执行</strong></li>
-<li>获取我们想要的数据</li>
+<li><p>判断是什么类型的注入</p>
+</li>
+<li><p><strong>语句是否能够被恶意修改</strong></p>
+</li>
+<li><p><strong>是否能够成功执行</strong></p>
+</li>
+<li><p>获取我们想要的数据</p>
+<hr>
+<p>在渗透测试中，information_schema库中有三个表对我们很重要。注意：<strong>mysql5.0以上才会有information_schema这个库</strong></p>
+</li>
+<li><p><strong>schemata</strong> 表 中 <strong>schema_name</strong> 字段存储数据库中<strong>所有的库名</strong></p>
+</li>
 </ul>
-<h3 id="通关历程"><a href="#通关历程" class="headerlink" title="通关历程"></a>通关历程</h3><hr>
-<h3 id="1-4"><a href="#1-4" class="headerlink" title="1~4"></a>1~4</h3><p> 完成最简单的sql注入。</p>
 <ul>
-<li><p>输入单双引号，观察报错信息，构造命令使语句闭合</p>
+<li><strong>tables</strong> 表 中<strong>table_schema</strong> 字段存储<strong>库名</strong> ，<strong>table_name</strong> 字段存储<strong>表名</strong></li>
+</ul>
+<p>    * <strong>columns</strong> 表 中 <strong>table_schema</strong> 字段存储<strong>库名</strong> ，<strong>table_name</strong> 字段存储<strong>表名</strong> ，<strong>column_name</strong> 字段存储<strong>字段名</strong></p>
+<h2 id="通关历程"><a href="#通关历程" class="headerlink" title="通关历程"></a>通关历程</h2><h3 id="1-4"><a href="#1-4" class="headerlink" title="1~4"></a>1~4</h3><p> 完成最简单的sql注入。</p>
+<ul>
+<li><p>输入单双引号，观察报错信息，构造命令，配合<code>%23</code>或<code>--+</code>使语句闭合</p>
 </li>
 <li><p>使用 order by 语句判断字段数，接着union select 1,2,…观察能显示的数据</p>
 </li>
-<li><p>构造语句查询数据库的信息,以查询 security数据库下users表中列名为password和username的字段为例</p>
-<p>（当然，security,users,password和username是一步步爆出来的）：</p>
+<li><p>构造语句查询数据库的信息,以查询列password和username为例</p>
 <figure class="highlight oxygene"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs oxygene">... <span class="hljs-keyword">union</span> <span class="hljs-keyword">select</span>  <span class="hljs-number">1</span>,<span class="hljs-number">2</span>,group_concat(schema_name) <span class="hljs-keyword">from</span> information_schema.schemata %<span class="hljs-number">23</span><br><br><span class="hljs-comment">//查询所有的数据库名,查到有“security”</span><br></code></pre></div></td></tr></table></figure>
 
 
@@ -445,12 +456,12 @@
 <p><code>union select count(*),concat( (select ..), floor(rand(14)*2))as c from 任一一个表名 group by c</code></p>
 <p>另外，group_concat拼接在语句中会失效（不知道为啥），使用limit语句作为代替来查询 more than 1 row 的数据。</p>
 </li>
-<li><p>7 GET -Dump into out file 类型，初识文件上传漏洞。使用into outfile函数，指定服务器上的绝对路径可实现上传文件，可用来上传一句话木马<code> &lt;?php @eval($_POST[&quot;密码&quot;]);?&gt;</code>，配合中国菜刀（攻击工具）达成目的。</p>
+<li><p>7 GET -Dump into out file 类型，文件上传漏洞。使用into outfile函数，指定服务器上的绝对路径可实现上传文件，可用来上传一句话木马<code> &lt;?php @eval($_POST[&quot;密码&quot;]);?&gt;</code>，配合中国菜刀（攻击工具）达成目的。</p>
 <p><em>小插曲：我就在这里写了个一句话木马（虽然在这里并不起作用），win10 的defender还是检测到了并弹出了危险警告。真是苦了defender能在我写的一堆垃圾中还找到疑似会伤害我的东西🤣</em></p>
 </li>
 </ul>
 <p><a target="_blank" rel="noopener" href="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/1DAFD32562C47EE4EB5BDD578D1CA7F0.jpg"><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/1DAFD32562C47EE4EB5BDD578D1CA7F0.jpg" srcset="/img/loading.gif" lazyload alt="img"></a></p>
-<p>不过这防火墙是真烦人，打开文件就报毒，搞得我都误删了一次。心痛得我连夜把博客加进defender白名单。</p>
+<p>不过这防火墙是真烦人，打开文件就报毒，搞得我都误删了一次，还得把相关文件夹加进白名单。</p>
 <ul>
 <li><p>8 GET - Blind - Boolian Based 类型 掌握一些截取字符的函数，并要学会写py脚本解决。</p>
 </li>
