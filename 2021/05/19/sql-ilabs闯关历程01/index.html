@@ -204,7 +204,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      55
+      56
        分钟
     </span>
   
@@ -271,6 +271,7 @@
 <h2 id="通关历程"><a href="#通关历程" class="headerlink" title="通关历程"></a>通关历程</h2><h3 id="1-4"><a href="#1-4" class="headerlink" title="1~4"></a>1~4</h3><p> 完成最简单的sql注入。</p>
 <ul>
 <li><p>输入单双引号，观察报错信息，构造命令，配合<code>%23</code>或<code>--+</code>使语句闭合</p>
+<p>（末尾的%23是#的url编码，#用来注释sql后面的语句使payload闭合。因为如果直接在url中输入#的话，浏览器只会把#号当作位置符号，不会上传到服务器，且服务端会自动对经过url编码后的数据解码）</p>
 </li>
 <li><p>使用 order by 语句判断字段数，接着union select 1,2,…观察能显示的数据</p>
 </li>
@@ -363,7 +364,7 @@
 <hr>
 <h3 id="11-12"><a href="#11-12" class="headerlink" title="11~12"></a>11~12</h3><p> 从这里开始由get类型的注入转变为post类型的注入。之前都是可以直接在浏览器地址栏进行的get类型的注入，而通常post传送的数据不能在url上看到，只能通过抓包工具(burpsuite)或者浏览器插件（hackbar）进行查看。无论我们在他给出的登录框怎么输入，上面的url地址栏都不会产生变化。</p>
 <p><a target="_blank" rel="noopener" href="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/0[%7DF[P%7BHGS9$L%60ZUP9G8S8B.png"><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/0%5B%7DF%5BP%7BHGS9$L%60ZUP9G8S8B.png" srcset="/img/loading.gif" lazyload alt="img"></a></p>
-<p>而在登录框中构造的语句仍然是有效的，因为我们输入的就是post所上传的数据。</p>
+<p>而我们在输入框中输入的数据即为post上传的数据。</p>
 <p>当我在username栏末尾输入‘时报错。从这个报错语句中即可以看出这里的sql语句是以单引号闭合的。</p>
 <p><a target="_blank" rel="noopener" href="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20210712214452.png"><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20210712214452.png" srcset="/img/loading.gif" lazyload alt="img"></a></p>
 <p>这里的username和password都是注入点，任选一个都可以使用语句注入。</p>
@@ -372,7 +373,7 @@
 <li>使用 order by 语句判断字段数</li>
 <li>构造语句查询数据库的信息</li>
 </ul>
-<p>所有步骤和1~4关的都一样，只是注入方式由get变为post,我们输入的工具语句也由在url中输入变为在表单中输入。另外注入符用#而不是%23，因为我们输入的语句不再经过浏览器url解析了。</p>
+<p>所有步骤和1~4关的都一样，只是注入方式由get变为post,我们输入的工具语句也由在url中输入变为在表单中输入。另外注释符用#而不是%23，因为我们输入的语句不再经过浏览器url解析，可以直接上传到服务器中了。</p>
 <p>12就是语句双引号加单小括号闭合，注入方法不变。</p>
 <hr>
 <h3 id="13-14"><a href="#13-14" class="headerlink" title="13-14"></a>13-14</h3><figure class="highlight livecodeserver"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs livecodeserver">这两关名字叫做<span class="hljs-built_in">post</span>类型的双重注入，输入的正常查询语句不再显示有用的信息，但报错语句仍有提示。通过报错信息闭合语句并查询完字段数后，根据前<span class="hljs-number">5</span>~<span class="hljs-number">6</span>关<span class="hljs-built_in">get</span>类型的双重注入经验可先按照以往<span class="hljs-built_in">get</span>类型的双重注入来尝试，果然成功了。<br></code></pre></div></td></tr></table></figure>
