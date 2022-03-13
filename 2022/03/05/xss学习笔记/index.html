@@ -14,7 +14,7 @@
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
   <meta name="theme-color" content="#2f4154">
-  <meta name="description" content="xss，即跨站脚本攻击,实际上是在前端注入js编写的恶意代码。该漏洞产生的危害取决于js执行了怎样的脚本代码。当用户使用浏览器浏览被嵌入恶意代码的网页时，恶意代码将会在用户的浏览器上执行。如果用户输入中某个参数的全部或其中一部分，原封不动地在源代码里出现时，我们就可以认为这个参数存在XSS漏洞。">
+  <meta name="description" content="xss，即跨站脚本攻击,实际上是在前端注入js编写的恶意代码。（普遍为js代码,因为js代码能完成的功能比较强大）该漏洞产生的危害取决于js执行了怎样的脚本代码。当用户使用浏览器浏览被嵌入恶意代码的网页时，恶意代码将会在用户的浏览器上执行。如果用户输入中某个参数的全部或其中一部分，原封不动地在源代码里出现时，我们就可以认为这个参数存在XSS漏洞。">
   <meta name="author" content="Eggs">
   <meta name="keywords" content="Blog">
   
@@ -194,7 +194,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      2.9k 字
+      3k 字
     </span>
   
 
@@ -204,7 +204,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      33
+      35
        分钟
     </span>
   
@@ -237,7 +237,7 @@
             <h1 style="display: none">xss学习笔记</h1>
             
             <div class="markdown-body">
-              <p>xss，即跨站脚本攻击,实际上是<strong>在前端注入js编写的恶意代码。</strong>该漏洞产生的危害取决于js执行了怎样的脚本代码。当用户使用浏览器浏览被嵌入恶意代码的网页时，恶意代码将会在用户的浏览器上执行。如果用户输入中某个参数的全部或其中一部分，原封不动地在源代码里出现时，我们就可以认为这个参数存在XSS漏洞。</p>
+              <p>xss，即跨站脚本攻击,实际上是<strong>在前端注入js编写的恶意代码。</strong>（普遍为js代码,因为js代码能完成的功能比较强大）该漏洞产生的危害取决于js执行了怎样的脚本代码。当用户使用浏览器浏览被嵌入恶意代码的网页时，恶意代码将会在用户的浏览器上执行。如果用户输入中某个参数的全部或其中一部分，原封不动地在源代码里出现时，我们就可以认为这个参数存在XSS漏洞。</p>
 <span id="more"></span>
 
 <hr>
@@ -300,7 +300,29 @@
 
 <p>单机“替换”按钮时会执行JavaScript的myfunction()函数，而myfunction()函数是一个DOM操作，通过document.getElementById获取ID为id1的节点，然后将节点id1的内容修改为dom_input中的值，即用户输入的值。当输入<code>&lt;img src=1 onerror=alter(/xss/)/&gt;</code>时，单击”替换“按钮，我们输入的数据又会输出到页面上，所以页面弹出消息框。但由于是隐式输出的，所以在查看源代码时，看不到输出的xss代码</p>
 <hr>
-<h3 id="xss的危害"><a href="#xss的危害" class="headerlink" title="xss的危害"></a>xss的危害</h3><p><em>常规用到的是盗取cookie、js做钓鱼攻击、流量指向等。主要是盗取管理员的会话和cookie信息，就是我们常说的管理员凭证，就意味着得到后台权限，可以直接利用。还能配合别的漏洞，比如可以和网页木马结合，扔到那里去跳转到网马地址，网马地址被执行后续就控制一些权限。</em></p>
+<h3 id="xss漏洞容易出现的地方"><a href="#xss漏洞容易出现的地方" class="headerlink" title="xss漏洞容易出现的地方"></a>xss漏洞容易出现的地方</h3><p>来自靶场webgoat的总结</p>
+<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220310231605.png" srcset="/img/loading.gif" lazyload></p>
+<p>xss漏洞常见地点：</p>
+<ul>
+<li><p>将用户搜索的字符串回显出来的字段。（如搜搜索引擎会弹出，没有找到关于“xxx”的内容这一字段）</p>
+</li>
+<li><p>显示用户输入的输出区域。（如留言版）</p>
+</li>
+<li><p>返回包含用户所提交的数据的报错信息。</p>
+</li>
+<li><p>包含用户提交的信息的隐藏字段。</p>
+</li>
+<li><p>展示用户输入数据的任何页面</p>
+<ul>
+<li>留言版</li>
+<li>没有限制的评论</li>
+</ul>
+</li>
+<li><p>HTTP头</p>
+</li>
+</ul>
+<hr>
+<h3 id="xss的危害"><a href="#xss的危害" class="headerlink" title="xss的危害"></a>xss的危害</h3><p><em>盗取cookie、钓鱼攻击、流量指向等。还能配合别的漏洞，比如可以和网页木马结合，使受害者跳转到网马地址，网马地址被执行后续就控制一些权限。</em></p>
 <hr>
 <h3 id="xss漏洞利用过程"><a href="#xss漏洞利用过程" class="headerlink" title="xss漏洞利用过程"></a>xss漏洞利用过程</h3><p>下面以dvwa的low级别反射型xss来演示,如何利用xss漏洞产生渗透效果</p>
 <p>源码：</p>
@@ -308,10 +330,10 @@
 
 <p>我们输入的参数原封不动地输出到页面，存在反射型xss。</p>
 <p><strong>以盗取cookie为例</strong></p>
-<p>思路：利用xss漏洞，构造payload，需要完成的操作即：当用户点击链接，即点击我们构造的payload时，触发读取cookie的js代码。</p>
+<p>思路：利用xss漏洞，构造payload，需要实现的效果：当用户点击链接，即点击我们构造的payload时，触发读取用户在漏洞站点上的cookie的js代码。</p>
 <p>即重点一是js怎么写，重点二是payload怎么写。</p>
-<p>解决方法：完成这个功能的js代码会比较长，所以我们不再像之前的<code>alert()</code>直接写在payload里触发，而是写进一个js文件，储存在我们的服务器中。而我们构造的payload只是一段简单的js代码，功能是让用户访问我们服务器上的这个js文件。也就是说，当用户点击我们构造的payload，就会访问我们服务器上构造好的js代码（这个过程可以伪装，即在用户的角度上，可能只是点了一下链接却没有反应或是跳转到了一个其它垃圾页面），从而使我们读取到用户的cookie。</p>
-<p>（这只是一种主流的方法，不一定是唯一的方法，怎么利用取决于不同的环境以及JavaScript能执行怎样的功能，例如我在这篇博客中写到了一种在post请求下的反射型xss漏洞的方法：）</p>
+<p>解决方法：完成这个功能的js代码会比较长，所以我们不再像之前的<code>alert()</code>直接写在payload里触发，而是写进一个js文件，储存在我们的服务器中。而我们构造的payload只是一段简单的js代码，功能是让用户访问我们服务器上的这个js文件。也就是说，当用户点击我们构造的payload，就会访问我们服务器上构造好的js代码（这个过程可以伪装，即在用户的角度上并没有意识到xss攻击），从而使我们读取到用户在具有xss漏洞站点的cookie。</p>
+<p><em>（这只是一种主流的方法，不一定是唯一的方法，怎么利用取决于不同的环境以及JavaScript能执行怎样的功能，例如如果是用post方式提交的数据包的话，就没有直接可利用的链接来用户点击来触发js代码。这样的话我们可以写一个HTML页面，该页面的功能就是自动提交目标网站具有xss漏洞的页面的表单，同时用js代码读取当前用户cookie，再把数据发送给攻击者。我们把这个页面布置到服务器上诱导用户点击即可）</em></p>
 <p>即我们还需要搭建一个网站来使用户访问，并在这个网站上布置js代码。这导致了xss的渗透不仅在本地环境复现比较复杂，而且在实际环境下还需要一定的成本，学习比较繁琐。针对这一情况，网上已经有了公共的xss平台， 也就是说我们构造的payload要使用户访问这个xss平台，并且平台也能提供了一些js模板来使用，通过这个平台我们也能更好地利用xss漏洞。如果只是本地复现的话，自己搭建平台也可以。在这里我搭建的是BlueLotus_XSSReceiver。</p>
 <p>下面展示在本地环境下利用BlueLotus_XSSReceiver来盗取用户cookie。</p>
 <p><strong>利用BlueLotus_XSSReceiver平台的详细步骤</strong>：</p>
