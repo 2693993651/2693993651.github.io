@@ -4,11 +4,69 @@
   
   
   <entry>
+    <title>CSRF靶场练习</title>
+    <link href="/2022/03/16/CSRF%E9%9D%B6%E5%9C%BA%E7%BB%83%E4%B9%A0/"/>
+    <url>/2022/03/16/CSRF%E9%9D%B6%E5%9C%BA%E7%BB%83%E4%B9%A0/</url>
+    
+    <content type="html"><![CDATA[<span id="more"></span><hr>]]></content>
+    
+    
+    <categories>
+      
+      <category>学习</category>
+      
+      <category>网安</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>csrf</tag>
+      
+      <tag>渗透</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>csrf学习笔记</title>
+    <link href="/2022/03/13/csrf%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"/>
+    <url>/2022/03/13/csrf%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</url>
+    
+    <content type="html"><![CDATA[<p>CSRF（Cross-Site Request Forgery）跨站点请求伪造，也被称为One Click Attack或者Session Riding。指利用受害者<strong>未失效的身份认证信息</strong>（cookie、session等），诱骗<strong>其点击恶意链接或者访问包含攻击代码的页面</strong>，在受害人不知情的情况下，<strong>以受害人的身份</strong>向（身份认证信息所对应的）服务器发送请求，从而<strong>完成非法操作</strong>（如转账、改密等）的一种攻击行为。</p><span id="more"></span><hr><h3 id="对CSRF漏洞的理解"><a href="#对CSRF漏洞的理解" class="headerlink" title="对CSRF漏洞的理解"></a>对CSRF漏洞的理解</h3><p>csrf同xss看起来有点像，都是攻击者构造url，诱骗用户点击来触发漏洞。</p><p>不同的是xss的攻击代码是代码注入，是利用了站点HTML语言构造的缺陷，payload是嵌入到页面中的HTML代码中的。而csrf攻击的payload中没有闭合HTML结构的语句，是直接利用了已登录用户的身份信息来执行站点命令。</p><p>CSRF的攻击有以下两个重点</p><ul><li>目标用户已经登录了网站，能够执行网站的功能</li><li>目标用户访问了攻击者构造的URL</li></ul><hr><h3 id="CSRF的攻击方式"><a href="#CSRF的攻击方式" class="headerlink" title="CSRF的攻击方式"></a>CSRF的攻击方式</h3><p>根据网站页面的漏洞构造payload，在用户登录的情况下点击后，凭借用户的信息去执行一系列命令。</p><p>以dvwa的csrf靶场中的low级别为例，在这里假设我们的目的为修改某一个用户的密码。</p><p>我们先抓取修改密码时的数据包，利用burp生成CSRF Poc页面的功能，根据这个数据包生成一个html文件。</p><p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220314212232.png"></p><p>这个html即是触发csrf的陷阱网页。根据刚才数据包提交的参数，这里创建了一个表单，并隐藏了对应参数。</p><p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220314214047.png"></p><p>当用户点击提交时，就会利用当前用户的身份去执行form action中的操作，在这里即为修改密码。</p><p>直接构造一个这个链接也是可以的，如果用户点击这个链接也是一样的效果，但这样设计网页更容易使用户触发漏洞，因为攻击者可以在网页中添加迷惑信息。</p><p>当用户点击提交后就可以看到密码已被修改。实际情况下攻击者构造的陷阱网页不会这么明显，不会使用户意识到发生了什么。</p><p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220314215711.png"></p><h3 id="CSRF漏洞代码分析及防御措施"><a href="#CSRF漏洞代码分析及防御措施" class="headerlink" title="CSRF漏洞代码分析及防御措施"></a>CSRF漏洞代码分析及防御措施</h3><p>…实际上存在csrf漏洞的网页的代码在结构和逻辑上并没有什么特性，为用户设置身份信息且用户有一些执行命令的权限以及对用户身份验证环节的薄弱（或身份信息易被伪造）就是共同点。</p><p>出现scrf漏洞的原因就是网站过于相信用户，攻击者可以伪造用户请求，由此可知，抵御csrf攻击的关键在于：在请求中放入攻击者不能伪造的信息。例如可以在http请求中以参数的形式加入一个随机产生的token，并在服务器验证token，如果请求中没有token或者token中的内容不正确，则认为该请求可能是csrf攻击从而拒绝该请求。</p><hr><p>参考：《web安全攻防》</p><hr><p>完结 : )🐣</p><hr>]]></content>
+    
+    
+    <categories>
+      
+      <category>学习</category>
+      
+      <category>网安</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>csrf</tag>
+      
+      <tag>渗透</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>F**k_Rd_client</title>
     <link href="/2022/03/11/F-k-Rd-client/"/>
     <url>/2022/03/11/F-k-Rd-client/</url>
     
-    <content type="html"><![CDATA[<p>I NEED CHINESE!</p><span id="more"></span><hr><p>试了下微软自带的远程桌面，加上用了别人的内网穿透服务，想着体验应该会美滋滋，结果键盘输入不了中文，虚拟机内键盘更是几乎不能用</p><p>不得不说微软自己做的软件兼容性就是好，键盘蹦成这样了自家的几个快捷键还能用👍</p><p>本来想写下使用体验和总结一下学到的内网穿透的知识，结果输不了中文，无奈之下用远程桌面玩了一晚上游戏😉</p><p><em>原计划这篇文章该是我当晚用着远程桌面时用全英文发的，不过在我输入第一句话时想了想微软的英文是啥后放弃了</em></p>]]></content>
+    <content type="html"><![CDATA[<p>I NEED CHINESE!</p><span id="more"></span><hr><p>试了下微软自带的远程桌面，加上用了别人的内网穿透服务，想着体验应该会美滋滋，结果用的蓝牙键盘输入不了中文</p><p>本来想写下使用体验和总结一下学到的内网穿透的知识，无奈之下用远程桌面玩了一晚上游戏😉</p><p><em>原计划这篇文章该是我当晚用着远程桌面时用全英文发的，不过在我输入第一句话时想了想微软的英文是啥后放弃了</em></p><hr><p>使用体验更新：这个远程桌面不用额外连接键盘，可以用自带的虚拟键盘，输入有点不习惯但完全静音，适合深夜躺在床上用。</p><p>虚拟键上的快捷键按上去有点..有趣</p><p>本身的清晰度和流畅度也不错，和串流的效果五五开吧，唯一可惜的就是不能外接键盘了</p><p>另外就是便宜的内网穿透效果太垃圾了，公网登录登上就掉线</p><hr><p>rd client is fine.</p>]]></content>
     
     
     <categories>
@@ -29,7 +87,7 @@
     <link href="/2022/03/08/xss%E9%9D%B6%E5%9C%BA%E7%BB%83%E4%B9%A0/"/>
     <url>/2022/03/08/xss%E9%9D%B6%E5%9C%BA%E7%BB%83%E4%B9%A0/</url>
     
-    <content type="html"><![CDATA[<p>下面是我从各大靶场（dvwa、pickachu、WebGoat）中选出的几个比较有代表性的xss例题。</p><span id="more"></span><hr><p>关于xss基础部分详见我这一篇博客：<a href="https://eggswoo.com/2022/03/05/xss%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">传送门–xss学习笔记</a></p><hr><h3 id="常用payload"><a href="#常用payload" class="headerlink" title="常用payload"></a>常用payload</h3><figure class="highlight php"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs php">&lt;script&gt;alert(<span class="hljs-number">1</span>)&lt;/script&gt;<br>&lt;a href=javascript:alert(<span class="hljs-number">1</span>)&gt;<span class="hljs-comment">//利用了JavaScript的通信协议</span><br>&lt;img src=x onerror=alert(<span class="hljs-number">1</span>)&gt;<span class="hljs-comment">//图片加载错误触发，无script标签</span><br><span class="hljs-comment">//结合编码</span><br></code></pre></div></td></tr></table></figure><hr><h3 id="反射型xss"><a href="#反射型xss" class="headerlink" title="反射型xss"></a>反射型xss</h3><p>题目来源：pikachu–xss之href输出</p><p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220310201517.png"></p><p>我们的输入被放在了href标签内。</p><p>这种情况下除了考虑闭合&lt;a&gt;标签外，还可以利用JavaScript的通讯协议。javascript 通信协议是一个伪协议, 用于指定 URL 为 JavaScript 代码。也就是说我们可以直接在href标签内根据一下通信格式输入JavaScript代码：</p><figure class="highlight isbl"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs isbl"><span class="hljs-variable">javascript</span>:<span class="hljs-function"><span class="hljs-title">alert</span>(<span class="hljs-number">1</span>)</span><br></code></pre></div></td></tr></table></figure><hr><p>题目来源： pikachu–xss之htmlspecialchars</p><p>htmlspecialchars() 函数把预定义的字符转换为 HTML,也就是我们主要输入的&lt;、&gt;会失去作用。</p><p>htmlspecialchars()语法：htmlspecialchars(string,flags,character-set,double_encode)</p><p>其中可用的quotestyle类型：<br>ENT_COMPAT - 默认。仅编码双引号<br>ENT_QUOTES - 编码双引号和单引号<br>ENT_NOQUOTES - 不编码任何引号</p><p>默认情况下是不会编码单引号的，所以如果使用了htmlspecialchars（）来过滤的话我们只能试试用单、双引号闭合语句来构造payload。</p><hr><h3 id="储存型xss"><a href="#储存型xss" class="headerlink" title="储存型xss"></a>储存型xss</h3><p>题目来源：pikachu–xss之盲打</p><p>我们输入的数据不会显示出来，只有管理员在后台查看时才能触发。虽然此时进行xss攻击比较困难，但一旦成功即可盗取网站管理员信息。</p><hr><h3 id="DOM型xss"><a href="#DOM型xss" class="headerlink" title="DOM型xss"></a>DOM型xss</h3><p>题目来源：dvwa–XSS (DOM),high级别</p><p>前端相关代码（与参数有关的JavaScript代码部分）：<img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220308133519.png"></p><p>源码：</p><figure class="highlight php"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs php"><span class="hljs-meta">&lt;?php</span><br><br><span class="hljs-comment">// Is there any input?</span><br><span class="hljs-keyword">if</span> ( array_key_exists( <span class="hljs-string">&quot;default&quot;</span>, <span class="hljs-variable">$_GET</span> ) &amp;&amp; !is_null (<span class="hljs-variable">$_GET</span>[ <span class="hljs-string">&#x27;default&#x27;</span> ]) ) &#123;<br><br>    <span class="hljs-comment"># White list the allowable languages</span><br>    <span class="hljs-keyword">switch</span> (<span class="hljs-variable">$_GET</span>[<span class="hljs-string">&#x27;default&#x27;</span>]) &#123;<br>        <span class="hljs-keyword">case</span> <span class="hljs-string">&quot;French&quot;</span>:<br>        <span class="hljs-keyword">case</span> <span class="hljs-string">&quot;English&quot;</span>:<br>        <span class="hljs-keyword">case</span> <span class="hljs-string">&quot;German&quot;</span>:<br>        <span class="hljs-keyword">case</span> <span class="hljs-string">&quot;Spanish&quot;</span>:<br>            <span class="hljs-comment"># ok</span><br>            <span class="hljs-keyword">break</span>;<br>        <span class="hljs-keyword">default</span>:<br>            header (<span class="hljs-string">&quot;location: ?default=English&quot;</span>);<br>            <span class="hljs-keyword">exit</span>;<br>    &#125;<br>&#125;<br><br><span class="hljs-meta">?&gt;</span> <br></code></pre></div></td></tr></table></figure><p>因为是dom类型，所以可以从前端相关JavaScript代码分析。开发者使用了一段js代码来生成下拉列表，我们提交的参数会被设为下拉列表的选项并显示出来。如果不用考虑这个php文件的话，我们只需要将提交的参数设为JavaScript代码即可。而根据这个php源码来看，GET方式接收输入（即<code>default</code>参数）后进行白名单检测，然后只有在白名单中的输入才会继续进程，否则退出。从代码上看这个php文件直接过滤掉了我们的payload。</p><p>关于这关，我们可以利用#来绕过。这是因为url中的#是位置标符，代表浏览器页面中的一个位置。**#是用来指导浏览器动作的，对服务端完全无用，所以http请求中不含有#，即我们url中#后的数据不会提交到服务器解析。**所以有这么一个现象：如果我们在任意url后按回车，页面会刷新；而在url添加了#字符后，按回车没有使页面刷新，倒是会使页面移到最上方。这就是#指导浏览器动作的体现。（也因为这个特性，sql注入时我们需要将#上传到服务端，所以不能直接输入#，而是输入url编码后的#，即%23。）</p><p>根据浏览器url的这个特性，我们可以的payload可以设为<code>白名单中的参数+#+js攻击代码</code>。但又因为我们构造好payload后需要提交新数据，所以需要改变#号之前的内容，这样按回车后数据才会重新上传（注意参数也要通过白名单检测）。我们可以在#之前添加空格或是换成白名单中的其它内容，即<code>English #&lt;script&gt;alert(1)&lt;/script&gt;</code>。</p><p>提交这个参数的话，payload的参数部分服务器只会接收到<code>English</code>,然后解析php文件，再把数据包发给用户，接着用户的浏览器把服务器发来的html文件渲染成网页。在浏览器渲染页面的过程中，会构建DOM 树并加载JavaScript文件。在这一步中前端的JavaScript接收的参数是来自页面而非服务器的完整payload，接着JavaScript代码与DOM树的交互，所以js攻击代码被显示到页面中并且生效，我们即实现了一次xss攻击。</p><p>可以看出DOM类型的xss漏洞有这个特点，在客户端的浏览器把接收到的HTML文件渲染成网页时，JavaScript和DOM树在这个过程交互后才形成的xss攻击，这个阶段服务器是不参与的，payload也不会进过服务器。所以针对dom类型的xss，在前端设置限制会是更有效的方式。</p><hr><p>题目来源：WebGoat A7lesson 10</p><p>题目介绍：</p><p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220313160037.png"></p><p>这里告诉了我们DOM型xss可能在客户端中代码的<code>route configuration</code>找到。这个route我个人理解为path，和<code>configuration</code>连在一起就是规定了网页生成时会调用那些文件，怎么调用这些文件，这些文件在哪里。（个人理解，可能有误）</p><p>生产环境中的人员会为了测试网页工作的效果，会写一些测试用的js文件。而产品实际上线时，开发者又可能忘了修改这些配置信息和删除js文件。</p><p>这里url中的<code>start.mvc#</code>。这个就被称为base route，这个后面接上参数就可以调用对应的js代码。此时可以看到 这里后面的参数为<code>lesson</code></p><p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220313161634.png"></p><p>通过这个base route（start.mvc#）接口，lesson即为一个调用的模块，其后的参数为对应的文件。</p><p>我们就可以在前端源码中查找有无其它可以被调用的模块，这些模块会不会接受一些参数，使得这些参数显示在前端从而触发xss。</p><p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220313162959.png"></p><p>在GoatRouter.js文件中，找到了有关route的配置信息。</p><p>这里就说明了start.mvc#后可以跟上五种参数：welcome（欢迎页）、lesson/:name、lesson/:name/:pageNum</p><p>、  test/:param 、reportCard，分别调用对应的函数。我们可以继续在源码中搜素对应函数，查看后面我们输入的参数去向，会不会对前端造成影响。</p><p>根据提示，我们可以先尝试在url中调用test，模块，看看会产生什么后果。输入payload：<code>http://127.0.0.1:8080/WebGoat/start.mvc#test/123</code></p><p> <img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220313164128.png"></p><p>原封不动的显示出了我们的参数。所以这道题的答案是<code>start.mvc#test/</code></p><p>假如我们在这后面添加JavaScript代码，也就触发了xss漏洞（这也是webgoat第11关的内容）。但是需要注意的是，js代码中的<code>/</code>符号需要进行url编码，因为<code>/</code>会被当作路径的分隔符，test后面接收的参数从是<code>/</code>开始到下一个<code>/</code>结束。当然全部进行url编码也可以。</p><hr><p>完结 : )🐣</p><hr>]]></content>
+    <content type="html"><![CDATA[<p>下面是我从各大靶场（dvwa、pickachu、WebGoat）中选出的几个比较有代表性的xss例题。</p><span id="more"></span><hr><p>关于xss基础部分详见我这一篇博客：<a href="https://eggswoo.com/2022/03/05/xss%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">传送门–xss学习笔记</a></p><hr><h3 id="常用payload"><a href="#常用payload" class="headerlink" title="常用payload"></a>常用payload</h3><figure class="highlight php"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs php">&lt;script&gt;alert(<span class="hljs-number">1</span>)&lt;/script&gt;<br>&lt;a href=javascript:alert(<span class="hljs-number">1</span>)&gt;<span class="hljs-comment">//利用了JavaScript的通信协议</span><br>&lt;img src=x onerror=alert(<span class="hljs-number">1</span>)&gt;<span class="hljs-comment">//图片加载错误触发，无script标签</span><br><span class="hljs-comment">//结合编码</span><br></code></pre></div></td></tr></table></figure><hr><h3 id="反射型xss"><a href="#反射型xss" class="headerlink" title="反射型xss"></a>反射型xss</h3><p>题目来源：pikachu–xss之href输出</p><p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220310201517.png"></p><p>我们的输入被放在了href标签内。</p><p>这种情况下除了考虑闭合&lt;a&gt;标签外，还可以利用JavaScript的通讯协议。javascript 通信协议是一个伪协议, 用于指定 URL 为 JavaScript 代码。也就是说我们可以直接在href标签内根据一下通信格式输入JavaScript代码：</p><figure class="highlight isbl"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs isbl"><span class="hljs-variable">javascript</span>:<span class="hljs-function"><span class="hljs-title">alert</span>(<span class="hljs-number">1</span>)</span><br></code></pre></div></td></tr></table></figure><hr><p>题目来源： pikachu–xss之htmlspecialchars</p><p>htmlspecialchars() 函数把预定义的字符转换为 HTML,也就是我们主要输入的&lt;、&gt;会失去作用。</p><p>htmlspecialchars()语法：htmlspecialchars(string,flags,character-set,double_encode)</p><p>其中可用的quotestyle类型：<br>ENT_COMPAT - 默认。仅编码双引号<br>ENT_QUOTES - 编码双引号和单引号<br>ENT_NOQUOTES - 不编码任何引号</p><p>默认情况下是不会编码单引号的，所以如果使用了htmlspecialchars（）来过滤的话我们只能试试用单、双引号闭合语句来构造payload。</p><hr><h3 id="储存型xss"><a href="#储存型xss" class="headerlink" title="储存型xss"></a>储存型xss</h3><p>题目来源：pikachu–xss之盲打</p><p>我们输入的数据不会显示出来，只有管理员在后台查看时才能触发。虽然此时进行xss攻击比较困难，但一旦成功即可盗取网站管理员信息。</p><hr><h3 id="DOM型xss"><a href="#DOM型xss" class="headerlink" title="DOM型xss"></a>DOM型xss</h3><p>题目来源：dvwa–XSS (DOM),high级别</p><p>前端相关代码（与参数有关的JavaScript代码部分）：<img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220308133519.png"></p><p>源码：</p><figure class="highlight php"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs php"><span class="hljs-meta">&lt;?php</span><br><br><span class="hljs-comment">// Is there any input?</span><br><span class="hljs-keyword">if</span> ( array_key_exists( <span class="hljs-string">&quot;default&quot;</span>, <span class="hljs-variable">$_GET</span> ) &amp;&amp; !is_null (<span class="hljs-variable">$_GET</span>[ <span class="hljs-string">&#x27;default&#x27;</span> ]) ) &#123;<br><br>    <span class="hljs-comment"># White list the allowable languages</span><br>    <span class="hljs-keyword">switch</span> (<span class="hljs-variable">$_GET</span>[<span class="hljs-string">&#x27;default&#x27;</span>]) &#123;<br>        <span class="hljs-keyword">case</span> <span class="hljs-string">&quot;French&quot;</span>:<br>        <span class="hljs-keyword">case</span> <span class="hljs-string">&quot;English&quot;</span>:<br>        <span class="hljs-keyword">case</span> <span class="hljs-string">&quot;German&quot;</span>:<br>        <span class="hljs-keyword">case</span> <span class="hljs-string">&quot;Spanish&quot;</span>:<br>            <span class="hljs-comment"># ok</span><br>            <span class="hljs-keyword">break</span>;<br>        <span class="hljs-keyword">default</span>:<br>            header (<span class="hljs-string">&quot;location: ?default=English&quot;</span>);<br>            <span class="hljs-keyword">exit</span>;<br>    &#125;<br>&#125;<br><br><span class="hljs-meta">?&gt;</span> <br></code></pre></div></td></tr></table></figure><p>因为是dom类型，所以可以从前端相关JavaScript代码分析。开发者使用了一段js代码来生成下拉列表，我们提交的参数会被设为下拉列表的选项并显示出来。如果不用考虑这个php文件的话，我们只需要将提交的参数设为JavaScript代码即可。而根据这个php源码来看，GET方式接收输入（即<code>default</code>参数）后进行白名单检测，然后只有在白名单中的输入才会继续进程，否则退出。从代码上看这个php文件直接过滤掉了我们的payload。</p><p>关于这关，我们可以利用#来绕过。<strong>这是因为url中的#是位置标符，代表浏览器页面中的一个位置。#是用来指导浏览器动作的，对服务端完全无用，所以http请求中不含有#，即我们url中#后的数据不会提交到服务器解析。</strong>所以有这么一个现象：如果我们在任意url后按回车，页面会刷新；而在url添加了#字符后，按回车没有使页面刷新，倒是会使页面移到最上方。这就是#指导浏览器动作的体现。（也因为这个特性，sql注入时我们需要将#上传到服务端，所以不能直接输入#，而是输入url编码后的#，即%23。）</p><p>根据浏览器url的这个特性，我们可以的payload可以设为<code>白名单中的参数+#+js攻击代码</code>。但又因为我们构造好payload后需要提交新数据，所以需要改变#号之前的内容，这样按回车后数据才会重新上传（注意参数也要通过白名单检测）。我们可以在#之前添加空格或是换成白名单中的其它内容，即<code>English #&lt;script&gt;alert(1)&lt;/script&gt;</code>。</p><p>提交这个参数的话，服务器只会接收到<code>English</code>,然后解析php文件，再把数据包发给用户，接着用户的浏览器把服务器发来的html文件渲染成网页。在浏览器渲染页面的过程中，会构建DOM 树并加载JavaScript文件。在这一步中前端的JavaScript接收的参数是来自页面而非服务器的完整payload，接着JavaScript代码与DOM树的交互，所以js攻击代码被显示到页面中并且生效，我们即实现了一次xss攻击。</p><p>可以看出DOM类型的xss漏洞有这个特点，在客户端的浏览器把接收到的HTML文件渲染成网页时，JavaScript和DOM树在这个过程交互后才形成的xss攻击，这个阶段服务器是不参与的，payload也不会进过服务器。所以针对dom类型的xss，在前端设置限制会是更有效的方式。</p><hr><p>题目来源：WebGoat A7lesson 10</p><p>题目介绍：</p><p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220313160037.png"></p><p>这里告诉了我们DOM型xss可能在客户端中代码的<code>route configuration</code>找到。这个route我个人理解为path，和<code>configuration</code>连在一起就是规定了网页生成时会调用那些文件，怎么调用这些文件，这些文件在哪里。（个人理解，可能有误）</p><p>生产环境中的人员会为了测试网页工作的效果，会写一些测试用的js文件。而产品实际上线时，开发者又可能忘了修改这些配置信息和删除js文件。</p><p>这里url中的<code>start.mvc#</code>。这个就被称为base route，这个后面接上参数就可以调用对应的js代码。此时可以看到 这里后面的参数为<code>lesson</code></p><p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220313161634.png"></p><p>通过这个base route（start.mvc#）接口，lesson即为一个调用的模块，其后的参数为对应的文件。</p><p>我们就可以在前端源码中查找有无其它可以被调用的模块，这些模块会不会接受一些参数，使得这些参数显示在前端从而触发xss。</p><p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220313162959.png"></p><p>在GoatRouter.js文件中，找到了有关route的配置信息。</p><p>这里就说明了start.mvc#后可以跟上五种参数：welcome、lesson/:name、lesson/:name/:pageNum</p><p>、  test/:param 、reportCard，分别会调用其对应的函数。我们可以继续在源码中搜素对应函数，查看我们输入的参数去向，会不会对前端造成影响。</p><p>在这里根据提示，我们也可以直接先尝试在url中调用test，模块，看看会产生什么后果。输入payload：<code>http://127.0.0.1:8080/WebGoat/start.mvc#test/123</code></p><p> <img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220313164128.png"></p><p>原封不动的显示出了我们的参数。所以这道题的答案是<code>start.mvc#test/</code></p><p>假如我们在这后面添加JavaScript代码，也就触发了xss漏洞（这也是webgoat第11关的内容）。但是需要注意的是，js代码中的<code>/</code>符号需要进行url编码，因为<code>/</code>会被当作路径的分隔符，test后面接收的参数从是<code>/</code>开始到下一个<code>/</code>结束。当然全部进行url编码也可以。</p><hr><p>完结 : )🐣</p><hr>]]></content>
     
     
     <categories>
@@ -326,9 +384,9 @@
     
     <tags>
       
-      <tag>sql注入</tag>
-      
       <tag>渗透</tag>
+      
+      <tag>sql注入</tag>
       
       <tag>py脚本</tag>
       
@@ -405,9 +463,9 @@
     
     <tags>
       
-      <tag>sql注入</tag>
-      
       <tag>渗透</tag>
+      
+      <tag>sql注入</tag>
       
     </tags>
     

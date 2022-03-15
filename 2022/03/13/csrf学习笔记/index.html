@@ -14,13 +14,29 @@
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
   <meta name="theme-color" content="#2f4154">
-  <meta name="description" content="俺的个人博客">
+  <meta name="description" content="CSRF（Cross-Site Request Forgery）跨站点请求伪造，也被称为One Click Attack或者Session Riding。指利用受害者未失效的身份认证信息（cookie、session等），诱骗其点击恶意链接或者访问包含攻击代码的页面，在受害人不知情的情况下，以受害人的身份向（身份认证信息所对应的）服务器发送请求，从而完成非法操作（如转账、改密等）的一种攻击行为。">
   <meta name="author" content="Eggs">
   <meta name="keywords" content="Blog">
   
-  <title>归档 - 蛋窝窝</title>
+  <title>csrf学习笔记 - 蛋窝窝</title>
 
   <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10.6.0/styles/atelier-sulphurpool-light.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+  
 
 
 
@@ -52,7 +68,7 @@
 
 
 <body>
-  <header style="height: 80vh;">
+  <header style="height: 70vh;">
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
     <a class="navbar-brand"
@@ -146,22 +162,60 @@
 </nav>
 
     <div class="banner" id="banner" parallax=true
-         style="background: url('https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/bkg_cloud&mountain.jpg') no-repeat center center;
+         style="background: url('/img/default0.png') no-repeat center center;
            background-size: cover;">
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
           <div class="page-header text-center fade-in-up">
-            <span class="h2" id="subtitle" title="“生命是华丽错觉。”">
+            <span class="h2" id="subtitle" title="csrf学习笔记">
               
             </span>
 
             
+              <div class="mt-3">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-author" aria-hidden="true"></i>
+      Eggs
+    </span>
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2022-03-13 23:27" pubdate>
+        2022年3月13日 晚上
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      816 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      8
+       分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
           </div>
 
-          
-            <div class="scroll-down-bar">
-              <i class="iconfont icon-arrowdown"></i>
-            </div>
           
         </div>
       </div>
@@ -170,46 +224,159 @@
 
   <main>
     
-      <div class="container nopadding-x-md">
-        <div class="py-5" id="board"
-          >
-          
-          <div class="container">
-            <div class="row">
-              <div class="col-12 col-md-10 m-auto">
-                
-
-<div class="list-group">
-  <p class="h4">共计 20 篇文章</p>
-  <hr>
-  
-  
-    
       
-      <p class="h5">2021</p>
-    
-    <a href="/2021/11/09/%E5%8F%88%E6%9C%89%E8%B0%81%E4%BC%9A%E4%B8%80%E7%9B%B4%E6%8C%BD%E7%95%99%E5%91%A2/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">又有谁会一直挽留呢</span>
-      <time style="float: right;">11-09</time>
-    </a>
-  
-    
-    <a href="/2021/11/09/%E6%81%AD%E5%96%9Cedg/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">恭喜edg</span>
-      <time style="float: right;">11-09</time>
-    </a>
-  
-</div>
 
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">csrf学习笔记</h1>
+            
+            <div class="markdown-body">
+              <p>CSRF（Cross-Site Request Forgery）跨站点请求伪造，也被称为One Click Attack或者Session Riding。指利用受害者<strong>未失效的身份认证信息</strong>（cookie、session等），诱骗<strong>其点击恶意链接或者访问包含攻击代码的页面</strong>，在受害人不知情的情况下，<strong>以受害人的身份</strong>向（身份认证信息所对应的）服务器发送请求，从而<strong>完成非法操作</strong>（如转账、改密等）的一种攻击行为。</p>
+<span id="more"></span>
 
+<hr>
+<h3 id="对CSRF漏洞的理解"><a href="#对CSRF漏洞的理解" class="headerlink" title="对CSRF漏洞的理解"></a>对CSRF漏洞的理解</h3><p>csrf同xss看起来有点像，都是攻击者构造url，诱骗用户点击来触发漏洞。</p>
+<p>不同的是xss的攻击代码是代码注入，是利用了站点HTML语言构造的缺陷，payload是嵌入到页面中的HTML代码中的。而csrf攻击的payload中没有闭合HTML结构的语句，是直接利用了已登录用户的身份信息来执行站点命令。</p>
+<p>CSRF的攻击有以下两个重点</p>
+<ul>
+<li>目标用户已经登录了网站，能够执行网站的功能</li>
+<li>目标用户访问了攻击者构造的URL</li>
+</ul>
+<hr>
+<h3 id="CSRF的攻击方式"><a href="#CSRF的攻击方式" class="headerlink" title="CSRF的攻击方式"></a>CSRF的攻击方式</h3><p>根据网站页面的漏洞构造payload，在用户登录的情况下点击后，凭借用户的信息去执行一系列命令。</p>
+<p>以dvwa的csrf靶场中的low级别为例，在这里假设我们的目的为修改某一个用户的密码。</p>
+<p>我们先抓取修改密码时的数据包，利用burp生成CSRF Poc页面的功能，根据这个数据包生成一个html文件。</p>
+<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220314212232.png" srcset="/img/loading.gif" lazyload></p>
+<p>这个html即是触发csrf的陷阱网页。根据刚才数据包提交的参数，这里创建了一个表单，并隐藏了对应参数。</p>
+<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220314214047.png" srcset="/img/loading.gif" lazyload></p>
+<p>当用户点击提交时，就会利用当前用户的身份去执行form action中的操作，在这里即为修改密码。</p>
+<p>直接构造一个这个链接也是可以的，如果用户点击这个链接也是一样的效果，但这样设计网页更容易使用户触发漏洞，因为攻击者可以在网页中添加迷惑信息。</p>
+<p>当用户点击提交后就可以看到密码已被修改。实际情况下攻击者构造的陷阱网页不会这么明显，不会使用户意识到发生了什么。</p>
+<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220314215711.png" srcset="/img/loading.gif" lazyload></p>
+<h3 id="CSRF漏洞代码分析及防御措施"><a href="#CSRF漏洞代码分析及防御措施" class="headerlink" title="CSRF漏洞代码分析及防御措施"></a>CSRF漏洞代码分析及防御措施</h3><p>…实际上存在csrf漏洞的网页的代码在结构和逻辑上并没有什么特性，为用户设置身份信息且用户有一些执行命令的权限以及对用户身份验证环节的薄弱（或身份信息易被伪造）就是共同点。</p>
+<p>出现scrf漏洞的原因就是网站过于相信用户，攻击者可以伪造用户请求，由此可知，抵御csrf攻击的关键在于：在请求中放入攻击者不能伪造的信息。例如可以在http请求中以参数的形式加入一个随机产生的token，并在服务器验证token，如果请求中没有token或者token中的内容不正确，则认为该请求可能是csrf攻击从而拒绝该请求。</p>
+<hr>
+<p>参考：《web安全攻防》</p>
+<hr>
+<p>完结 : )🐣</p>
+<hr>
 
-
-
-              </div>
             </div>
-          </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/%E5%AD%A6%E4%B9%A0/">学习</a>
+                    
+                      <a class="hover-with-bg" href="/categories/%E5%AD%A6%E4%B9%A0/%E7%BD%91%E5%AE%89/">网安</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/csrf/">csrf</a>
+                    
+                      <a class="hover-with-bg" href="/tags/%E6%B8%97%E9%80%8F/">渗透</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/03/16/CSRF%E9%9D%B6%E5%9C%BA%E7%BB%83%E4%B9%A0/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">CSRF靶场练习</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/03/11/F-k-Rd-client/">
+                        <span class="hidden-mobile">F**k_Rd_client</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments" lazyload>
+                
+                  
+                
+                
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js', function () {
+        new Valine({
+          el: "#valine",
+          app_id: "DejyuTUMjI2eFz3aDorItWV1-gzGzoHsz",
+          app_key: "fuBqYYOE6Y2x4Ssxcxg7OhUW",
+          placeholder: "说点什么",
+          path: window.location.pathname,
+          avatar: "monsterid",
+          meta: ["nick"],
+          pageSize: "10",
+          lang: "zh-CN",
+          highlight: true,
+          recordIP: true,
+          serverURLs: "",
+        });
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+              </article>
+            
+          </article>
         </div>
       </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
     
 
     
@@ -349,9 +516,15 @@
 
 
 
+  <script  src="https://cdn.jsdelivr.net/npm/tocbot@4.12.2/dist/tocbot.min.js" ></script>
 
 
 
+  <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4.3.0/anchor.min.js" ></script>
 
 
 
