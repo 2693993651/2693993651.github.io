@@ -194,7 +194,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      504 字
+      706 字
     </span>
   
 
@@ -204,7 +204,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      5
+      7
        分钟
     </span>
   
@@ -253,7 +253,25 @@
 <p><em>banner信息：属于信息搜集的范畴。在渗透测试中，典型的 4xx、5xx 信息泄露就属于 banner 泄露的一种。在 banner 信息中，可以获取到软件开发商、软件名称、服务类型、版本版本号有时候就会存在公开的 CVE 问题，可以直接进行利用。banner 信息获取的基础是在和目标建立链接后的，只有建立的链接，才可以获取到相应的 banner 信息，当目标对 banner 信息进行隐藏或者配置了禁止读取时，这时的 banner 则获取不到</em></p>
 <p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/ssrf01.jpg" srcset="/img/loading.gif" lazyload></p>
 <hr>
-<h3 id="ssrf漏洞利用"><a href="#ssrf漏洞利用" class="headerlink" title="ssrf漏洞利用"></a>ssrf漏洞利用</h3>
+<h3 id="ssrf漏洞利用"><a href="#ssrf漏洞利用" class="headerlink" title="ssrf漏洞利用"></a>ssrf漏洞利用</h3><p>以pikachu的ssrf例题为例</p>
+<p>此php页面的功能是接收一个url参数，然后将url的内容返回到网上。</p>
+<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220322190647.png" srcset="/img/loading.gif" lazyload></p>
+<p>如果我们的url参数设为服务器上其它文件的地址（内网地址）时，页面同样返回请求内容，泄露了内网信息。</p>
+<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220322191052.png" srcset="/img/loading.gif" lazyload></p>
+<p>也可以利用file协议读取文件，如<code>xx.php?url=file:///C:/Windows/win.ini</code></p>
+<hr>
+<h3 id="ssrf漏洞代码分析"><a href="#ssrf漏洞代码分析" class="headerlink" title="ssrf漏洞代码分析"></a>ssrf漏洞代码分析</h3><figure class="highlight php"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs php"><span class="hljs-meta">&lt;?php</span><br>    <span class="hljs-keyword">if</span>(<span class="hljs-keyword">isset</span>(<span class="hljs-variable">$_POST</span>[<span class="hljs-string">&#x27;url&#x27;</span>]))<br>    &#123;<br>        <span class="hljs-variable">$file</span> = file_get_contents(<span class="hljs-variable">$_POST</span>[<span class="hljs-string">&#x27;url&#x27;</span>]);<br>        <span class="hljs-keyword">echo</span> <span class="hljs-variable">$file</span>;<br>    &#125;	<br><span class="hljs-meta">?&gt;</span><br></code></pre></div></td></tr></table></figure>
+
+<p>在这段代码中，<code>file_get_contents()</code>将整个文件或一个url所指向的文件读入一个字符串中，接着输出到页面上。</p>
+<p>其它可能导致ssrf的函数有：</p>
+<figure class="highlight stylus"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs stylus"><span class="hljs-function"><span class="hljs-title">fsockopen</span><span class="hljs-params">()</span></span>  打开一个网络连接或者一个Unix 套接字连接<br><span class="hljs-function"><span class="hljs-title">curl_exec</span><span class="hljs-params">()</span></span>   初始化一个新的会话<br></code></pre></div></td></tr></table></figure>
+
+
+
+<hr>
+<p>完结 : )🐣</p>
+<hr>
+
             </div>
             <hr>
             <div>
