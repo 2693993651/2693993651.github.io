@@ -14,11 +14,11 @@
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
   <meta name="theme-color" content="#2f4154">
-  <meta name="description" content="俺的个人博客">
+  <meta name="description" content="本篇介绍一下我从各大靶场（dvwa、pikachu、webgoat）中选出的几个具有csrf漏洞的例题。">
   <meta name="author" content="Eggs">
   <meta name="keywords" content="Blog">
   
-  <title>CSRF靶场练习 - 蛋窝窝</title>
+  <title>csrf靶场练习 - 蛋窝窝</title>
 
   <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
 
@@ -167,7 +167,7 @@
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
           <div class="page-header text-center fade-in-up">
-            <span class="h2" id="subtitle" title="CSRF靶场练习">
+            <span class="h2" id="subtitle" title="csrf靶场练习">
               
             </span>
 
@@ -194,7 +194,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      0 字
+      2.9k 字
     </span>
   
 
@@ -204,7 +204,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      1
+      35
        分钟
     </span>
   
@@ -234,12 +234,110 @@
         <div class="py-5" id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">CSRF靶场练习</h1>
+            <h1 style="display: none">csrf靶场练习</h1>
             
             <div class="markdown-body">
-              <span id="more"></span>
+              <p>本篇介绍一下我从各大靶场（dvwa、pikachu、webgoat）中选出的几个具有csrf漏洞的例题。</p>
+<span id="more"></span>
 
+<p>关于csrf基础知识的传送门：[csrf的基础知识](<a target="_blank" rel="noopener" href="https://eggswoo.com/2022/03/13/csrf%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">csrf学习笔记 - 蛋窝窝 (eggswoo.com)</a>)</p>
 <hr>
+<h3 id="referer限制"><a href="#referer限制" class="headerlink" title="referer限制"></a>referer限制</h3><p>题目来源：dvwa–csrf medium级别（区别于网上的老旧版本，这关涉及到了浏览器安全策略）</p>
+<p>相关源码：</p>
+<figure class="highlight php"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs php"><span class="hljs-meta">&lt;?php</span><br><br><span class="hljs-keyword">if</span>( <span class="hljs-keyword">isset</span>( <span class="hljs-variable">$_GET</span>[ <span class="hljs-string">&#x27;Change&#x27;</span> ] ) ) &#123;<br>    <span class="hljs-comment">// Checks to see where the request came from</span><br>    <span class="hljs-keyword">if</span>( stripos( <span class="hljs-variable">$_SERVER</span>[ <span class="hljs-string">&#x27;HTTP_REFERER&#x27;</span> ] ,<span class="hljs-variable">$_SERVER</span>[ <span class="hljs-string">&#x27;SERVER_NAME&#x27;</span> ]) !== <span class="hljs-literal">false</span> ) &#123;<br>        <span class="hljs-comment">// Get input</span><br>        <span class="hljs-variable">$pass_new</span>  = <span class="hljs-variable">$_GET</span>[ <span class="hljs-string">&#x27;password_new&#x27;</span> ];<br>        <span class="hljs-variable">$pass_conf</span> = <span class="hljs-variable">$_GET</span>[ <span class="hljs-string">&#x27;password_conf&#x27;</span> ];<br><br>...<br>...<br>...<br>	<br><span class="hljs-meta">?&gt;</span><br></code></pre></div></td></tr></table></figure>
+
+<p>可以看出这关服务器对数据包中的参数<code>$_SERVER[ &#39;HTTP_REFERER&#39; ]</code>进行了检查，该参数必须在函数<code>stripos()</code>中与<code>$_SERVER[ &#39;SERVER_NAME&#39; ]</code>的结果为true,代码中的这两个参数在http数据包中即为<code>host</code>和<code>referer</code>。host指的是目标服务器域名，referer指的是当前服务器域名。以下图为的数据包为例</p>
+<p>当我从百度的搜索页面跳转到知乎的页面时，就会产生一个这样的数据包：</p>
+<p>host:        www.baidu.com</p>
+<p>referer:    www.zhihu.com</p>
+<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220317165448.png" srcset="/img/loading.gif" lazyload></p>
+<p>在这里我们的目的是要满足 stripos( $_SERVER[ ‘HTTP_REFERER’ ] ,$_SERVER[ ‘SERVER_NAME’ ]) !== false ，而stripos（）函数的作用是查找字符串在另一字符串中第一次出现的位置。这里即需要referer的域名在host中出现。这里本意是确保是站内的跳转，referer和host都必须是同一个站点下。</p>
+<p>而我们可以在自己的服务器上部署一个文件名为目标站点的HTML文件，这样当用户访问我们站点上的文件时，host为目标站点，referer为我们站点/目标站点.html，满足了stripos函数，理论上来说即可成功实现csrf攻击。</p>
+<p><strong>但是</strong>，我最开始实验的时候一直没能成功，referer中始终只有一级域名,即只有一个ip地址，没有显示后面的文件名，查阅资料后才发现这是因为浏览器有着一些安全策略的设置。</p>
+<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220317184605.png" srcset="/img/loading.gif" lazyload></p>
+<p><em>图片来源：<a target="_blank" rel="noopener" href="https://www.jianshu.com/p/f76917e4947e">https://www.jianshu.com/p/f76917e4947e</a></em></p>
+<p>可我之前在百度跳转知乎时也是不同源，但数据包中的referer却是完整的。</p>
+<p>原来这是因为有关referer参数的设置可以在html网页中更改，这样就浏览器的安全策略就失效了。</p>
+<p>这是之前百度搜索页面的相关设置</p>
+<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220317190110.png" srcset="/img/loading.gif" lazyload>所以我们需要在自己构造的html页面中加入这一项<code>&lt;meta content=&quot;always&quot; name=&quot;referrer&quot;&gt;</code></p>
+<p>该html文件源码：</p>
+<figure class="highlight html"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs html">//服务器为192.168.111.130<br>//该文件储存在本地（127.0.0.1），文件名为192.168.111.130.html<br><span class="hljs-meta">&lt;!doctype <span class="hljs-meta-keyword">html</span>&gt;</span><br><span class="hljs-meta">&lt;!doctype <span class="hljs-meta-keyword">html</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">html</span> <span class="hljs-attr">lang</span>=<span class="hljs-string">&quot;en&quot;</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">head</span>&gt;</span><br>	<span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">content</span>=<span class="hljs-string">&quot;always&quot;</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;referrer&quot;</span>&gt;</span><br>	<span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">charset</span>=<span class="hljs-string">&quot;UTF-8&quot;</span>&gt;</span><br>	<span class="hljs-tag">&lt;<span class="hljs-name">title</span>&gt;</span>img_src_get<span class="hljs-tag">&lt;/<span class="hljs-name">title</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">head</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span><br>	<span class="hljs-tag">&lt;<span class="hljs-name">h1</span>&gt;</span>get for img src<span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;</span><br>	<span class="hljs-tag">&lt;<span class="hljs-name">img</span> <span class="hljs-attr">stytle</span>=<span class="hljs-string">&quot;display:none&quot;</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;http://192.168.111.130/DVWA-master/vulnerabilities/csrf/?password_new=a&amp;password_conf=a&amp;Change=Change&quot;</span><span class="hljs-attr">alt</span>=<span class="hljs-string">&quot;&quot;</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span><br></code></pre></div></td></tr></table></figure>
+
+<p>再次尝试访问</p>
+<p>referer带有了我们命名的文件名，实现了当用户访问我们服务器上的这个页面时，会对目标服务器上的页面发起csrf攻击。</p>
+<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220317190505.png" srcset="/img/loading.gif" lazyload></p>
+<p>验证一下密码，已成功被修改为数据包的参数“1”，这次csrf攻击成功。</p>
+<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220317191704.png" srcset="/img/loading.gif" lazyload></p>
+<p><em>题外话，做这一关的实验时，我并没有直接在网上看到解决方法，包括我用英文搜的Google在内，所有的通关方法都是不用改html参数就成功了，所以我也卡了有一两天。如果按部就班，盲目跟着别人的步子，只会在这里卡到天荒地老🤔。</em></p>
+<p>另外这一关的官方提示，是说我们可以结合xss来完成。</p>
+<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220317203005.png" srcset="/img/loading.gif" lazyload></p>
+<p>因为如果站内存在xss漏洞，利用站内的xss漏洞发送GET请求的话，产生的数据包中host和referer也满足在同一个域名这一条件。</p>
+<p>medium难度下的反射型xss的payload:</p>
+<p><code>&lt;img src=1 onerror=alert(1)&gt;</code></p>
+<p>我们根据要求更改一下payload：</p>
+<p><code>&lt;img src=&quot;http://192.168.111.130/DVWA-master/vulnerabilities/csrf/?password_new=&amp;password_conf=&amp;Change=Change#&quot; alt=&quot;over&quot;&gt;</code></p>
+<p><em>xss叫跨站脚本攻击，而非跨站js脚本攻击</em> :)</p>
+<p>结合url生成链接：</p>
+<p><code>http://192.168.111.130/DVWA-master/vulnerabilities/xss_r/?name=%3Cimg+src%3D%22http%3A%2F%2F192.168.111.130%2FDVWA-master%2Fvulnerabilities%2Fcsrf%2F%3Fpassword_new%3D%26password_conf%3D%26Change%3DChange%23%22+alt%3D%22over%22%3E#</code></p>
+<p>当用户点击该链接时，即会触发xss漏洞，接着触发csrf漏洞，最终达到更改密码的目的。当然，我们同样可以将该链接藏在我们服务器上的站点中，一个短链接更容易使用户受骗点击。</p>
+<hr>
+<p>题目来源：pikachu–csrf(token)/dvwa–high</p>
+<p>这两个题目都是在请求的URL中加入了token验证，以dvwa提供的源码为例</p>
+<figure class="highlight php"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs php"><span class="hljs-meta">&lt;?php</span><br><br><span class="hljs-keyword">if</span>( <span class="hljs-keyword">isset</span>( <span class="hljs-variable">$_GET</span>[ <span class="hljs-string">&#x27;Change&#x27;</span> ] ) )<br>&#123;<br>    <span class="hljs-comment">// Check Anti-CSRF token</span><br>    checkToken( <span class="hljs-variable">$_REQUEST</span>[ <span class="hljs-string">&#x27;user_token&#x27;</span> ], <span class="hljs-variable">$_SESSION</span>[ <span class="hljs-string">&#x27;session_token&#x27;</span> ], <span class="hljs-string">&#x27;index.php&#x27;</span> );<br><br>    ...<br>    ...<br>    ...<br><span class="hljs-comment">// Generate Anti-CSRF token</span><br>generateSessionToken();<br>&#125;<br><span class="hljs-meta">?&gt;</span><br></code></pre></div></td></tr></table></figure>
+
+<p>前端form表单中有关token的相关代码</p>
+<figure class="highlight html"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">form</span> <span class="hljs-attr">action</span>=<span class="hljs-string">&quot;#&quot;</span> <span class="hljs-attr">method</span>=<span class="hljs-string">&quot;GET&quot;</span>&gt;</span><br>			Current password:<span class="hljs-tag">&lt;<span class="hljs-name">br</span> /&gt;</span><br>			<span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;password&quot;</span> <span class="hljs-attr">AUTOCOMPLETE</span>=<span class="hljs-string">&quot;off&quot;</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;password_current&quot;</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">br</span> /&gt;</span><br>			New password:<span class="hljs-tag">&lt;<span class="hljs-name">br</span> /&gt;</span><br>			<span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;password&quot;</span> <span class="hljs-attr">AUTOCOMPLETE</span>=<span class="hljs-string">&quot;off&quot;</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;password_new&quot;</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">br</span> /&gt;</span><br>			Confirm new password:<span class="hljs-tag">&lt;<span class="hljs-name">br</span> /&gt;</span><br>			<span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;password&quot;</span> <span class="hljs-attr">AUTOCOMPLETE</span>=<span class="hljs-string">&quot;off&quot;</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;password_conf&quot;</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">br</span> /&gt;</span><br>			<span class="hljs-tag">&lt;<span class="hljs-name">br</span> /&gt;</span><br>			<span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;submit&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;Change&quot;</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;Change&quot;</span>&gt;</span><br>			<span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&#x27;hidden&#x27;</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&#x27;user_token&#x27;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&#x27;53d5d775f61cd91ce1056a8af93bd825&#x27;</span> /&gt;</span><br>		<span class="hljs-tag">&lt;/<span class="hljs-name">form</span>&gt;</span><br></code></pre></div></td></tr></table></figure>
+
+
+
+<p>用户每次访问/请求页面，就会调用generateSessionToken()函数，销毁之前储存在$_SESSION中的token，并在<strong>服务器端</strong>生成$_SESSION[‘token’]，并将这个$_SESSION[‘token’]传递到<strong>当前用户的前端表单</strong>中。当用户提交表单时，会一并提交这个token的值，服务器接收到用户请求时会先验证token的值是否与服务器端生成的token相同，如果不同则拒绝提供服务。</p>
+<p>这样当攻击者进行csrf攻击时，所构造的payload中必须带有正确的token，而token全程是在服务端生成，传递到用户的前端，用后即毁。攻击者作为第三者是没有机会窃取到token的，所以携带token的请求几乎已经堵死了csrf漏洞。</p>
+<p>为什么只是几乎呢，我通过查阅针对携带token请求的绕过，目前只在网上看到了这两种不是非常靠谱的方法</p>
+<ul>
+<li><p>先连续获取几次token的值，这个值一般是通过base64或md5加密。尝试解密并推导出token的生成函数，这样就有机会伪造token了</p>
+<p><em>（如果是随机生成的token就没必要猜了…）</em></p>
+</li>
+<li><p>直接删除token，有些请求是不需要token的，比如删除用户账户</p>
+<p><em>（所以这也不算绕过token）</em></p>
+</li>
+</ul>
+<p><strong>普遍能够绕过token的方法是结合xss漏洞来实现csrf。</strong>当用户点击攻击者构造的链接后，触发通过xss读取用户前端页面的token。而我们之前提到过的，攻击者在自己的服务器上构建js代码，构造xss链接来指向该js文件在这里是不行的了<a target="_blank" rel="noopener" href="https://eggswoo.com/2022/03/05/xss%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/#xss%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E8%BF%87%E7%A8%8B">xss学习笔记 - 蛋窝窝 (eggswoo.com)</a>，因为存在着跨域的限制。简单来说就是网站如没有允许跨域的话，是不能被其它网站读取数据的。攻击者的网站攻击者可以取消跨域的限制，让别的网站来读取攻击者的js脚本，而攻击者却不能更改目标站点的跨域限制，也就是说攻击者网站上的js文件是不能读取站点上前端的html内容的。所以攻击者只能用xss漏洞直接读取token内容。</p>
+<p>下面是我看到的一种思路：</p>
+<p><a target="_blank" rel="noopener" href="https://www.freebuf.com/articles/web/203301.html">DVWA 1.10 High等级的CSRF另类通关法 - FreeBuf网络安全行业门户</a></p>
+<p>结合以上内容可以看出来，即使有绕过带有token的csrf的方法也具存在着很强的局限性，况且实际情况下利用xss直接窃取cookie来登录还要更简单一些</p>
+<hr>
+<p>题目来源：WebGoat–A8 CSRF and content-type</p>
+<p>这道题的特点是使用了json数据格式来传递表单中的数据。</p>
+<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220322160527.png" srcset="/img/loading.gif" lazyload></p>
+<p>当我们提交后，<strong>我们输入的值会被解析为json格式</strong>提交：</p>
+<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220322163851.png" srcset="/img/loading.gif" lazyload></p>
+<p>然后服务器再解析json格式的内容，做出对应的响应。</p>
+<p>我们的目的就是伪造这个表单，放在自己服务器上诱使用户点击（或是直接构造提交请求的链接）。现在的任务就是如何伪造这种json格式的表单。</p>
+<p>靶场中给了一个<strong>带有XML主体的post请求</strong>参考资料<a target="_blank" rel="noopener" href="http://pentestmonkey.net/blog/csrf-xml-post-request">csrf-xml-post-request</a>。（xml格式和json格式都是用于接收web服务端数据的一种格式，这两种格式的post绕过方法是一样的）。从这里的资料可知，如果使用这两种格式接收数据，fom中必须添加属性<code>ENCTYPE=&quot;text/plain&quot;</code>。</p>
+<p>除了编码外，还有另外一个问题。</p>
+<p>浏览器解析post内容的默认格式是这样的：a=1&amp;b=2&amp;c=3。而json格式数据是这样的：{“a”:1,”b”:2,”c”:3}</p>
+<p>post中传递参数时，按照规定会是这样的形式：<code>name1=value&amp;name2=value2</code>。这在input标签中看起来是这个样子:</p>
+<figure class="highlight html"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;hidden&quot;</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;a&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;b&quot;</span> &gt;</span>	//a=b	<br></code></pre></div></td></tr></table></figure>
+
+<p>而我们构造出的链接在传递json数据时，input标签中的内容是这样：</p>
+<figure class="highlight html"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;hidden&quot;</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&#x27;&#123;json内容&#125;&#x27;</span>&gt;</span>	  //json（=xx?）<br></code></pre></div></td></tr></table></figure>
+
+<p>漏掉了value属性。所以即使我们构造成这样，在提交表单时浏览器会”智能地“加上一个等号，使得我们提交的数据变成<code>&#123;json内容&#125;=</code>。而这多余的等号会使得服务器解析json的内容失败，我们构造的链接也就是无效的。</p>
+<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220322171156.png" srcset="/img/loading.gif" lazyload></p>
+<p><em>图片来源：<a target="_blank" rel="noopener" href="https://www.jianshu.com/p/227ebb46c1a7">https://www.jianshu.com/p/227ebb46c1a7</a></em></p>
+<p>所以这里的json需要和input的属性value拼接一下，凑出<code>value=</code></p>
+<figure class="highlight html"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&#x27;&#123;&quot;name&quot;:&quot;WebGoat&quot;,&quot;email&quot;:&quot;webgoat@webgoat.org&quot;,&quot;subject&quot;:&quot;suggestions&quot;,&quot;message&quot;:&quot;&#x27;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&#x27;WebGoat is the best!!&quot;&#125;&#x27;</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&#x27;hidden&#x27;</span>&gt;</span><br><br></code></pre></div></td></tr></table></figure>
+
+<p>这样构造满足了name=value的形式，而post传递的数据被浏览器解析为</p>
+<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220322172458.png" srcset="/img/loading.gif" lazyload></p>
+<p><em>图片来源：<a target="_blank" rel="noopener" href="https://www.jianshu.com/p/227ebb46c1a7">https://www.jianshu.com/p/227ebb46c1a7</a></em></p>
+<p>服务器就能正确解析出该json信息，（只是最后一项中会多出一个=号）。</p>
+<p>这样当受害者点击我们构造的链接时，服务器就会收到带有json格式的post请求并相响应，我们的目的也就达到了。</p>
+<hr>
+<p>题目来源：W531ebGoat–Login CSRF attack</p>
+<p>这种csrf攻击是让用户在不知情的情况下登录到了攻击者的账户，然后攻击者就可以知道用户做了什么操作，用这种方式来搜集用户的信息。</p>
+<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220321201446.png" srcset="/img/loading.gif" lazyload></p>
+<p>以图上的内容为例，攻击者在自己服务器上创建一个页面（www.attacker.com），页面中有一个登录谷歌的表单，当用户访问该页面时就会自动登录谷歌，浏览器就保存了登录谷歌的cookie。然后当用户使用谷歌时，浏览器直接使用攻击者的Cookie，用户会一直以攻击者的账户请求谷歌的服务。事后攻击者再登录自己的账户根据历史记录就能看到用户搜索了什么内容。</p>
 
             </div>
             <hr>
@@ -277,6 +375,12 @@
                 <div class="post-prevnext">
                   <article class="post-prev col-6">
                     
+                    
+                      <a href="/2022/03/20/ssrf%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">ssrf学习笔记</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
                     
                   </article>
                   <article class="post-next col-6">

