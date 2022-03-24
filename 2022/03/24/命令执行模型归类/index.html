@@ -14,7 +14,7 @@
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
   <meta name="theme-color" content="#2f4154">
-  <meta name="description" content="命令执行有几种模型，本篇就为这几种漏洞模型归类。">
+  <meta name="description" content="命令执行有多种模型，本篇为这些漏洞模型归类总结的学习记录。">
   <meta name="author" content="Eggs">
   <meta name="keywords" content="Blog">
   
@@ -194,7 +194,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      667 字
+      1.8k 字
     </span>
   
 
@@ -204,7 +204,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      8
+      21
        分钟
     </span>
   
@@ -237,7 +237,7 @@
             <h1 style="display: none">命令执行模型归类</h1>
             
             <div class="markdown-body">
-              <p>命令执行有几种模型，本篇就为这几种漏洞模型归类。</p>
+              <p>命令执行有多种模型，本篇为这些漏洞模型归类总结的学习记录。</p>
 <span id="more"></span>
 
 <hr>
@@ -246,6 +246,7 @@
 <p>使用了PHP的部分函数，如system、shell_exec()、exec()和passthtu()。详见这篇：</p>
 </li>
 </ul>
+<p><a target="_blank" rel="noopener" href="https://eggswoo.com/2022/03/23/OS%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">OS命令执行漏洞</a></p>
 <ul>
 <li><p>代码执行</p>
 <p>php中<code>eval()；</code>存在代码执行，函数，菜刀、蚁剑的php一句话木马也是利用的这个函数。</p>
@@ -266,7 +267,7 @@
 </ul>
 </li>
 </ul>
-<p><em>参考：<a target="_blank" rel="noopener" href="https://blog.csdn.net/zouchengzhi1021/article/details/105366196">https://blog.csdn.net/zouchengzhi1021/article/details/105366196</a></em></p>
+<p>​            <em>参考：<a target="_blank" rel="noopener" href="https://blog.csdn.net/zouchengzhi1021/article/details/105366196">https://blog.csdn.net/zouchengzhi1021/article/details/105366196</a></em></p>
 <ul>
 <li><p>动态函数调用</p>
 <p>PHP支持动态函数调用，这给开发带来了极大的便利，但却也存在安全隐患，代码如下：</p>
@@ -279,8 +280,56 @@
 </li>
 </ul>
 <hr>
-<h3 id="Java命令执行"><a href="#Java命令执行" class="headerlink" title="Java命令执行"></a>Java命令执行</h3><hr>
-<h3 id="框架执行漏洞"><a href="#框架执行漏洞" class="headerlink" title="框架执行漏洞"></a>框架执行漏洞</h3><hr>
+<h3 id="Java命令执行"><a href="#Java命令执行" class="headerlink" title="Java命令执行"></a>Java命令执行</h3><p>java体系非常庞大，其中包括Java SE，Java EE，Java ME。而无论分支还是框架，都是以Java SE为基础的。</p>
+<blockquote>
+<p>Java SE，Java EE，Java ME三者的区别, 主要是面向的应用领域不一样</p>
+<p>java se: 即J2SE，java标准版，最基础的版本， 主要做一般的java应用， 比如， 应用软件/ QQ之类的通信软件等等。<br>java ee: 即J2EE，主要做企业应用， 比如公司网站，企业解决方案等；<br>java me: 即J2ME，主要面向嵌入式等设备应用的开发， 比如手机游戏等。</p>
+</blockquote>
+<p>在Java SE 中，存在Runtime类，在该类中提供了exec方法用以在单独的进程中执行指定的字符串命令。像JSP、Servlet、Struts、Spring、Hibernate等技术一般执行外部程序都会调用次方法（或者使用ProcessBuilders类，但比较少）。下面以Runtime类为例进行说明，模型代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-keyword">import</span> java.io.InputStream;<br><span class="hljs-keyword">import</span> java.io.InputStreamReader;<br><span class="hljs-keyword">import</span> java.io.BufferedReader;<br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">RuntimeTest</span></span>&#123;<br>    <span class="hljs-function">publi <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String args[])</span>throw exception</span>&#123;<br>        <span class="hljs-comment">//如果输入无参则退出</span><br>        <span class="hljs-keyword">if</span>(args.length==<span class="hljs-number">0</span>)&#123;<br>            System.exit(<span class="hljs-number">1</span>);<br>        &#125;		<br>        String command = args[<span class="hljs-number">0</span>];<br>        Runtime run = Runtime.getRuntime();<br>        <span class="hljs-comment">//执行命令</span><br>        Process pro = run.exe(command);<br>        <br>        InputStreamReader in = <span class="hljs-keyword">new</span> InputStreamReader(pro.getInputStream());<br>        BufferedReader buff = <span class="hljs-keyword">new</span> BufferedReader(in);<br>        <span class="hljs-keyword">for</span>(String temp = buff.readLine();temp!=<span class="hljs-keyword">null</span>;temp=buff.readLine())&#123;<br>            <span class="hljs-comment">//输入结果</span><br>            System,out.printlb(temp);<br>        &#125;<br>        buff.close();<br>        in.close();<br>        &#125;<br>   &#125;<br></code></pre></div></td></tr></table></figure>
+
+<p>上面的代码进过编译后可以执行命令操作，如：Java RuntimeTest “ls -l”，进行列文件操作。像有名的Struts2框架就存在命令执行漏洞，这即将在下一个模块中讲述。</p>
+<p>​    还有非常多的JSP木马，也都会使用Runtime().exec()来执行系统命令。<em>就像php木马中都会使用eval()。</em></p>
+<hr>
+<h3 id="框架执行漏洞"><a href="#框架执行漏洞" class="headerlink" title="框架执行漏洞"></a>框架执行漏洞</h3><p>如今框架技术已被广泛应用，越来越多的开发者喜欢使用框架。甚至有些甲方公司把项目交给乙方公司开发时，会明确要求乙方使用指定的框架技术，比如有名的Java三大框架（Hibernate、Spring、Struts）。</p>
+<p>而一旦框架出现了安全漏洞，则框架的用户群越多，受到的影响就越广，危害越大。</p>
+<ul>
+<li><p>Struts2代码执行漏洞</p>
+<p>Struts1最初是独立的MVC框架，但是Struts2改写了Strust1的核心技术，低层采用了XWORK的核心。XWORK也是一个MVC框架，而Struts2是在Strust1和XWORK基础技术上进行了合并，算是一个全新的框架。</p>
+<blockquote>
+<p>MVC：一种架构型模式，用来指导我们改善应用程序的架构，使得应用的模型和视图相分离，从而达到更好的开发和维护效率。在MVC模式中，应用程序被划分成模型（Model）、视图（View）和控制器（Controller）三个部分）</p>
+</blockquote>
+<p>​    Struts2的核心是使用webwork(XWORK的核心)框架，处理action时通过调用底层Java Bean的getter/setter方法来处理HTTP参数，它将每个HTTP参数申明为一个ONGL语句。</p>
+<blockquote>
+<p>java bean:</p>
+<p>Java language 是一种面向对象的编程语言，类是面向对象的编程语言的基础；可重用又是面向对象编程思想存在的意义之一。而java是咖啡，Java bean是咖啡豆🤔Java bean指的读写方法符合以下这种命名规范的类</p>
+<figure class="highlight java"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs Java"><span class="hljs-comment">// 读方法:</span><br><span class="hljs-function"><span class="hljs-keyword">public</span> Type <span class="hljs-title">getXyz</span><span class="hljs-params">()</span></span><br><span class="hljs-function"><span class="hljs-comment">// 写方法:</span></span><br><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">setXyz</span><span class="hljs-params">(Type value)</span></span><br></code></pre></div></td></tr></table></figure>
+
+<p>ONGL语句：</p>
+<p>OGNL是Object Graphic Navigation Language（对象图导航语言）的缩写，是一种功能强大的EL（Expression Language，表达式语言），可以通过简单的表达式来访问Java对象中的属性。</p>
+</blockquote>
+<p>当我们提交如下HTTP参数时：</p>
+<p><code>?user.address.city=bj&amp;user[&#39;name&#39;]=admin</code>，</p>
+<p>ONGL将它转换为：</p>
+<p><code>obj.getUser().getAddress().setCirt=&#39;bj&#39;;</code></p>
+<p> <code>Obj.getUser().setName=&quot;admin&quot;;</code></p>
+</li>
+</ul>
+<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220324225223.png" srcset="/img/loading.gif" lazyload><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220324225338.png" srcset="/img/loading.gif" lazyload></p>
+<ul>
+<li><p>ThinkPHP 命令执行漏洞</p>
+<p>ThinkPHP的问题主要在于DIspatcher.class.php文件，官方SVN修改前后的关键代码如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs bash">125 - <span class="hljs-variable">$res</span> = preg_replace(<span class="hljs-string">&#x27;@(w+)&#x27;</span>.<span class="hljs-variable">$depr</span>.<span class="hljs-string">&#x27;([^&#x27;</span>.<span class="hljs-variable">$depr</span>.<span class="hljs-string">&#x27;\/]+)@e&#x27;</span>,<span class="hljs-string">&#x27;$var[\&#x27;</span>\\1\<span class="hljs-string">&#x27;]=&quot;\\2\&#x27;</span>;,implode(<span class="hljs-variable">$depr</span>,<span class="hljs-variable">$paths</span>));<br></code></pre></div></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs bash">125 + <span class="hljs-variable">$res</span> = preg_replace(<span class="hljs-string">&#x27;@(w+)&#x27;</span>.<span class="hljs-variable">$depr</span>.<span class="hljs-string">&#x27;([^&#x27;</span>.<span class="hljs-variable">$depr</span>.<span class="hljs-string">&#x27;\/]+)@e&#x27;</span>,<span class="hljs-string">&#x27;$var[\&#x27;</span>\\1\<span class="hljs-string">&#x27;]=&quot;\\2\&#x27;</span>;,implode(<span class="hljs-variable">$depr</span>,<span class="hljs-variable">$paths</span>));<br></code></pre></div></td></tr></table></figure>
+
+<p>上述代码的含义是把phpinfo作为restful类型URL进行解析的，主要作用是把phpinfo中的数据解析并$_GET数组中。</p>
+<p>然而在用正则解析phpinfo的时候，主要是以下语句：<br><code>$res=preg_replace(&#39;@(w+)&#39;.$depr.&#39;([^&#39;.$depr.&#39;\/]+)@e&#39;,&#39;$var[\&#39;\\1\&#39;]=&quot;\\2\&#39;;,implode($depr,$paths));</code></p>
+<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220324232041.png" srcset="/img/loading.gif" lazyload></p>
+</li>
+</ul>
+<p><em>资料来源：《Web安全深度剖析》</em> </p>
+<hr>
 <h3 id="防范命令执行漏洞"><a href="#防范命令执行漏洞" class="headerlink" title="防范命令执行漏洞"></a>防范命令执行漏洞</h3><ul>
 <li><p>尽量不用使用系统执行命令</p>
 </li>
@@ -293,6 +342,7 @@
 </ul>
 <hr>
 <p>参考：《Web安全深度剖析》</p>
+<p>完结 : )🐣</p>
 <hr>
 
             </div>
