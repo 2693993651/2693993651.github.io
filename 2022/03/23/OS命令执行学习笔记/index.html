@@ -14,11 +14,11 @@
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
   <meta name="theme-color" content="#2f4154">
-  <meta name="description" content="CSRF（Cross-Site Request Forgery）跨站点请求伪造，也被称为One Click Attack或者Session Riding。指利用受害者未失效的身份认证信息（cookie、session等），诱骗其点击恶意链接或者访问包含攻击代码的页面，在受害人不知情的情况下，以受害人的身份向（身份认证信息所对应的）服务器发送请求，从而完成非法操作（如转账、改密等）的一种攻击行为。">
+  <meta name="description" content="应用程序有时需要调用一些执行系统命令的函数，如在PHP中，使用system、exec、shell_exec、paasthru、popen、porc_popen等函数可以执行系统命令。当黑可以控制这些函数中的参数时，就可以将恶意对系统命令拼接到正常命令中，从而造成命令执行攻击，这就是命令执行漏洞。">
   <meta name="author" content="Eggs">
   <meta name="keywords" content="Blog">
   
-  <title>csrf学习笔记 - 蛋窝窝</title>
+  <title>OS命令执行学习笔记 - 蛋窝窝</title>
 
   <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
 
@@ -167,7 +167,7 @@
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
           <div class="page-header text-center fade-in-up">
-            <span class="h2" id="subtitle" title="csrf学习笔记">
+            <span class="h2" id="subtitle" title="OS命令执行学习笔记">
               
             </span>
 
@@ -182,8 +182,8 @@
   
     <span class="post-meta">
       <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-      <time datetime="2022-03-13 23:27" pubdate>
-        2022年3月13日 晚上
+      <time datetime="2022-03-23 20:57" pubdate>
+        2022年3月23日 晚上
       </time>
     </span>
   
@@ -194,7 +194,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      1.1k 字
+      706 字
     </span>
   
 
@@ -204,7 +204,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      12
+      8
        分钟
     </span>
   
@@ -234,44 +234,44 @@
         <div class="py-5" id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">csrf学习笔记</h1>
+            <h1 style="display: none">OS命令执行学习笔记</h1>
             
             <div class="markdown-body">
-              <p>CSRF（Cross-Site Request Forgery）跨站点请求伪造，也被称为One Click Attack或者Session Riding。指利用受害者<strong>未失效的身份认证信息</strong>（cookie、session等），诱骗<strong>其点击恶意链接或者访问包含攻击代码的页面</strong>，在受害人不知情的情况下，<strong>以受害人的身份</strong>向（身份认证信息所对应的）服务器发送请求，从而<strong>完成非法操作</strong>（如转账、改密等）的一种攻击行为。</p>
+              <p>应用程序有时需要调用一些执行<strong>系统命令</strong>的函数，如在PHP中，使用system、exec、shell_exec、paasthru、popen、porc_popen等函数可以执行系统命令。当黑可以控制这些函数中的参数时，就可以将恶意对系统命令拼接到正常命令中，从而造成命令执行攻击，这就是命令执行漏洞。</p>
 <span id="more"></span>
 
+<p><em>很多人喜欢把代码执行漏洞称为命令执行漏洞，因为命令执行漏洞可以执行系统命令，而代码执行漏洞也会执行系统命令，这样就容易混淆。其实两者比较好区分，它们之间的区别比较大，命令执行漏洞是直接调用操作系统命令，故这里叫OS命令执行漏洞，而代码执行漏洞则是靠脚本代码调用操作系统命令，如：<code>eval(system(&#39;set&#39;););</code>。</em></p>
 <hr>
-<h3 id="对CSRF漏洞的理解"><a href="#对CSRF漏洞的理解" class="headerlink" title="对CSRF漏洞的理解"></a>对CSRF漏洞的理解</h3><p>csrf同xss看起来有点像，都是攻击者构造url，诱骗用户点击来触发漏洞。</p>
-<p>不同的是xss的攻击代码是代码注入，是利用了站点HTML语言构造的缺陷，payload是嵌入到页面中的HTML代码中的。而csrf攻击的payload中没有闭合HTML结构的语句，是直接利用了已登录用户的身份信息来执行站点命令。</p>
-<p>CSRF的攻击有以下两个重点</p>
+<h3 id="OS命令执行攻击过程"><a href="#OS命令执行攻击过程" class="headerlink" title="OS命令执行攻击过程"></a>OS命令执行攻击过程</h3><p>以dvwa中的low级命令执行为例</p>
+<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220323221638.png" srcset="/img/loading.gif" lazyload></p>
+<p>该站点提供了一个可以使用ping命令的窗口，我们可以在该命令后面加上“|”或“&amp;”来拼接其他命令，就像直接在cmd窗口执行命令一样。这就是命令执行漏洞特点的体现：数据和代码没有分离。</p>
+<p>当我们输入<code>127.0.0.1 | dir</code>时</p>
+<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220323224730.png" srcset="/img/loading.gif" lazyload></p>
+<p>利用了管道符“|”成功在服务器端执行了系统命令dir。</p>
+<hr>
+<h3 id="系统命令中管道符规则"><a href="#系统命令中管道符规则" class="headerlink" title="系统命令中管道符规则"></a>系统命令中管道符规则</h3><p>Windows：</p>
 <ul>
-<li>目标用户已经登录了网站，能够执行网站的功能</li>
-<li>目标用户访问了攻击者构造的URL</li>
+<li>| 直接执行后面的命令</li>
+<li>|| 如果前面的语句出错则执行后面的语句，前面的语句只能为假</li>
+<li>&amp; 如果前面的语句为假时直接执行后面的命令，前面的语句可真可假</li>
+<li>&amp;&amp; 如果前面的语句为假则直接出错，不执行后面的语句。前面的语句只能为真</li>
+</ul>
+<p>Linux：</p>
+<ul>
+<li>; 执行前面的语句后再执行后面的</li>
+<li>| 显示后面语句执行的结果</li>
+<li>|| 当前面的语句出错时执行后面的语句</li>
+<li>&amp; 如果前面的语句为假则直接执行后面的语句，前面的语句可真可假</li>
+<li>&amp;&amp; 如果前面的语句为假则直接出错，不执行后面的语句。前面的语句只能为真</li>
 </ul>
 <hr>
-<h3 id="CSRF漏洞利用"><a href="#CSRF漏洞利用" class="headerlink" title="CSRF漏洞利用"></a>CSRF漏洞利用</h3><p>根据网站页面的漏洞构造payload，在用户登录的情况下点击后，凭借用户的信息去执行一系列命令。</p>
-<p>以dvwa的csrf靶场中的low级别为例，在这里假设我们的目的为修改某一个用户的密码。</p>
-<p>在这关中直接构造一个链接即可，用户点击这个链接就会执行命令。为了增加隐蔽性，我们可以在自己的站点设置HTML文件，使得其访问链接不包含参数，看上去危险性会比较低，更容易使用户访问。</p>
-<p>这个HTML网页可以这样写</p>
-<figure class="highlight php"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs php">&lt;!DOCUPYTE html&gt;<br>&lt;html lang=<span class="hljs-string">&quot;en&quot;</span>&gt;<br>&lt;head&gt;<br>	&lt;meta charset=<span class="hljs-string">&quot;UTF-8&quot;</span>&gt;<br>	&lt;title&gt;img_src_get&lt;/title&gt;<br>&lt;/head&gt;<br>&lt;body&gt;<br>	&lt;h1&gt;get <span class="hljs-keyword">for</span> img src&lt;/h1&gt;<br>	&lt;img stytle=<span class="hljs-string">&quot;display:none&quot;</span> src=<span class="hljs-string">&quot;http://192.168.111.142/DVWA-master/vulnerabilities/csrf/?password_new=1&amp;password_conf=1&amp;Change=Change&quot;</span>alt=<span class="hljs-string">&quot;&quot;</span>&gt;<br>&lt;/body&gt;<br>&lt;/html&gt;<br></code></pre></div></td></tr></table></figure>
+<h3 id="OS命令执行漏洞代码分析"><a href="#OS命令执行漏洞代码分析" class="headerlink" title="OS命令执行漏洞代码分析"></a>OS命令执行漏洞代码分析</h3><figure class="highlight php"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs php"><span class="hljs-meta">&lt;?php</span><br><br><span class="hljs-keyword">if</span>( <span class="hljs-keyword">isset</span>( <span class="hljs-variable">$_POST</span>[ <span class="hljs-string">&#x27;Submit&#x27;</span> ]  ) ) &#123;<br>    <span class="hljs-comment">// Get input</span><br>    <span class="hljs-variable">$target</span> = <span class="hljs-variable">$_REQUEST</span>[ <span class="hljs-string">&#x27;ip&#x27;</span> ];<br><br>    <span class="hljs-comment">// Determine OS and execute the ping command.</span><br>    <span class="hljs-keyword">if</span>( stristr( php_uname( <span class="hljs-string">&#x27;s&#x27;</span> ), <span class="hljs-string">&#x27;Windows NT&#x27;</span> ) ) &#123;<br>        <span class="hljs-comment">// Windows</span><br>        <span class="hljs-variable">$cmd</span> = shell_exec( <span class="hljs-string">&#x27;ping  &#x27;</span> . <span class="hljs-variable">$target</span> );<br>    &#125;<br>    <span class="hljs-keyword">else</span> &#123;<br>        <span class="hljs-comment">// *nix</span><br>        <span class="hljs-variable">$cmd</span> = shell_exec( <span class="hljs-string">&#x27;ping  -c 4 &#x27;</span> . <span class="hljs-variable">$target</span> );<br>    &#125;<br><br>    <span class="hljs-comment">// Feedback for the end user</span><br>    <span class="hljs-keyword">echo</span> <span class="hljs-string">&quot;&lt;pre&gt;<span class="hljs-subst">&#123;$cmd&#125;</span>&lt;/pre&gt;&quot;</span>;<br>&#125;<br><br><span class="hljs-meta">?&gt;</span> <br></code></pre></div></td></tr></table></figure>
 
-<p>这样当用户访问我们站点时，遇到img，发送get请求去找图片的资源。而这里的请求不是访问图片而是访问我们构造好的url，其作用是访问具有csrf漏洞的对应站点并执行一系列命令。</p>
-<p>另外我们也可以利用burp生成CSRF Poc页面的功能，来生成陷阱html文件。</p>
-<p>先抓取修改密码时的数据包，action中选择CSRF Poc，根据这个数据包生成一个html文件。</p>
-<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220314212232.png" srcset="/img/loading.gif" lazyload></p>
-<p>根据刚才数据包提交的参数，这里创建了一个表单，并隐藏了对应参数。</p>
-<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220314214047.png" srcset="/img/loading.gif" lazyload></p>
-<p>在用户已经登录了对应站点的情况下，当用户点击提交时，就会利用当前用户的身份去执行form action中的操作，在这里即为修改对应站点账号的密码。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs javascript"><span class="hljs-comment">//值得注意的是，这样的话需要用户点击链接后再点击一下提交才能实现攻击，成功率可能较低</span><br><span class="hljs-comment">//所以我们可以加上下面一段js代码，使得当页面加载完成时自动提交表单</span><br><br>&lt;script&gt;<br><br><span class="hljs-built_in">window</span>.onload = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>&#123;<br><br>  <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">&quot;submit&quot;</span>).click();<span class="hljs-comment">//typt=&quot;submit&quot;的属性框中加上对应的id=&quot;submit&quot;</span><br><br>&#125;         <br><br>&lt;/script&gt;<br></code></pre></div></td></tr></table></figure>
-
-
-
-<p>当用户点击提交后就可以看到密码已被修改。实际情况下攻击者构造的陷阱网页不会这么明显，不会使用户意识到发生了什么。</p>
-<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220314215711.png" srcset="/img/loading.gif" lazyload></p>
-<h3 id="CSRF漏洞代码分析及防御措施"><a href="#CSRF漏洞代码分析及防御措施" class="headerlink" title="CSRF漏洞代码分析及防御措施"></a>CSRF漏洞代码分析及防御措施</h3><p>…实际上存在csrf漏洞的网页的代码在结构和逻辑上并没有什么特性，为用户设置身份信息且用户有一些执行命令的权限以及对用户身份验证环节的薄弱（或身份信息易被伪造）就是存在csrf漏洞网站的共同点。</p>
-<p>出现scrf漏洞的原因就是网站过于相信用户，攻击者可以伪造用户请求，由此可知，抵御csrf攻击的关键在于：在请求中放入攻击者不能伪造的信息。例如可以在http请求中以参数的形式加入一个随机产生的token，并在服务器验证token，如果请求中没有token或者token中的内容不正确，则认为该请求可能是csrf攻击从而拒绝该请求。</p>
+<p>可以看出存在OS命令执行漏洞的原因是使用了shell_exec函数，并且服务端没有对用户输入进行过滤。</p>
 <hr>
-<p>参考：《web安全攻防》</p>
+<p>参考：</p>
+<p>《web安全攻防》</p>
+<p>《Web安全深度剖析》</p>
 <p>完结 : )🐣</p>
 <hr>
 
@@ -293,9 +293,9 @@
                   <div class="post-meta">
                     <i class="iconfont icon-tags"></i>
                     
-                      <a class="hover-with-bg" href="/tags/%E6%B8%97%E9%80%8F/">渗透</a>
+                      <a class="hover-with-bg" href="/tags/%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/">命令执行</a>
                     
-                      <a class="hover-with-bg" href="/tags/csrf/">csrf</a>
+                      <a class="hover-with-bg" href="/tags/%E6%B8%97%E9%80%8F/">渗透</a>
                     
                   </div>
                 
@@ -312,9 +312,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2022/03/16/csrf%E9%9D%B6%E5%9C%BA%E7%BB%83%E4%B9%A0/">
+                      <a href="/2022/03/24/%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%A8%A1%E5%9E%8B%E5%BD%92%E7%B1%BB/">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">csrf靶场练习</span>
+                        <span class="hidden-mobile">命令执行模型归类</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -322,8 +322,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2022/03/11/F-k-Rd-client/">
-                        <span class="hidden-mobile">F**k_Rd_client</span>
+                      <a href="/2022/03/20/ssrf%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0+%E4%BE%8B%E9%A2%98/">
+                        <span class="hidden-mobile">ssrf学习笔记+例题</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

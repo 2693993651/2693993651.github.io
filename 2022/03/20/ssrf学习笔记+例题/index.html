@@ -18,7 +18,7 @@
   <meta name="author" content="Eggs">
   <meta name="keywords" content="Blog">
   
-  <title>ssrf学习笔记 - 蛋窝窝</title>
+  <title>ssrf学习笔记+例题 - 蛋窝窝</title>
 
   <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
 
@@ -167,7 +167,7 @@
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
           <div class="page-header text-center fade-in-up">
-            <span class="h2" id="subtitle" title="ssrf学习笔记">
+            <span class="h2" id="subtitle" title="ssrf学习笔记+例题">
               
             </span>
 
@@ -194,7 +194,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      706 字
+      1.3k 字
     </span>
   
 
@@ -204,7 +204,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      7
+      14
        分钟
     </span>
   
@@ -234,7 +234,7 @@
         <div class="py-5" id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">ssrf学习笔记</h1>
+            <h1 style="display: none">ssrf学习笔记+例题</h1>
             
             <div class="markdown-body">
               <p>SSRF（Server-Side Request Forgery，服务器端请求伪造）是一种由攻击者构造请求，由服务器发起请求的安全漏洞。一般情况下，SSRF攻击的目标是外网无法访问的内部服务系统（正因为请求是由服务器端发起的，所以服务端能请求到与自身相连而与外网隔离的内部服务系统）</p>
@@ -266,8 +266,30 @@
 <p>其它可能导致ssrf的函数有：</p>
 <figure class="highlight stylus"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs stylus"><span class="hljs-function"><span class="hljs-title">fsockopen</span><span class="hljs-params">()</span></span>  打开一个网络连接或者一个Unix 套接字连接<br><span class="hljs-function"><span class="hljs-title">curl_exec</span><span class="hljs-params">()</span></span>   初始化一个新的会话<br></code></pre></div></td></tr></table></figure>
 
+<p>介绍一下curl是什么东西。</p>
+<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220322221733.png" srcset="/img/loading.gif" lazyload></p>
+<p>官网上说了curl是一个工具和库</p>
+<ul>
+<li><p>作为一种命令行工具，作用是发出网络请求，然后得到和提取数据，显示在”标准输出”（stdout）上面。</p>
+<p>它支持多种协议，可用于网站开发。</p>
+</li>
+<li><p>作为一种库，curl库是一个非常强大的开源库，支持很多协议，包括HTTP、FTP、TELNET等，在微信开发、支付、第三方登录中，开发人员使用它来发送请求。它给人们带来的好处是可以通过灵活的选项设置不同的HTTP协议参数，并且支持HTTPS，也经常用于数据采集当中。</p>
+</li>
+</ul>
+<p>在php里面curl作为一个库被加载，以下面这个为例，我们重点关注一下ssrf中用到的curl函数</p>
+<figure class="highlight php"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs php"><span class="hljs-meta">&lt;?php</span><br>    <br>    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">show_header</span>(<span class="hljs-params"><span class="hljs-variable">$url</span></span>)</span><br><span class="hljs-function">	</span>&#123;<br>    	<span class="hljs-variable">$ch</span> = curl_init();<br>    	curl_setopt(<span class="hljs-variable">$ch</span>,CURLOPT_URL,<span class="hljs-variable">$url</span>);<br>    	curl_setopt(<span class="hljs-variable">$ch</span>,CURLOPT_HEADER,<span class="hljs-number">0</span>);<br>    	curl_exec(<span class="hljs-variable">$ch</span>);<br>    	curl_close(<span class="hljs-variable">$ch</span>);<br>	&#125;<br><br>	<span class="hljs-variable">$url</span>=<span class="hljs-variable">$_GET</span>[<span class="hljs-string">&#x27;url&#x27;</span>];<br>	show_header(<span class="hljs-variable">$url</span>);<br><span class="hljs-meta">?&gt;</span><br>    <br><span class="hljs-comment">//curl_init($ch)，创建一个新的curl资源</span><br><span class="hljs-comment">//curl_setopt($ch,CURLOPT_URL,$url), 设置需要获取的url地址</span><br><span class="hljs-comment">//curl_setopt($ch,CURLOPT_HEADER,0)，启用时（即后面的curl_exec()函数）会将头文件的信息作为数据</span><br><span class="hljs-comment">//流输出。</span><br><span class="hljs-comment">//curl_exec($ch)，执行一个curl会话，即抓取URL并把它传递给浏览器，请求的内容取决于之</span><br><span class="hljs-comment">//前curl_setopt()函数执行的内容。在这里即为输出头文件信息。</span><br><br><span class="hljs-comment">//根据这段代码，如果我们输入内网服务器地址，会访问该页面并得到对应的文件头信息。所以我们可以通过这种方式获</span><br><span class="hljs-comment">//取内网中一些敏感信息，如可通过banner得知该主机是否存在某种服务。</span><br></code></pre></div></td></tr></table></figure>
 
-
+<hr>
+<h3 id="ssrf相关例题"><a href="#ssrf相关例题" class="headerlink" title="ssrf相关例题"></a>ssrf相关例题</h3><p>题目来源：webGoat–A8 Server-Side Request Forgery</p>
+<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220323130332.png" srcset="/img/loading.gif" lazyload></p>
+<p>当我们点击提交按钮时，弹出tom的图片。而上方文字提升我们需要改变url显示出jerry的图片。</p>
+<p>从形式上猜测该处为post表单，接收的url值指向了tom。</p>
+<p>我们可以通过抓包或者直接修改前端页面中post请求的url参数来展示Jerry照片</p>
+<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220323130255.png" srcset="/img/loading.gif" lazyload></p>
+<p>而第二关，同样是在form表单中的post请求里修改url参数的值即可，在这里需修改为<code>http://ifconfig.pro</code></p>
+<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220323131001.png" srcset="/img/loading.gif" lazyload></p>
+<hr>
+<p>参考：《web安全攻防》</p>
 <hr>
 <p>完结 : )🐣</p>
 <hr>
@@ -308,6 +330,12 @@
                 <div class="post-prevnext">
                   <article class="post-prev col-6">
                     
+                    
+                      <a href="/2022/03/23/OS%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">OS命令执行学习笔记</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
                     
                   </article>
                   <article class="post-next col-6">

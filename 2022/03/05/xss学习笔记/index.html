@@ -266,7 +266,7 @@
 <p>​        攻击方式：用户请求一个经过专门设计的URL，它由攻击者提交，而且其中包含xss代码。服务器响应后形成        HTML文件发送给用户。当用用户的浏览器处理这个响应时，DOM对象就会处理xss代码，导致触发xss漏洞</p>
 <p>​        <em>DOM类型的xss看似比较复杂，其核心特点就是利用DOM树和JavaScript的交互来改变页面元素，我们即利用        这个特性使页面元素包含JavaScript恶意代码，来完成xss攻击。</em></p>
 <hr>
-<h3 id="xss产生的原理（代码层面）"><a href="#xss产生的原理（代码层面）" class="headerlink" title="xss产生的原理（代码层面）"></a>xss产生的原理（代码层面）</h3><p><strong>反射型xss</strong></p>
+<h3 id="xss产生的原理"><a href="#xss产生的原理" class="headerlink" title="xss产生的原理"></a>xss产生的原理</h3><p><strong>反射型xss</strong></p>
 <figure class="highlight php"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs php"><span class="hljs-meta">&lt;?php</span><br>       <span class="hljs-keyword">if</span>(<span class="hljs-keyword">isset</span>(<span class="hljs-variable">$_GET</span>[<span class="hljs-string">&#x27;str&#x27;</span>]))<br>       &#123;<br>		<span class="hljs-keyword">echo</span> <span class="hljs-string">&#x27;&lt;input type=&quot;text&quot; value=&quot;&#x27;</span>.<span class="hljs-variable">$_GET</span>[<span class="hljs-string">&#x27;str&#x27;</span>].<span class="hljs-string">&#x27;&quot;&gt;&#x27;</span>;            <br>       &#125;<br><span class="hljs-meta">?&gt;</span><br></code></pre></div></td></tr></table></figure>
 
 <p>当我们在输入框中输入字符串时，即<code>&#39;str&#39;=abc</code>，代码正常运作；但当我们输入构造的JavaScript代码时，即访问xx/xx.php?str=<code>&quot;&gt;&lt;img src=1 onerror=alert(/xss/) /&gt;</code>，此时<code>echo</code>语句输出的是</p>
@@ -355,7 +355,6 @@
 <hr>
 <p>参考：<a target="_blank" rel="noopener" href="https://www.freebuf.com/articles/web/276998.html">https://www.freebuf.com/articles/web/276998.html</a></p>
 <p>​            《web安全攻防》</p>
-<hr>
 <p>完结 : )🐣</p>
 <hr>
 
