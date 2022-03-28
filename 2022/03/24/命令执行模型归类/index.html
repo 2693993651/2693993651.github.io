@@ -7,6 +7,7 @@
 
 <head>
   <meta charset="UTF-8">
+ <meta name="referrer" content="no-referrer"/>
   <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
   <link rel="icon" href="/img/favicon.png">
   <meta name="viewport"
@@ -242,14 +243,12 @@
 
 <hr>
 <h3 id="PHP命令执行"><a href="#PHP命令执行" class="headerlink" title="PHP命令执行"></a>PHP命令执行</h3><ul>
-<li><p>OS命令执行</p>
-<p>使用了PHP的部分函数，如system、shell_exec()、exec()和passthtu()。详见这篇：</p>
+<li><h4 id="OS命令执行"><a href="#OS命令执行" class="headerlink" title="OS命令执行"></a>OS命令执行</h4><p>使用了PHP的部分函数，如system、shell_exec()、exec()和passthtu()。详见这篇：</p>
 </li>
 </ul>
 <p><a target="_blank" rel="noopener" href="https://eggswoo.com/2022/03/23/OS%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">OS命令执行漏洞</a></p>
 <ul>
-<li><p>代码执行</p>
-<p>php中<code>eval()；</code>存在代码执行，函数，菜刀、蚁剑的php一句话木马也是利用的这个函数。</p>
+<li><h4 id="代码执行"><a href="#代码执行" class="headerlink" title="代码执行"></a>代码执行</h4><p>php中<code>eval()；</code>存在代码执行，函数，菜刀、蚁剑的php一句话木马也是利用的这个函数。</p>
 <p>eval()函数可以把字符串按照PHP代码来执行，换句话说，就是可以动态执行PHP代码。使用eval函数需要注意的是：输入的字符串必须是合法的PHP代码，且必须以分号结尾。</p>
 <p>其它作用类似的函数还有：</p>
 <ul>
@@ -269,8 +268,7 @@
 </ul>
 <p>​            <em>参考：<a target="_blank" rel="noopener" href="https://blog.csdn.net/zouchengzhi1021/article/details/105366196">https://blog.csdn.net/zouchengzhi1021/article/details/105366196</a></em></p>
 <ul>
-<li><p>动态函数调用</p>
-<p>PHP支持动态函数调用，这给开发带来了极大的便利，但却也存在安全隐患，代码如下：</p>
+<li><h4 id="动态函数调用"><a href="#动态函数调用" class="headerlink" title="动态函数调用"></a>动态函数调用</h4><p>PHP支持动态函数调用，这给开发带来了极大的便利，但却也存在安全隐患，代码如下：</p>
 <figure class="highlight php"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs php"><span class="hljs-meta">&lt;?php</span><br>	<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">info</span>(<span class="hljs-params"></span>)</span>&#123;<br>    	<span class="hljs-keyword">return</span> phpinfo();<br>	&#125;	<br>	<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">b</span>(<span class="hljs-params"></span>)</span>&#123;<br>  	  <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;b()函数...&quot;</span>;<br>	&#125;<br>	<span class="hljs-variable">$fun</span>=<span class="hljs-variable">$_REQUEST</span>[<span class="hljs-string">&#x27;fun&#x27;</span>];<br>	<span class="hljs-keyword">echo</span> <span class="hljs-variable">$fun</span>();<span class="hljs-comment">//动态调用函数 </span><br><span class="hljs-meta">?&gt;</span><br></code></pre></div></td></tr></table></figure>
 
 <p>这样PHP解析器就可以根据$fun的值来调用对应的函数。这种动态调用如果支持传参的话，则会有更大的威胁：</p>
@@ -294,8 +292,7 @@
 <h3 id="框架执行漏洞"><a href="#框架执行漏洞" class="headerlink" title="框架执行漏洞"></a>框架执行漏洞</h3><p>如今框架技术已被广泛应用，越来越多的开发者喜欢使用框架。甚至有些甲方公司把项目交给乙方公司开发时，会明确要求乙方使用指定的框架技术，比如有名的Java三大框架（Hibernate、Spring、Struts）。</p>
 <p>而一旦框架出现了安全漏洞，则框架的用户群越多，受到的影响就越广，危害越大。</p>
 <ul>
-<li><p>Struts2代码执行漏洞</p>
-<p>Struts1最初是独立的MVC框架，但是Struts2改写了Strust1的核心技术，低层采用了XWORK的核心。XWORK也是一个MVC框架，而Struts2是在Strust1和XWORK基础技术上进行了合并，算是一个全新的框架。</p>
+<li><h4 id="Struts2代码执行漏洞"><a href="#Struts2代码执行漏洞" class="headerlink" title="Struts2代码执行漏洞"></a>Struts2代码执行漏洞</h4><p>Struts1最初是独立的MVC框架，但是Struts2改写了Strust1的核心技术，低层采用了XWORK的核心。XWORK也是一个MVC框架，而Struts2是在Strust1和XWORK基础技术上进行了合并，算是一个全新的框架。</p>
 <blockquote>
 <p>MVC：一种架构型模式，用来指导我们改善应用程序的架构，使得应用的模型和视图相分离，从而达到更好的开发和维护效率。在MVC模式中，应用程序被划分成模型（Model）、视图（View）和控制器（Controller）三个部分）</p>
 </blockquote>
@@ -317,8 +314,7 @@
 </ul>
 <p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220324225223.png" srcset="/img/loading.gif" lazyload><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220324225338.png" srcset="/img/loading.gif" lazyload></p>
 <ul>
-<li><p>ThinkPHP 命令执行漏洞</p>
-<p>ThinkPHP的问题主要在于DIspatcher.class.php文件，官方SVN修改前后的关键代码如下：</p>
+<li><h4 id="ThinkPHP-命令执行漏洞"><a href="#ThinkPHP-命令执行漏洞" class="headerlink" title="ThinkPHP 命令执行漏洞"></a>ThinkPHP 命令执行漏洞</h4><p>ThinkPHP的问题主要在于DIspatcher.class.php文件，官方SVN修改前后的关键代码如下：</p>
 <figure class="highlight bash"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs bash">125 - <span class="hljs-variable">$res</span> = preg_replace(<span class="hljs-string">&#x27;@(w+)&#x27;</span>.<span class="hljs-variable">$depr</span>.<span class="hljs-string">&#x27;([^&#x27;</span>.<span class="hljs-variable">$depr</span>.<span class="hljs-string">&#x27;\/]+)@e&#x27;</span>,<span class="hljs-string">&#x27;$var[\&#x27;</span>\\1\<span class="hljs-string">&#x27;]=&quot;\\2\&#x27;</span>;,implode(<span class="hljs-variable">$depr</span>,<span class="hljs-variable">$paths</span>));<br></code></pre></div></td></tr></table></figure>
 
 <figure class="highlight bash"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs bash">125 + <span class="hljs-variable">$res</span> = preg_replace(<span class="hljs-string">&#x27;@(w+)&#x27;</span>.<span class="hljs-variable">$depr</span>.<span class="hljs-string">&#x27;([^&#x27;</span>.<span class="hljs-variable">$depr</span>.<span class="hljs-string">&#x27;\/]+)@e&#x27;</span>,<span class="hljs-string">&#x27;$var[\&#x27;</span>\\1\<span class="hljs-string">&#x27;]=&quot;\\2\&#x27;</span>;,implode(<span class="hljs-variable">$depr</span>,<span class="hljs-variable">$paths</span>));<br></code></pre></div></td></tr></table></figure>
@@ -343,7 +339,6 @@
 <hr>
 <p>参考：《Web安全深度剖析》</p>
 <p>完结 : )🐣</p>
-<hr>
 
             </div>
             <hr>

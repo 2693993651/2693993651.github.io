@@ -7,6 +7,7 @@
 
 <head>
   <meta charset="UTF-8">
+ <meta name="referrer" content="no-referrer"/>
   <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
   <link rel="icon" href="/img/favicon.png">
   <meta name="viewport"
@@ -299,6 +300,7 @@
 </li>
 <li><p>直接删除token，有些请求是不需要token的，比如删除用户账户</p>
 <p><em>（所以这也不算绕过token）</em></p>
+<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220325000535.png" srcset="/img/loading.gif" lazyload></p>
 </li>
 </ul>
 <p><strong>普遍能够绕过token的方法是结合xss漏洞来实现csrf。</strong>当用户点击攻击者构造的链接后，触发通过xss读取用户前端页面的token。而我们之前提到过的，攻击者在自己的服务器上构建js代码，构造xss链接来指向该js文件在这里是不行的了<a target="_blank" rel="noopener" href="https://eggswoo.com/2022/03/05/xss%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/#xss%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E8%BF%87%E7%A8%8B">xss学习笔记 - 蛋窝窝 (eggswoo.com)</a>，因为存在着跨域的限制。简单来说就是网站如没有允许跨域的话，是不能被其它网站读取数据的。攻击者的网站攻击者可以取消跨域的限制，让别的网站来读取攻击者的js脚本，而攻击者却不能更改目标站点的跨域限制，也就是说攻击者网站上的js文件是不能读取站点上前端的html内容的。所以攻击者只能用xss漏洞直接读取token内容。</p>
@@ -340,7 +342,6 @@
 <p>以图上的内容为例，攻击者在自己服务器上创建一个页面（www.attacker.com），页面中有一个登录谷歌的表单，当用户访问该页面时就会自动登录谷歌，浏览器就保存了登录谷歌的cookie。然后当用户使用谷歌时，浏览器直接使用攻击者的Cookie，用户会一直以攻击者的账户请求谷歌的服务。事后攻击者再登录自己的账户根据历史记录就能看到用户搜索了什么内容。</p>
 <hr>
 <p>完结 : )🐣</p>
-<hr>
 
             </div>
             <hr>
