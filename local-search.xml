@@ -4,6 +4,33 @@
   
   
   <entry>
+    <title>no_referer</title>
+    <link href="/2022/03/28/no-referer/"/>
+    <url>/2022/03/28/no-referer/</url>
+    
+    <content type="html"><![CDATA[<p>gitee图床403</p><span id="more"></span><hr><p>耍了一个周末，（其实也就是去看了蝙蝠侠，然后躺尸两天）</p><p>返工一天要处理好多破事…因为在网上也得谨言慎行所以我就没什么好说的了😊</p><p>我脑子里翻来覆去都是…持续了两个学期的缘分罢了😤</p><p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220328162432.png"></p><p>而压死骆驼的最后一根稻草就是我突然发现博客图片全挂了，打开f12发现是403错误。</p><p>之前我的图片全部存在gitee仓库当图床用，果然天底下也没有什么免费的东西。。</p><p>原来是gitee不允许外链访问了。</p><p>还好改下html配置就行了，继续白嫖😶</p><p>（也可以把github pages迁成gitee pages，要麻烦一点）</p><p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220328162705.png"></p><p>这也算世事无常吧，别人提供的服务，说断就断了，假如github pages没了我就要花钱买个服务器。不过这其实无所谓，反正我都要买服务器用的。但又假如网费涨价了呢，电费涨价了呢，饭涨价了呢。我也想就加个<code>&lt;meta name=&quot;referrer&quot; content=&quot;no-referrer&quot; /&gt;</code>解决。</p><hr><p>新冠渐成常态，俄乌战争持续一个月，上周东航坠机</p><hr><p>我还在一堆琐事中挣扎，我好怀念小时候对未来的无限畅想。</p><p>生命是华丽错觉。</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>碎碎念</category>
+      
+      <category>不好笑</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>blog</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>命令执行模型归类</title>
     <link href="/2022/03/24/%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%A8%A1%E5%9E%8B%E5%BD%92%E7%B1%BB/"/>
     <url>/2022/03/24/%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%A8%A1%E5%9E%8B%E5%BD%92%E7%B1%BB/</url>
@@ -153,7 +180,7 @@
     <link href="/2022/03/11/F-k-Rd-client/"/>
     <url>/2022/03/11/F-k-Rd-client/</url>
     
-    <content type="html"><![CDATA[<p>I NEED CHINESE!</p><span id="more"></span><hr><p>试了下微软自带的远程桌面，加上用了别人的内网穿透服务，想着体验应该会美滋滋，结果用的蓝牙键盘输入不了中文</p><p>本来想写下使用体验和总结一下学到的内网穿透的知识，无奈之下用远程桌面玩了一晚上游戏😉</p><p><em>原计划这篇文章该是我当晚用着远程桌面时用全英文发的，不过在我输入第一句话时想了想微软的英文是啥后放弃了</em></p><hr><p>使用体验更新：这个远程桌面不用额外连接键盘，可以用自带的虚拟键盘，输入有点不习惯但完全静音，适合深夜躺在床上用。</p><p>虚拟键上的快捷键按上去有点..有趣</p><p>本身的清晰度和流畅度也不错，和串流的效果五五开吧，唯一可惜的就是不能外接键盘了，而且虚拟机内键盘用不了</p><hr><p>rd client is fine.</p>]]></content>
+    <content type="html"><![CDATA[<p>I NEED CHINESE!</p><span id="more"></span><hr><p>试了下微软自带的远程桌面，加上用了别人的内网穿透服务，想着体验应该会美滋滋，结果用的蓝牙键盘输入不了中文</p><p>本来想写下使用体验和总结一下学到的内网穿透的知识，无奈之下用远程桌面玩了一晚上游戏😉</p><p><em>原计划这篇文章该是我当晚用着远程桌面时用全英文发的，不过在我输入第一句话时想了想微软的英文是啥后放弃了</em></p><hr><p>使用体验更新：这个远程桌面不用额外连接键盘，可以用自带的虚拟键盘，输入有点不习惯但完全静音，适合深夜躺在床上用。</p><p>虚拟键上的快捷键按上去有点..有趣</p><p>本身的清晰度和流畅度也不错，和串流的效果五五开吧，唯一可惜的就是不能外接键盘了，而且虚拟机内键盘用不了</p><hr><p>再更：下载了老版本机翻过的rd client，所有功能都正常。</p><p>负向升级微软真有你的。</p><hr><p>rd client is fine.</p>]]></content>
     
     
     <categories>
