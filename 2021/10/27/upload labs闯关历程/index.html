@@ -387,7 +387,7 @@
 <p>其中<code>%EF%BF%BD</code>URL编码后的结果，后面的数字是源码中拼接文件路径时添加的内容。事实上,在这里我们上传的文件在服务器被储存为了<code>egg.php</code>，其之后的内容被截断了。用蚁剑链接时也是去掉后面的内容即可。</p>
 <p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220125103453.png" srcset="/img/loading.gif" lazyload></p>
 <h3 id="14–图片马之文件头检查"><a href="#14–图片马之文件头检查" class="headerlink" title="14–图片马之文件头检查"></a>14–图片马之文件头检查</h3><p>在14~17关中，我们通关上传图片马来达到上传木马文件的目的。与之前的不同，虽然关卡一直要求我们上传图片文件，但之前我们本质都是上传的包含木马的<code>php</code>文件，可以直接被服务器当作<code>php</code>代码执行的<code>php</code>文件。</p>
-<p>而这里我们上传的是“具有图片格式”的图片，是不能直接被服务器当作<code>php</code>代码执行的。所以当我们上传了图片马后往往还需要利用另一个漏洞——文件包含漏洞，在作者强调的注意第二点这里可以看到。</p>
+<p>而这里我们上传的是“具有图片格式”的图片，是不能直接被服务器当作<code>php</code>代码执行的。所以当我们上传了图片马后往往还需要利用另一个漏洞——文件包含漏洞，在作者所强调的第二点这里可以看到。</p>
 <p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220208154545.png" srcset="/img/loading.gif" lazyload></p>
 <p>文件包含漏洞：被<code>include</code> 和<code>require </code>函数引用的文件会被当作<code>php</code>文件来执行，当该文件含有恶意代码时即可造成危险。所以当我们成功上传了包含<code>php</code>代码的图片时，可以利用这个漏洞来执行。下面是这关中关于该漏洞的代码部分。</p>
 <p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220208154652.png" srcset="/img/loading.gif" lazyload></p>
@@ -396,9 +396,11 @@
 <p>代码检查了文件的的前两个字节，现对数据包作如下修改：</p>
 <p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220217091657.png" srcset="/img/loading.gif" lazyload></p>
 <p>在这里添加gif98a,使其判断为gif文件。这样我们就成功在服务器端上传了一个gif类型的包含<code>php</code>代码的文件。</p>
-<p>然后是我们利用文件包含漏洞的步骤：复制图片链接，然后根据指示跳转到文件包含漏洞界面，通过源码得知参数为<code>file</code>，在该页面url<code>.../include.php</code>处添加图片地址，根据其文件路径保留只uplod后面的部分，即<code>?file=upload/...jpg</code>即可使其<code>php</code>代码解析，用蚁剑连接时也用这个地址。下面是上传phpinfo()函数的实验结果。</p>
+<p>然后是我们利用文件包含漏洞的步骤：复制图片链接，然后根据指示跳转到文件包含漏洞界面，通过源码得知参数为<code>file</code>，在该页面url<code>.../include.php</code>处添加图片地址，根据其相对文件路径保留只upload后面的部分。完整url:<code>192.168.191.129/upload-labs-master/include.php?file=upload/2220220330210320.png</code>，用蚁剑连接时也用这个地址</p>
+<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220330210431.png" srcset="/img/loading.gif" lazyload></p>
+<p>下面是上传phpinfo()函数的实验结果。</p>
 <p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220217083359.png" srcset="/img/loading.gif" lazyload></p>
-<p>下面是另一种方法，利用cmd命令把<code>php</code>指令和一张常规图片合成一张新的图片，自然就得到了包含<code>php</code>木马的图片文件，检查文件头时符合要求，被当作<code>php</code>代码执行时也能发挥作用。</p>
+<p>下面是另一种方法，利用cmd命令把php指令和一张常规图片合成一张新的图片，自然就得到了包含<code>php</code>木马的图片文件，检查文件头时符合要求，被当作<code>php</code>代码执行时也能发挥作用。</p>
 <p>制作图片马：cmd cd /d切换工作目录到 进入图片所在路径</p>
 <p>输入指令<code>copy egg.jpg/b+shell.php/a shell.jpg</code></p>
 <p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220217073313.png" srcset="/img/loading.gif" lazyload></p>

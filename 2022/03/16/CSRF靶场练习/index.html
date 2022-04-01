@@ -282,7 +282,7 @@
 <p><code>http://192.168.111.130/DVWA-master/vulnerabilities/xss_r/?name=%3Cimg+src%3D%22http%3A%2F%2F192.168.111.130%2FDVWA-master%2Fvulnerabilities%2Fcsrf%2F%3Fpassword_new%3D%26password_conf%3D%26Change%3DChange%23%22+alt%3D%22over%22%3E#</code></p>
 <p>当用户点击该链接时，即会触发xss漏洞，接着触发csrf漏洞，最终达到更改密码的目的。当然，我们同样可以将该链接藏在我们服务器上的站点中，一个短链接更容易使用户受骗点击。</p>
 <hr>
-<h3 id="带有json格式的POST请求伪造"><a href="#带有json格式的POST请求伪造" class="headerlink" title="带有json格式的POST请求伪造"></a>带有json格式的POST请求伪造</h3><p>题目来源：pikachu–csrf(token)/dvwa–high</p>
+<h3 id="token限制"><a href="#token限制" class="headerlink" title="token限制"></a>token限制</h3><p>题目来源：pikachu–csrf(token)/dvwa–high</p>
 <p>这两个题目都是在请求的URL中加入了token验证，以dvwa提供的源码为例</p>
 <figure class="highlight php"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs php"><span class="hljs-meta">&lt;?php</span><br><br><span class="hljs-keyword">if</span>( <span class="hljs-keyword">isset</span>( <span class="hljs-variable">$_GET</span>[ <span class="hljs-string">&#x27;Change&#x27;</span> ] ) )<br>&#123;<br>    <span class="hljs-comment">// Check Anti-CSRF token</span><br>    checkToken( <span class="hljs-variable">$_REQUEST</span>[ <span class="hljs-string">&#x27;user_token&#x27;</span> ], <span class="hljs-variable">$_SESSION</span>[ <span class="hljs-string">&#x27;session_token&#x27;</span> ], <span class="hljs-string">&#x27;index.php&#x27;</span> );<br><br>    ...<br>    ...<br>    ...<br><span class="hljs-comment">// Generate Anti-CSRF token</span><br>generateSessionToken();<br>&#125;<br><span class="hljs-meta">?&gt;</span><br></code></pre></div></td></tr></table></figure>
 
@@ -308,7 +308,7 @@
 <p><a target="_blank" rel="noopener" href="https://www.freebuf.com/articles/web/203301.html">DVWA 1.10 High等级的CSRF另类通关法 - FreeBuf网络安全行业门户</a></p>
 <p>结合以上内容可以看出来，即使有绕过带有token的csrf的方法也具存在着很强的局限性，况且实际情况下利用xss直接窃取cookie来登录还要更简单一些</p>
 <hr>
-<p>题目来源：WebGoat–A8 CSRF and content-type</p>
+<h3 id="带有json格式的POST请求伪造"><a href="#带有json格式的POST请求伪造" class="headerlink" title="带有json格式的POST请求伪造"></a>带有json格式的POST请求伪造</h3><p>题目来源：WebGoat–A8 CSRF and content-type</p>
 <p>这道题的特点是使用了json数据格式来传递表单中的数据。</p>
 <p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220322160527.png" srcset="/img/loading.gif" lazyload></p>
 <p>当我们提交后，<strong>我们输入的值会被解析为json格式</strong>提交：</p>
