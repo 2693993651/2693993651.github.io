@@ -205,7 +205,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      19
+      20
        分钟
     </span>
   
@@ -271,6 +271,8 @@
 <p>关于这关，我们可以利用#来绕过。<strong>这是因为url中的#是位置标符，代表浏览器页面中的一个位置。#是用来指导浏览器动作的，对服务端完全无用，所以http请求中不含有#，即我们url中#后的数据不会提交到服务器解析。</strong>所以有这么一个现象：如果我们在任意url后按回车，页面会刷新；而在url添加了#字符后，按回车没有使页面刷新，倒是会使页面移到最上方。这就是#指导浏览器动作的体现。（也因为这个特性，sql注入时我们需要将#上传到服务端，所以不能直接输入#，而是输入url编码后的#，即%23。）</p>
 <p>根据浏览器url的这个特性，我们可以的payload可以设为<code>白名单中的参数+#+js攻击代码</code>。但又因为我们构造好payload后需要提交新数据，所以需要改变#号之前的内容，这样按回车后数据才会重新上传（注意参数也要通过白名单检测）。我们可以在#之前添加空格或是换成白名单中的其它内容，即<code>English #&lt;script&gt;alert(1)&lt;/script&gt;</code>。</p>
 <p>提交这个参数的话，服务器只会接收到<code>English</code>,然后解析php文件，再把数据包发给用户，接着用户的浏览器把服务器发来的html文件渲染成网页。在浏览器渲染页面的过程中，会构建DOM 树并加载JavaScript文件。在这一步中前端的JavaScript接收的参数是来自页面而非服务器的完整payload，接着JavaScript代码与DOM树的交互，所以js攻击代码被显示到页面中并且生效，我们即实现了一次xss攻击。</p>
+<p><strong>关键点：虽然有提交参数到服务器的过程，但我们利用#使得payload没有传递到服务器</strong>（这点是#的利用）</p>
+<p><strong>同时，页面构造DOM树，加载JavaScript的时候早已没有服务器参与，读取我们输入数据，导致触发xss</strong>(这是dom的特性)</p>
 <p>可以看出DOM类型的xss漏洞有这个特点，在客户端的浏览器把接收到的HTML文件渲染成网页时，JavaScript和DOM树在这个过程交互后才形成的xss攻击，这个阶段服务器是不参与的，payload也不会进过服务器。所以针对dom类型的xss，在前端设置限制会是更有效的方式。</p>
 <hr>
 <h4 id="题目来源：WebGoat-A7lesson-10"><a href="#题目来源：WebGoat-A7lesson-10" class="headerlink" title="题目来源：WebGoat A7lesson 10"></a>题目来源：WebGoat A7lesson 10</h4><p>题目介绍：</p>
@@ -310,7 +312,7 @@
                   <div class="post-meta">
                     <i class="iconfont icon-tags"></i>
                     
-                      <a class="hover-with-bg" href="/tags/%E6%B8%97%E9%80%8F/">渗透</a>
+                      <a class="hover-with-bg" href="/tags/Web%E5%AE%89%E5%85%A8/">Web安全</a>
                     
                       <a class="hover-with-bg" href="/tags/xss/">xss</a>
                     
