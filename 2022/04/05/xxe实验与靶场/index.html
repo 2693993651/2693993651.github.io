@@ -15,7 +15,7 @@
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
   <meta name="theme-color" content="#2f4154">
-  <meta name="description" content="我将在本篇中较详细地介绍xxe漏洞，并结合本地环境与WebGaot靶场中的xxe模块进行练习。">
+  <meta name="description" content="我将在本篇中继续介绍xxe漏洞，并结合本地环境与WebGaot靶场中的xxe模块进行练习。">
   <meta name="author" content="Eggs">
   <meta name="keywords" content="Blog">
   
@@ -195,7 +195,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      2.2k 字
+      2.5k 字
     </span>
   
 
@@ -205,7 +205,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      28
+      31
        分钟
     </span>
   
@@ -238,7 +238,7 @@
             <h1 style="display: none">XXE实验与靶场</h1>
             
             <div class="markdown-body">
-              <p>我将在本篇中较详细地介绍xxe漏洞，并结合本地环境与WebGaot靶场中的xxe模块进行练习。</p>
+              <p>我将在本篇中继续介绍xxe漏洞，并结合本地环境与WebGaot靶场中的xxe模块进行练习。</p>
 <span id="more"></span>
 
 <hr>
@@ -361,10 +361,21 @@
 <p>成功读取到目标数据</p>
 <p>而报错注入的话，会在返回页面的报错信息中获取到文件内容</p>
 <p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220411192604.png" srcset="/img/loading.gif" lazyload></p>
+<h4 id="dos攻击"><a href="#dos攻击" class="headerlink" title="dos攻击"></a>dos攻击</h4><p>这个比较简单，我就直接复制WebGoat靶场的图了</p>
+<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220412213503.png" srcset="/img/loading.gif" lazyload></p>
+<h4 id="内网相关（留坑）"><a href="#内网相关（留坑）" class="headerlink" title="内网相关（留坑）"></a>内网相关（留坑）</h4><p>从盲注的步骤中可以注意到，我们可以使服务器主动发起连接请求。那么我们也可以使服务器访问内网主机，这也是ssrf的形式。</p>
+<blockquote>
+<p>我们以存在 XXE 漏洞的服务器为我们探测内网的支点。要进行内网探测我们还需要做一些准备工作，我们需要先利用 file 协议读取我们作为支点服务器的网络配置文件，看一下有没有内网，以及网段大概是什么样子（我以linux 为例），我们可以尝试读取 /etc/network/interfaces 或者 /proc/net/arp 或者 /etc/host 文件以后我们就有了大致的探测方向了</p>
+<p>….</p>
+</blockquote>
+<p><em>我看大佬还写了很多XXE有关的内容，不是很好搞懂和上手。我计划以后找时间复现一下再写个xxe进阶。必不可能咕😉</em></p>
+<hr>
 <p>参考：</p>
 <p><a target="_blank" rel="noopener" href="https://xz.aliyun.com/t/3357">一篇文章带你深入理解漏洞之 XXE 漏洞 - 先知社区 (aliyun.com)</a></p>
 <p><a target="_blank" rel="noopener" href="https://lalajun.github.io/2019/12/03/WEB-XXE/">WEB-XXE (lalajun.github.io)</a></p>
 <p><a target="_blank" rel="noopener" href="https://blog.csdn.net/elephantxiang/article/details/114680896"> WebGoat (A4) XML External Entities (XXE)_仙女象的博客-CSDN博客</a></p>
+<hr>
+<p>完结 : )🐣</p>
 
             </div>
             <hr>
@@ -402,6 +413,12 @@
                 <div class="post-prevnext">
                   <article class="post-prev col-6">
                     
+                    
+                      <a href="/2022/04/12/WAF%E4%BB%8B%E7%BB%8D/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">WAF介绍</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
                     
                   </article>
                   <article class="post-next col-6">
