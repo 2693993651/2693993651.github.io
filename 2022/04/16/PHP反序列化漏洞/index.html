@@ -195,7 +195,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      5.3k 字
+      5.8k 字
     </span>
   
 
@@ -205,7 +205,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      63
+      69
        分钟
     </span>
   
@@ -487,10 +487,22 @@
 <p><code>print_r(scandir(dirname(__FILE__)));</code> 打印大气文件目录结构</p>
 <p><code>print_r(file_get_contents());</code> 读取文件内容</p>
 <p>以上就是PHP session反序化相关的内容了，要是觉得意犹未尽，这里还有一个稍微复杂一点的吸体爱抚的例题：<a target="_blank" rel="noopener" href="https://xz.aliyun.com/t/6640#toc-10">https://xz.aliyun.com/t/6640#toc-10</a></p>
-<h3 id="0x04POP链构造"><a href="#0x04POP链构造" class="headerlink" title="0x04POP链构造"></a>0x04POP链构造</h3><p>参考：</p>
+<h3 id="0x04-施工中！-POP链构造"><a href="#0x04-施工中！-POP链构造" class="headerlink" title="0x04   施工中！ POP链构造"></a>0x04   <strong>施工中！</strong> POP链构造</h3><h4 id="POP与POP链"><a href="#POP与POP链" class="headerlink" title="POP与POP链"></a>POP与POP链</h4><p>笼统来讲，POP 面向属性编程(Property-Oriented Programing) 常用于上层语言构造特定调用链的方法，与二进制利用中的面向返回编程（Return-Oriented Programing）的原理相似，都是<strong>从现有运行环境</strong>中寻找一系列的代码或者指令调用，然后根据需求构成一组连续的调用链,最终达到攻击者恶意利用的目的。</p>
+<p>说的再具体一点反序列化是通过控制对象的属性从而实现控制程序的执行流程，进而达成利用本身无害的代码进行有害操作的目的。</p>
+<p>也可以这样理解，构造一条完整的调用链，这条调用链与原来代码的调用链一致，不过部分属性被我们所控制，从而达到攻击目的。构造的这条链就是POP链。</p>
+<p>为什么需要利用pop链呢，</p>
+<p><strong>先前的序列化攻击，更多的是在魔术方法中出现一些利用的漏洞，因为自动调用从而触发漏洞。<br>但如果关键代码不在魔术方法中，而是在一个类的普通方法中。这时候可以通过寻找相同的函数名将类的属性和敏感函数的属性联系起来。</strong></p>
+<h4 id="POP链代码实现"><a href="#POP链代码实现" class="headerlink" title="POP链代码实现"></a>POP链代码实现</h4><p>现有a.php</p>
+<p><em>源码来自<a target="_blank" rel="noopener" href="https://www.cnblogs.com/iamstudy/articles/php_object_injection_pop_chain.html">https://www.cnblogs.com/iamstudy/articles/php_object_injection_pop_chain.html</a></em></p>
+<figure class="highlight php"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs php"><span class="hljs-meta">&lt;?php</span><br><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">lemon</span> </span>&#123;<br>    <span class="hljs-keyword">protected</span> <span class="hljs-variable">$ClassObj</span>;<br><br>    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">__construct</span>(<span class="hljs-params"></span>) </span>&#123;<br>        <span class="hljs-keyword">$this</span>-&gt;ClassObj = <span class="hljs-keyword">new</span> normal();<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">__destruct</span>(<span class="hljs-params"></span>) </span>&#123;<br>        <span class="hljs-keyword">$this</span>-&gt;ClassObj-&gt;action();<br>    &#125;<br>&#125;<br><br><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">normal</span> </span>&#123;<br>    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">action</span>(<span class="hljs-params"></span>) </span>&#123;<br>        <span class="hljs-keyword">echo</span> <span class="hljs-string">&quot;hello&quot;</span>;<br>    &#125;<br>&#125;<br><br><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">evil</span> </span>&#123;<br>    <span class="hljs-keyword">private</span> <span class="hljs-variable">$data</span>;<br>    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">action</span>(<span class="hljs-params"></span>) </span>&#123;<br>        <span class="hljs-keyword">eval</span>(<span class="hljs-keyword">$this</span>-&gt;data);<br>    &#125;<br>&#125;<br><br>unserialize(<span class="hljs-variable">$_GET</span>[<span class="hljs-string">&#x27;d&#x27;</span>]);<br></code></pre></div></td></tr></table></figure>
+
+<p>从该代码可以看出，在我们传入的参数是类<code>lemon</code>的序列化字符串时，反序列化操作，</p>
+<p>参考：</p>
 <p><a target="_blank" rel="noopener" href="https://xz.aliyun.com/t/3674">https://xz.aliyun.com/t/3674</a></p>
 <p><a target="_blank" rel="noopener" href="https://xz.aliyun.com/t/6640">https://xz.aliyun.com/t/6640</a></p>
 <p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/bmjoker/p/13742666.html">https://www.cnblogs.com/bmjoker/p/13742666.html</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/iamstudy/articles/php_object_injection_pop_chain.html">https://www.cnblogs.com/iamstudy/articles/php_object_injection_pop_chain.html</a></p>
+<p><a target="_blank" rel="noopener" href="https://as1def.github.io/2020/10/09/PHP%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E5%92%8CPOP%E9%93%BE%E6%9E%84%E9%80%A0/">https://as1def.github.io/2020/10/09/PHP%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E5%92%8CPOP%E9%93%BE%E6%9E%84%E9%80%A0/</a></p>
 
             </div>
             <hr>
