@@ -1,0 +1,628 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=&#34;auto&#34;>
+
+
+
+<head>
+  <meta charset="UTF-8">
+ <meta name="referrer" content="no-referrer"/>
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="来复现一下ThinkPHP 5.1. x中的反序列化利用链漏洞">
+  <meta name="author" content="Eggs">
+  <meta name="keywords" content="Blog">
+  
+  <title>thinkphp_pop链 - 蛋窝窝</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10.6.0/styles/atelier-sulphurpool-light.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+  
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+  
+<link rel="stylesheet" href="/css/diy/diy.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"2693993651.github.io","root":"/","version":"1.8.10","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":"§ "},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null}}};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>蛋窝窝 •ᴗ•Hi~</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" data-toggle="modal" data-target="#modalSearch">&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;</a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/default0.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="thinkphp_pop链">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-author" aria-hidden="true"></i>
+      Eggs
+    </span>
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2022-04-18 19:41" pubdate>
+        2022年4月18日 晚上
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      1.1k 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      13
+       分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">thinkphp_pop链</h1>
+            
+            <div class="markdown-body">
+              <p>来复现一下ThinkPHP 5.1. x中的反序列化利用链漏洞</p>
+<span id="more"></span>
+
+<hr>
+<p>大佬们都是逆向分析做出来的，而奈何我还尚未进军逆向领域，就先拾人牙慧，重点就放在代码审计了。</p>
+<h3 id="0x00环境搭建"><a href="#0x00环境搭建" class="headerlink" title="0x00环境搭建"></a>0x00环境搭建</h3><p>系统win10，先去下个composer，因为thinkphp官方就让用这个下</p>
+<figure class="highlight cmd"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs cmd">//需要先添加PHP环境变量<br>//依次执行下面三条命令<br>php -r &quot;<span class="hljs-built_in">copy</span>(&#x27;https://getcomposer.org/installer&#x27;, &#x27;composer-setup.php&#x27;);&quot;<br>php composer-setup.php<br>php -r &quot;unlink(&#x27;composer-setup.php&#x27;);&quot;<br></code></pre></div></td></tr></table></figure>
+
+<p>意思就是在当前目录下创建下载composer的文件，然后启动该文件，下载完之后再把该文件删了</p>
+<p>然后使用下面的命令下载5.1版本的thinkphp</p>
+<figure class="highlight cmd"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs cmd">php composer.phar create-project topthink/think=<span class="hljs-number">5</span>.<span class="hljs-number">1</span>.x-dev tp51x<br></code></pre></div></td></tr></table></figure>
+
+<p>因为我本地有phpstudy集成环境，所以把该文件移到WWW目录后访问<code>127.0.0.1/tp51x/public</code>即可</p>
+<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220418204520.png" srcset="/img/loading.gif" lazyload></p>
+<p>然后将 <strong>application/index/controller/Index.php</strong> 代码修改成如下：</p>
+<figure class="highlight php"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs php"><span class="hljs-meta">&lt;?php</span><br><span class="hljs-keyword">namespace</span> <span class="hljs-title">app</span>\<span class="hljs-title">controller</span>;<br><br><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Index</span></span><br><span class="hljs-class"></span>&#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">index</span>(<span class="hljs-params"></span>)</span><br><span class="hljs-function">    </span>&#123;<br>        <span class="hljs-variable">$u</span> = unserialize(<span class="hljs-variable">$_GET</span>[<span class="hljs-string">&#x27;eggs&#x27;</span>]);<br>        <span class="hljs-keyword">return</span> <span class="hljs-string">&#x27;ThinkPHP V5.1&#x27;</span>;<br>    &#125;<br>&#125;<br></code></pre></div></td></tr></table></figure>
+
+<p>环境搭建完毕，现在我们直接🔪到源码中去</p>
+<h3 id="0x01利用条件"><a href="#0x01利用条件" class="headerlink" title="0x01利用条件"></a>0x01利用条件</h3><ul>
+<li>有一个内容完全可控的反序列化点，例如： <code>unserialize(可控变量)</code></li>
+<li>存在文件上传、文件名完全可控、使用了文件操作函数，例如： <code>file_exists(&#39;phar://恶意文件&#39;)</code></li>
+</ul>
+<p>（满足以上任意一个条件即可）</p>
+<hr>
+<p>我们修改的页面即满足了条件1，thinkphp源码中有其它页面满足了条件2。</p>
+<p>所以实际上环境中有很多地方可以构造pop链，那么我们就来找找有哪些链子吧</p>
+<h3 id="0x02知识补充"><a href="#0x02知识补充" class="headerlink" title="0x02知识补充"></a>0x02知识补充</h3><p><strong>反序列化的常见起点</strong></p>
+<div class="hljs code-wrapper"><pre><code>    __wakeup：一定会调用
+    __destruct：一定会调用
+    __toString：当一个对象被反序列化后又被当做字符串使用
+</code></pre></div>
+<p><strong>反序列化的常见中间跳板</strong></p>
+<div class="hljs code-wrapper"><pre><code>    __toString：当一个对象被当做字符串使用
+    __get：读取不可访问或不存在属性时被调用
+    __set：当给不可访问或不存在属性赋值时被调用
+    __isset：对不可访问或不存在的属性调用 isset() 或 empty() 时被调用，形如 $this-&gt;$func();
+</code></pre></div>
+<p><strong>反序列化的常见终点</strong></p>
+<div class="hljs code-wrapper"><pre><code>    __call：调用不可访问或不存在的方法时被调用
+    call_user_func：一般php代码执行都会选择这里
+    call_user_func_array：一般php代码执行都会选择这里
+</code></pre></div>
+<p>通过以上三点总结，我们在寻找pop链时就会更有方向</p>
+<p><strong>Phar反序列化原理以及特征</strong></p>
+<div class="hljs code-wrapper"><pre><code>    phar://伪协议会在多个函数中反序列化其 metadata 部分
+    受影响的函数包括不限于如下
+</code></pre></div>
+<blockquote>
+<p>copy,file_exists,file_get_contents,file_put_contents,file,fileatime,filectime,filegroup,<br>fileinode,filemtime,fileowner,fileperms,<br>fopen,is_dir,is_executable,is_file,is_link,is_readable,is_writable,<br>is_writeable,parse_ini_file,readfile,stat,unlink,exif_thumbnailexif_imagetype,<br>imageloadfontimagecreatefrom,hash_hmac_filehash_filehash_update_filemd5_filesha1_file,<br>get_meta_tagsget_headers,getimagesizegetimagesizefromstring,extractTo</p>
+</blockquote>
+<h3 id="0x03构造pop链"><a href="#0x03构造pop链" class="headerlink" title="0x03构造pop链"></a>0x03构造pop链</h3><h4 id="寻找序列化起始点"><a href="#寻找序列化起始点" class="headerlink" title="寻找序列化起始点"></a>寻找序列化起始点</h4><p>先移步至<strong>tp51x\thinkphp\library\think\process\pipes\Windows.php</strong> 文件</p>
+<p>关键代码（以下代码都被定义到了windows类中）</p>
+<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220418213329.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220418213421.png" srcset="/img/loading.gif" lazyload></p>
+<p><em>Windows</em> 类的*__destruct()*方法中，存在一个删除文件功能<code>removeFiles()</code>。接下来我们到这个功能里去看看，涉及有关<code>$filename</code>的操作。而<code>$filename</code>一般都是指的我们上传的文件名，是<strong>可控的</strong>。</p>
+<p>根据该方法，如果存在一个类有魔术方法<code>__toString()</code>，然后我们将一个该类的对象赋值给<code>filename</code>变量，那么在执行<code>file_exists($filename)</code>时，就会触发<code>__toString()</code>了因为 <code>file_exists()</code> 函数需要的是一个字符串类型的参数，如果传入一个对象，就会先调用该类 <code>__toString()</code> 方法，获取其字符串返回值，然后再判断</p>
+<p>接下来，我们就来寻找可以利用的<code>__toString()</code>。<em>我试图直接<code>ctrl+f</code>，不过这个文件中并没有找到，需要全局搜索🤦‍♂️这也是我对一个实际项目的初体验了吧</em></p>
+<h4 id="寻找中间跳板"><a href="#寻找中间跳板" class="headerlink" title="寻找中间跳板"></a>寻找中间跳板</h4><p><strong>tp51x\thinkphp\library\think\Collection.php</strong></p>
+<p>在这里我们找到了需要的<code>__toString()</code></p>
+<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220418223740.png" srcset="/img/loading.gif" lazyload></p>
+<p>可以看出，接下来我们的目标即是<code>toArray()</code> 方法中寻找一个满足条件的：<code>$可控变量 -&gt; 方法(参数可控)</code>，这样可以去触发某个类的 <code>__call</code> 方法</p>
+<p><strong>thinkphp/library/think/model/concern/Conversion.php</strong></p>
+<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220418224758.png" srcset="/img/loading.gif" lazyload></p>
+<p><code>$relation-&gt;visible($name);</code>符合条件</p>
+<h4 id="寻找反序列化代码执行点"><a href="#寻找反序列化代码执行点" class="headerlink" title="寻找反序列化代码执行点"></a>寻找反序列化代码执行点</h4><p>我们接下来的就像想办法用<code>visible()</code>函数调用一个具有<code>__call()</code>的类（<em>需要该类没有visible方法</em>）</p>
+<p>全局搜索 <code>__call</code>，跟进 <strong>thinkphp/library/think/Request.php</strong></p>
+<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220418230036.png" srcset="/img/loading.gif" lazyload></p>
+<h1 id="施工中"><a href="#施工中" class="headerlink" title="施工中"></a>施工中</h1><p>参考：</p>
+<p><a target="_blank" rel="noopener" href="https://xz.aliyun.com/t/6476">https://xz.aliyun.com/t/6476</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/LYJ20010728/article/details/119860851">https://blog.csdn.net/LYJ20010728/article/details/119860851</a></p>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/%E5%AD%A6%E4%B9%A0/">学习</a>
+                    
+                      <a class="hover-with-bg" href="/categories/%E5%AD%A6%E4%B9%A0/%E7%BD%91%E5%AE%89/">网安</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/Web%E5%AE%89%E5%85%A8/">Web安全</a>
+                    
+                      <a class="hover-with-bg" href="/tags/php%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/">php反序列化</a>
+                    
+                      <a class="hover-with-bg" href="/tags/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/">代码审计</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/04/16/PHP%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E/">
+                        <span class="hidden-mobile">PHP反序列化漏洞</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments" lazyload>
+                
+                  
+                
+                
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js', function () {
+        new Valine({
+          el: "#valine",
+          app_id: "DejyuTUMjI2eFz3aDorItWV1-gzGzoHsz",
+          app_key: "fuBqYYOE6Y2x4Ssxcxg7OhUW",
+          placeholder: "说点什么",
+          path: window.location.pathname,
+          avatar: "monsterid",
+          meta: ["nick"],
+          pageSize: "10",
+          lang: "zh-CN",
+          highlight: true,
+          recordIP: true,
+          serverURLs: "",
+        });
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+  <div class="statistics">
+    
+    
+
+    
+      
+        <!-- 不蒜子统计PV -->
+        <span id="busuanzi_container_site_pv" style="display: none">
+            总访问量 
+            <span id="busuanzi_value_site_pv"></span>
+             次
+          </span>
+      
+      
+        <!-- 不蒜子统计UV -->
+        <span id="busuanzi_container_site_uv" style="display: none">
+            总访客数 
+            <span id="busuanzi_value_site_uv"></span>
+             人
+          </span>
+      
+    
+  </div>
+
+
+  
+
+  
+<div>
+  <span id="timeDate">载入天数...</span>
+  <span id="times">载入时分秒...</span>
+  <script>
+  var now = new Date();
+  function createtime(){
+      var grt= new Date("05/14/2021 10:42:10");//此处修改你的建站时间或者网站上线时间
+      now.setTime(now.getTime()+250);
+      days = (now - grt ) / 1000 / 60 / 60 / 24;
+      dnum = Math.floor(days);
+      hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum);
+      hnum = Math.floor(hours);
+      if(String(hnum).length ==1 ){
+          hnum = "0" + hnum;
+      }
+      minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum);
+      mnum = Math.floor(minutes);
+      if(String(mnum).length ==1 ){
+                mnum = "0" + mnum;
+      }
+      seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum);
+      snum = Math.round(seconds);
+      if(String(snum).length ==1 ){
+                snum = "0" + snum;
+      }
+      document.getElementById("timeDate").innerHTML = "🐣孵化中... for&nbsp"+dnum+"&nbspdays";  //此次自定义显示内容
+      document.getElementById("times").innerHTML = hnum + "&nbsphr&nbsp" + mnum + "&nbspmin&nbsp" + snum + "&nbspsec";
+  }  //此次自定义显示内容
+  setInterval("createtime()",250);
+  </script>
+</div>
+<div class="text-center py-1">   
+  <div>
+    <span>Copyright © 2021</span></a>
+    <span>Eggswoo</span></a>    <br>
+  </div>
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/tocbot@4.12.2/dist/tocbot.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4.3.0/anchor.min.js" ></script>
+
+
+
+  <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2.0.8/dist/clipboard.min.js" ></script>
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2.0.11/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+      typing(title)
+      
+    })(window, document);
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    (function () {
+      var path = "/local-search.xml";
+      $('#local-search-input').on('click', function() {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      });
+      $('#modalSearch').on('shown.bs.modal', function() {
+        $('#local-search-input').focus();
+      });
+    })()
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<script src="/js/diy/diy.js"></script>
+<script src="//cdn.jsdelivr.net/gh/bynotes/texiao/source/js/caidai.js"></script>
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>
