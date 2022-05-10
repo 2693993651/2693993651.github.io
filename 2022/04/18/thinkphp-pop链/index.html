@@ -195,7 +195,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      1.1k 字
+      1.5k 字
     </span>
   
 
@@ -205,7 +205,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      13
+      17
        分钟
     </span>
   
@@ -242,7 +242,6 @@
 <span id="more"></span>
 
 <hr>
-<p>大佬们都是逆向分析做出来的，而奈何我还尚未进军逆向领域，就先拾人牙慧，重点就放在代码审计了。</p>
 <h3 id="0x00环境搭建"><a href="#0x00环境搭建" class="headerlink" title="0x00环境搭建"></a>0x00环境搭建</h3><p>系统win10，先去下个composer，因为thinkphp官方就让用这个下</p>
 <figure class="highlight cmd"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs cmd">//需要先添加PHP环境变量<br>//依次执行下面三条命令<br>php -r &quot;<span class="hljs-built_in">copy</span>(&#x27;https://getcomposer.org/installer&#x27;, &#x27;composer-setup.php&#x27;);&quot;<br>php composer-setup.php<br>php -r &quot;unlink(&#x27;composer-setup.php&#x27;);&quot;<br></code></pre></div></td></tr></table></figure>
 
@@ -260,7 +259,7 @@
 <li>有一个内容完全可控的反序列化点，例如： <code>unserialize(可控变量)</code></li>
 <li>存在文件上传、文件名完全可控、使用了文件操作函数，例如： <code>file_exists(&#39;phar://恶意文件&#39;)</code></li>
 </ul>
-<p>（满足以上任意一个条件即可）</p>
+<p>（满足以上任意一个条件即可，第二点详见接下来的知识补充）</p>
 <hr>
 <p>我们修改的页面即满足了条件1，thinkphp源码中有其它页面满足了条件2。</p>
 <p>所以实际上环境中有很多地方可以构造pop链，那么我们就来找找有哪些链子吧</p>
@@ -282,32 +281,49 @@
 </code></pre></div>
 <p>通过以上三点总结，我们在寻找pop链时就会更有方向</p>
 <p><strong>Phar反序列化原理以及特征</strong></p>
-<div class="hljs code-wrapper"><pre><code>    phar://伪协议会在多个函数中反序列化其 metadata 部分
-    受影响的函数包括不限于如下
+<p>phar 文件通过 phar:// 伪协议拓宽攻击面</p>
+<div class="hljs code-wrapper"><pre><code>因为 phar 文件会以序列化的形式存储用户自定义的meta-data，所以在文件系统函数（file_exists()、is_dir()等）参数可控的情况下，配合phar://伪协议，可以不依赖unserialize()直接进行反序列化操作,深入了解请至：https://paper.seebug.org/680/
 </code></pre></div>
+<p>受影响的函数包括不限于如下</p>
 <blockquote>
 <p>copy,file_exists,file_get_contents,file_put_contents,file,fileatime,filectime,filegroup,<br>fileinode,filemtime,fileowner,fileperms,<br>fopen,is_dir,is_executable,is_file,is_link,is_readable,is_writable,<br>is_writeable,parse_ini_file,readfile,stat,unlink,exif_thumbnailexif_imagetype,<br>imageloadfontimagecreatefrom,hash_hmac_filehash_filehash_update_filemd5_filesha1_file,<br>get_meta_tagsget_headers,getimagesizegetimagesizefromstring,extractTo</p>
 </blockquote>
 <h3 id="0x03构造pop链"><a href="#0x03构造pop链" class="headerlink" title="0x03构造pop链"></a>0x03构造pop链</h3><h4 id="寻找序列化起始点"><a href="#寻找序列化起始点" class="headerlink" title="寻找序列化起始点"></a>寻找序列化起始点</h4><p>先移步至<strong>tp51x\thinkphp\library\think\process\pipes\Windows.php</strong> 文件</p>
-<p>关键代码（以下代码都被定义到了windows类中）</p>
+<p>关键代码</p>
 <p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220418213329.png" srcset="/img/loading.gif" lazyload></p>
 <p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220418213421.png" srcset="/img/loading.gif" lazyload></p>
-<p><em>Windows</em> 类的*__destruct()*方法中，存在一个删除文件功能<code>removeFiles()</code>。接下来我们到这个功能里去看看，涉及有关<code>$filename</code>的操作。而<code>$filename</code>一般都是指的我们上传的文件名，是<strong>可控的</strong>。</p>
-<p>根据该方法，如果存在一个类有魔术方法<code>__toString()</code>，然后我们将一个该类的对象赋值给<code>filename</code>变量，那么在执行<code>file_exists($filename)</code>时，就会触发<code>__toString()</code>了因为 <code>file_exists()</code> 函数需要的是一个字符串类型的参数，如果传入一个对象，就会先调用该类 <code>__toString()</code> 方法，获取其字符串返回值，然后再判断</p>
-<p>接下来，我们就来寻找可以利用的<code>__toString()</code>。<em>我试图直接<code>ctrl+f</code>，不过这个文件中并没有找到，需要全局搜索🤦‍♂️这也是我对一个实际项目的初体验了吧</em></p>
+<p><code>Windows</code> 类的<code>__destruct()</code>方法中，存在一个删除文件功能<code>removeFiles()</code>。接下来我们到这个功能里去看看</p>
+<p>涉及有关参数<code>$filename</code>的操作。而从该方法得知<code>$filename</code>也是该类的属性，是<strong>可控的</strong>。</p>
+<p><em>只看到这里，我们其实可以构造任意文件删除的反序列化漏洞。不过我们的最终目的是远程命令执行，所以对此不深入讨论</em></p>
+<p>而<code>file_exists()</code> 函数需要的是一个字符串类型的参数，如果传入一个对象，就会先调用该类 <code>__toString()</code> 方法，获取其字符串返回值，然后再判断</p>
+<p>那么如果存在一个类有魔术方法<code>__toString()</code>，然后我们将一个该类的对象赋值给<code>filename</code>变量，那么在执行<code>file_exists($filename)</code>时，就会触发<code>__toString()</code></p>
+<p>接下来，我们就来寻找可以利用的<code>__toString()</code>。</p>
+<p><em>我试图直接<code>ctrl+f</code>，不过这个文件中并没有找到，需要全局搜索🤦‍♂️这也是我对一个实际项目的初体验了吧</em></p>
+<p>当前的链子：</p>
+<p><strong>windos析构函数 调用 removefiles() 调用 file_exists() -&gt;toString()</strong></p>
 <h4 id="寻找中间跳板"><a href="#寻找中间跳板" class="headerlink" title="寻找中间跳板"></a>寻找中间跳板</h4><p><strong>tp51x\thinkphp\library\think\Collection.php</strong></p>
 <p>在这里我们找到了需要的<code>__toString()</code></p>
 <p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220418223740.png" srcset="/img/loading.gif" lazyload></p>
-<p>可以看出，接下来我们的目标即是<code>toArray()</code> 方法中寻找一个满足条件的：<code>$可控变量 -&gt; 方法(参数可控)</code>，这样可以去触发某个类的 <code>__call</code> 方法</p>
+<p>虽然该方法不能直接控制参数使我们直接调用__call()，但我们可以接着跟着函数调用的路线走，直到找到一个参数可控的函数</p>
+<p>可以看出，接下来我们的目标即是<code>toArray()</code> 方法中寻找一个满足条件的：<code>$可控变量 -&gt; 方法(参数可控)</code>，这是为了构造触发执行代码的相关函数。如果没有满足该条件的方法，那么我们就继续沿着被调用的函数，再往下看，找到能调用 <code>__call</code> 方法的函数。</p>
+<p>当前的链子：</p>
+<p><strong>windos类析构函数 调用 removefiles() 调用 file_exists() -&gt;Conversion类  toString() 调用 toJson() 调用 toArray()</strong></p>
+<p>来到</p>
 <p><strong>thinkphp/library/think/model/concern/Conversion.php</strong></p>
-<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220418224758.png" srcset="/img/loading.gif" lazyload></p>
-<p><code>$relation-&gt;visible($name);</code>符合条件</p>
+<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220420080824.png" srcset="/img/loading.gif" lazyload></p>
+<p>来到同文件下的<code>toarray()</code>函数下，发现<code>$relation-&gt;visible($name);</code>符合条件，<strong>满足$可控变量-&gt;方法(参数可控)的点</strong></p>
+<p><code>relation</code>为可控的属性，不过该属性经过<code>getRelation()</code>、<code>getAttr()</code>处理，我们需要看看数据是怎么被处理的。</p>
+<p><code>getRelation</code>在**/thinkphp/library/think/model/concern/RelationShip.php**</p>
+<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220420081750.png" srcset="/img/loading.gif" lazyload></p>
+<p>由于getRelation()下面的if语句为if (!$relation)，所以这里不用理会，返回空即可。</p>
 <h4 id="寻找反序列化代码执行点"><a href="#寻找反序列化代码执行点" class="headerlink" title="寻找反序列化代码执行点"></a>寻找反序列化代码执行点</h4><p>我们接下来的就像想办法用<code>visible()</code>函数调用一个具有<code>__call()</code>的类（<em>需要该类没有visible方法</em>）</p>
 <p>全局搜索 <code>__call</code>，跟进 <strong>thinkphp/library/think/Request.php</strong></p>
 <p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220418230036.png" srcset="/img/loading.gif" lazyload></p>
-<h1 id="施工中"><a href="#施工中" class="headerlink" title="施工中"></a>施工中</h1><p>参考：</p>
+<p>参考：</p>
 <p><a target="_blank" rel="noopener" href="https://xz.aliyun.com/t/6476">https://xz.aliyun.com/t/6476</a></p>
 <p><a target="_blank" rel="noopener" href="https://blog.csdn.net/LYJ20010728/article/details/119860851">https://blog.csdn.net/LYJ20010728/article/details/119860851</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_38154820/article/details/106330113">https://blog.csdn.net/qq_38154820/article/details/106330113</a></p>
+<p>.</p>
 
             </div>
             <hr>
@@ -329,7 +345,7 @@
                     
                       <a class="hover-with-bg" href="/tags/Web%E5%AE%89%E5%85%A8/">Web安全</a>
                     
-                      <a class="hover-with-bg" href="/tags/php%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/">php反序列化</a>
+                      <a class="hover-with-bg" href="/tags/%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/">反序列化</a>
                     
                       <a class="hover-with-bg" href="/tags/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/">代码审计</a>
                     
