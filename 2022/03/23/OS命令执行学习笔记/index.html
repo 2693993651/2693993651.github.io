@@ -244,10 +244,10 @@
 <p><em>很多人喜欢把代码执行漏洞称为命令执行漏洞，因为命令执行漏洞可以执行系统命令，而代码执行漏洞也会执行系统命令，这样就容易混淆。其实两者比较好区分，它们之间的区别比较大，命令执行漏洞是直接调用操作系统命令，故这里叫OS命令执行漏洞，而代码执行漏洞则是靠脚本代码调用操作系统命令，如：<code>eval(system(&#39;set&#39;););</code>。</em></p>
 <hr>
 <h3 id="OS命令执行攻击过程"><a href="#OS命令执行攻击过程" class="headerlink" title="OS命令执行攻击过程"></a>OS命令执行攻击过程</h3><p>以dvwa中的low级命令执行为例</p>
-<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220323221638.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://raw.githubusercontent.com/2693993651/images/master/images/20220323221638.png" srcset="/img/loading.gif" lazyload></p>
 <p>该站点提供了一个可以使用ping命令的窗口，我们可以在该命令后面加上“|”或“&amp;”来拼接其他命令，就像直接在cmd窗口执行命令一样。这就是命令执行漏洞特点的体现：数据和代码没有分离。</p>
 <p>当我们输入<code>127.0.0.1 | dir</code>时</p>
-<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220323224730.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://raw.githubusercontent.com/2693993651/images/master/images/20220323224730.png" srcset="/img/loading.gif" lazyload></p>
 <p>利用了管道符“|”成功在服务器端执行了系统命令dir。</p>
 <hr>
 <h3 id="系统命令中管道符规则"><a href="#系统命令中管道符规则" class="headerlink" title="系统命令中管道符规则"></a>系统命令中管道符规则</h3><p>Windows：</p>

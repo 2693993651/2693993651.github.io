@@ -259,18 +259,18 @@
 <p>这样当用户访问我们站点时，遇到img，发送get请求去找图片的资源。而这里的请求不是访问图片而是访问我们构造好的url，其作用是访问具有csrf漏洞的对应站点并执行一系列命令。</p>
 <p>另外我们也可以利用burp生成CSRF Poc页面的功能，来生成陷阱html文件。</p>
 <p>先抓取修改密码时的数据包，action中选择CSRF Poc，根据这个数据包生成一个html文件。</p>
-<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220314212232.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://raw.githubusercontent.com/2693993651/images/master/images/20220314212232.png" srcset="/img/loading.gif" lazyload></p>
 <p>根据刚才数据包提交的参数，这里创建了一个表单，并隐藏了对应参数。</p>
-<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220314214047.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://raw.githubusercontent.com/2693993651/images/master/images/20220314214047.png" srcset="/img/loading.gif" lazyload></p>
 <p>在用户已经登录了对应站点的情况下，当用户点击提交时，就会利用当前用户的身份去执行form action中的操作，在这里即为修改对应站点账号的密码。</p>
 <figure class="highlight javascript"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs javascript"><span class="hljs-comment">//值得注意的是，这样的话需要用户点击链接后再点击一下提交才能实现攻击，成功率可能较低</span><br><span class="hljs-comment">//所以我们可以加上下面一段js代码，使得当页面加载完成时自动提交表单</span><br><br>&lt;script&gt;<br><br><span class="hljs-built_in">window</span>.onload = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>&#123;<br><br>  <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">&quot;submit&quot;</span>).click();<span class="hljs-comment">//typt=&quot;submit&quot;的属性框中加上对应的id=&quot;submit&quot;</span><br><br>&#125;         <br><br>&lt;/script&gt;<br></code></pre></div></td></tr></table></figure>
 
 
 
 <p>当用户点击提交后就可以看到密码已被修改。实际情况下攻击者构造的陷阱网页不会这么明显，不会使用户意识到发生了什么。</p>
-<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220314215711.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://raw.githubusercontent.com/2693993651/images/master/images/20220314215711.png" srcset="/img/loading.gif" lazyload></p>
 <h3 id="CSRF漏洞代码分析及防御措施"><a href="#CSRF漏洞代码分析及防御措施" class="headerlink" title="CSRF漏洞代码分析及防御措施"></a>CSRF漏洞代码分析及防御措施</h3><p>…实际上存在csrf漏洞的网页的代码在结构和逻辑上并没有什么特性，为用户设置身份信息且用户有一些执行命令的权限以及对用户身份验证环节的薄弱（或身份信息易被伪造）就是存在csrf漏洞网站的共同点。</p>
-<p>出现scrf漏洞的原因就是网站过于相信用户，攻击者可以伪造用户请求，由此可知，抵御csrf攻击的关键在于：在请求中放入攻击者不能伪造的信息。例如可以在http请求中以参数的形式加入一个随机产生的token，并在服务器验证token，如果请求中没有token或者token中的内容不正确，则认为该请求可能是csrf攻击从而拒绝该请求。</p>
+<p>出现csrf漏洞的原因就是网站过于相信用户，攻击者可以伪造用户请求，由此可知，抵御csrf攻击的关键在于：在请求中放入攻击者不能伪造的信息。例如可以在http请求中以参数的形式加入一个随机产生的token，并在服务器验证token，如果请求中没有token或者token中的内容不正确，则认为该请求可能是csrf攻击从而拒绝该请求。</p>
 <hr>
 <p>参考：《web安全攻防》</p>
 <hr>

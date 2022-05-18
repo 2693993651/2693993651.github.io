@@ -260,7 +260,7 @@
 <li><p>DOM型xss</p>
 <p>DOM全称Document Object Model，使用DOM可以使程序和脚本能够动态访问和更新文档的内容、结构及样式。DOM型xss其实是一种特殊类型的反射型xss，它是基于DOM文档对象模型的一种漏洞。</p>
 <p>HTML的标签都是节点，而这些节点组成了DOM的整体结构——节点数。通过HTML DOM，书中的所有节点均可通过JavaScript进行访问。所有HTML元素（节点）均可被修改，也可以创建或删除节点。HTML DOM 数结构如下图所示：</p>
-<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/ct_htmltree.gif" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://raw.githubusercontent.com/2693993651/images/master/images/ct_htmltree.gif" srcset="/img/loading.gif" lazyload></p>
 </li>
 </ul>
 <p>​        在网站页面中有许多元素，当页面到达浏览器时，浏览器会为页面内创建一个顶级的Document object文档        对象，接着生成各个子文档对象，每个页面元素对应一个文档对象，每个文档对象包含属性、方法和事件。        可以通过js脚本对文档对象进行编辑，从而修改页面的元素。也就是说，客户端的脚本程序可以通过DOM动        态修改页面内容，从客户端获取DOM中的数据并在本地执行。由于DOM是在客户端修改节点的，所以基于        DOM型的xss漏洞不需要与服务器端交互，它只发生在客户端处理数据的阶段。</p>
@@ -300,7 +300,7 @@
 <p>单机“替换”按钮时会执行JavaScript的myfunction()函数，而myfunction()函数是一个DOM操作，通过document.getElementById获取ID为id1的节点，然后将节点id1的内容修改为dom_input中的值，即用户输入的值。当输入<code>&lt;img src=1 onerror=alter(/xss/)/&gt;</code>时，单击”替换“按钮，我们输入的数据又会输出到页面上，所以页面弹出消息框。但由于是隐式输出的，所以在查看源代码时，看不到输出的xss代码</p>
 <hr>
 <h3 id="xss漏洞容易出现的地方"><a href="#xss漏洞容易出现的地方" class="headerlink" title="xss漏洞容易出现的地方"></a>xss漏洞容易出现的地方</h3><p>来自靶场webgoat的总结</p>
-<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220310231605.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://raw.githubusercontent.com/2693993651/images/master/images/20220310231605.png" srcset="/img/loading.gif" lazyload></p>
 <p>xss漏洞常见地点：</p>
 <ul>
 <li><p>将用户搜索的字符串回显出来的字段。（如搜搜索引擎会弹出，没有找到关于“xxx”的内容这一字段）</p>
@@ -338,18 +338,18 @@
 <p><strong>利用BlueLotus_XSSReceiver平台的详细步骤</strong>：</p>
 <p>先生成一个js模板，这里我选的模板是default.js，官方介绍说这个模板包能完成xss的基本攻击</p>
 <p>选好模块后设置好参数</p>
-<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220306233110.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://raw.githubusercontent.com/2693993651/images/master/images/20220306233110.png" srcset="/img/loading.gif" lazyload></p>
 <p>我的xss平台搭建在本地虚拟环境中，主机作为用户，所以需要分别把js文件和payload中的IP地址改为xss平台所在主机中的内网ip地址（注意js文件中的接收页面是ip/BlueLotus_XSSReceiver/index.php），使用户（即主机）能够访问到。</p>
 <p>构造payload，诱使用户点击。我们这里即把平台生成的payload提交的xss漏洞处即可。</p>
-<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220307184800.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://raw.githubusercontent.com/2693993651/images/master/images/20220307184800.png" srcset="/img/loading.gif" lazyload></p>
 <p>此时我们平台的接收面版已经有了信息</p>
-<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220307184858.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://raw.githubusercontent.com/2693993651/images/master/images/20220307184858.png" srcset="/img/loading.gif" lazyload></p>
 <p>复制盗取来的cookie值</p>
-<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220307194408.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://raw.githubusercontent.com/2693993651/images/master/images/20220307194408.png" srcset="/img/loading.gif" lazyload></p>
 <p>接着访问对应网站，可以用浏览器插件或按f12进入开发者页面修改cookie值。修改cookie后注意直接访问内部的页面，访问登录页面是没用的</p>
-<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220307195024.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://raw.githubusercontent.com/2693993651/images/master/images/20220307195024.png" srcset="/img/loading.gif" lazyload></p>
 <p>可以看到我们没有输入账号密码，直接用admin账户登录成功</p>
-<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220307200723.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://raw.githubusercontent.com/2693993651/images/master/images/20220307200723.png" srcset="/img/loading.gif" lazyload></p>
 <p>如要实现其它功能，如屏幕截图、读取键盘输入，使用平台提供的对应js模板或自己修改js文件即可。</p>
 <hr>
 <p>参考：<a target="_blank" rel="noopener" href="https://www.freebuf.com/articles/web/276998.html">https://www.freebuf.com/articles/web/276998.html</a></p>

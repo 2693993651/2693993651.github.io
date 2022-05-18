@@ -312,7 +312,7 @@
 <p> <code>Obj.getUser().setName=&quot;admin&quot;;</code></p>
 </li>
 </ul>
-<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220324225223.png" srcset="/img/loading.gif" lazyload><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220324225338.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://raw.githubusercontent.com/2693993651/images/master/images/20220324225223.png" srcset="/img/loading.gif" lazyload><img src="https://raw.githubusercontent.com/2693993651/images/master/images/20220324225338.png" srcset="/img/loading.gif" lazyload></p>
 <ul>
 <li><h4 id="ThinkPHP-命令执行漏洞"><a href="#ThinkPHP-命令执行漏洞" class="headerlink" title="ThinkPHP 命令执行漏洞"></a>ThinkPHP 命令执行漏洞</h4><p>ThinkPHP的问题主要在于DIspatcher.class.php文件，官方SVN修改前后的关键代码如下：</p>
 <figure class="highlight bash"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs bash">125 - <span class="hljs-variable">$res</span> = preg_replace(<span class="hljs-string">&#x27;@(w+)&#x27;</span>.<span class="hljs-variable">$depr</span>.<span class="hljs-string">&#x27;([^&#x27;</span>.<span class="hljs-variable">$depr</span>.<span class="hljs-string">&#x27;\/]+)@e&#x27;</span>,<span class="hljs-string">&#x27;$var[\&#x27;</span>\\1\<span class="hljs-string">&#x27;]=&quot;\\2\&#x27;</span>;,implode(<span class="hljs-variable">$depr</span>,<span class="hljs-variable">$paths</span>));<br></code></pre></div></td></tr></table></figure>
@@ -321,7 +321,7 @@
 
 <p>上述代码的含义是把phpinfo作为restful类型URL进行解析的，主要作用是把phpinfo中的数据解析并$_GET数组中。</p>
 <p>然而在用正则解析phpinfo的时候，主要是以下语句：<br><code>$res=preg_replace(&#39;@(w+)&#39;.$depr.&#39;([^&#39;.$depr.&#39;\/]+)@e&#39;,&#39;$var[\&#39;\\1\&#39;]=&quot;\\2\&#39;;,implode($depr,$paths));</code></p>
-<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220324232041.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://raw.githubusercontent.com/2693993651/images/master/images/20220324232041.png" srcset="/img/loading.gif" lazyload></p>
 </li>
 </ul>
 <p><em>资料来源：《Web安全深度剖析》</em> </p>
@@ -379,7 +379,7 @@
                     
                       <a href="/2022/03/28/no-referer/">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">no_referer</span>
+                        <span class="hidden-mobile">图床之no_referer</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     

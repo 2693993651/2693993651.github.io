@@ -163,7 +163,7 @@
 </nav>
 
     <div class="banner" id="banner" parallax=true
-         style="background: url('https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/bVye7CFilTNnE1G.png') no-repeat center center;
+         style="background: url('https://raw.githubusercontent.com/2693993651/images/master/images/bVye7CFilTNnE1G.png') no-repeat center center;
            background-size: cover;">
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
@@ -245,18 +245,18 @@
 <p><del>上次说记录通关历程的sqlilabs我好像就停在了20关🤔</del></p>
 <hr>
 <p>从第一关，开冲！</p>
-<h3 id="1–格式检查之客户端js"><a href="#1–格式检查之客户端js" class="headerlink" title="1–格式检查之客户端js"></a>1–格式检查之客户端js</h3><p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20211027231935.png" srcset="/img/loading.gif" lazyload></p>
+<h3 id="1–格式检查之客户端js"><a href="#1–格式检查之客户端js" class="headerlink" title="1–格式检查之客户端js"></a>1–格式检查之客户端js</h3><p><img src="https://raw.githubusercontent.com/2693993651/images/master/images/20211027231935.png" srcset="/img/loading.gif" lazyload></p>
 <p>很常见的界面，首先直接传入一个写入一句话木马的php文件试试。</p>
-<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20211027232317.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://raw.githubusercontent.com/2693993651/images/master/images/20211027232317.png" srcset="/img/loading.gif" lazyload></p>
 <p>在点击上传后的一瞬间弹出了一个JavaScript的alter，告诉我们限制了文件的类型不能为php。这关的限制很有可能就在前端，上传时没有与服务器交互就直接拒绝了我。可以尝试把木马的php后缀改为<code>jpg</code>，上传<code>jpg</code>文件然后用burp抓包，修改数据再把包发出去。即将下图中的“a.jpg”改为“a.php”。</p>
-<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20211027232640.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://raw.githubusercontent.com/2693993651/images/master/images/20211027232640.png" srcset="/img/loading.gif" lazyload></p>
 <p>接着用蚁剑连接即可。</p>
 <p>文件路径在上传文件后右键图片即可复制获得。</p>
 <p>另外大致可以猜测<strong>这关上传文件的限制代码并没有进行HTTP请求去访问服务器<br> 所以可判断这是前端js验证，验证代码在我们的浏览器上</strong></p>
 <p>我们也可以直接禁用浏览器的JavaScript或删除部分相关的js代码</p>
-<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20211027233354.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://raw.githubusercontent.com/2693993651/images/master/images/20211027233354.png" srcset="/img/loading.gif" lazyload></p>
 <p>然后直接上传“a.php”，显示上传成功。</p>
-<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20211027233447.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://raw.githubusercontent.com/2693993651/images/master/images/20211027233447.png" srcset="/img/loading.gif" lazyload></p>
 <p>（这一关的提示）</p>
 <p>所以针对有前端限制的代码，可以用burp修改数据包绕过前端的限制，也可以直接通过浏览器禁用前端相关的限制代码。</p>
 <h3 id="2–格式检查之mime-type"><a href="#2–格式检查之mime-type" class="headerlink" title="2–格式检查之mime-type"></a>2–格式检查之mime-type</h3><p>这关同样可以采取修改第一关的方法，上传后缀为jpg的木马文件，burp抓包后再修改回php，即可实现上传。</p>
@@ -265,22 +265,22 @@
 <p>不同类型的文件类型在传输时，有着不同的mime类型，这样浏览器就知道该用什么方式来打开它，和文件后缀的作用一致，只不过文件后缀是让操作系统知道这是什么类型文件，MIME是让信息的接收方知道这是什么类型的文件。</p>
 <p>MIME在数据包中体现在了这一部分：content-type</p>
 <p>如<code>jpg</code>类型的文件在content-type这一栏是image/jpeg</p>
-<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20211028163015.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://raw.githubusercontent.com/2693993651/images/master/images/20211028163015.png" srcset="/img/loading.gif" lazyload></p>
 <p>而php类型的文件在这一栏是application/octet-stream</p>
-<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20211028162641.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://raw.githubusercontent.com/2693993651/images/master/images/20211028162641.png" srcset="/img/loading.gif" lazyload></p>
 <p>所以除了刚才修改文件后缀的方法，我们也可以通过修改content-type这一属性来实现文件上传。直接上传php文件，然后再把数据包中content-type改为jpg的对应形式，即image/jpeg。</p>
-<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/image-20211028181237168.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://raw.githubusercontent.com/2693993651/images/master/images/image-20211028181237168.png" srcset="/img/loading.gif" lazyload></p>
 <h3 id="3–黑名单之php3"><a href="#3–黑名单之php3" class="headerlink" title="3–黑名单之php3"></a>3–黑名单之php3</h3><p>这关在服务器端进行了黑名单限制，如果匹配到了黑名单中的文件类型就会拒绝本次上传。</p>
 <p>而黑名单最大的问题就是不全。我们的思路就是上传一个黑名单以外并包含php代码的文件，但又要使得我们访问该文时，该文件会被当作php文件类型解析。<code>php3</code>文件和<code>phtml</code>没有在黑名单中，而这两种文件往往也会被当作php文件来解析。</p>
-<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20211028183945.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://raw.githubusercontent.com/2693993651/images/master/images/20211028183945.png" srcset="/img/loading.gif" lazyload></p>
 <p>我们可以把后缀改为<code>php3</code>或是<code>phtml</code>上传，上传成功。</p>
 <p>但蚁剑却连接不了，说明php代码并没有生效，我们上传的文件很可能并没有被服务器当作php文件解析。</p>
 <p>这是因为apache服务器的配置文件（httpd_conf）中没有进行相关设置，所以解析不了。所以说这个漏洞属于是网站管理人员配置文件时的失误。</p>
-<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20211028204830.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://raw.githubusercontent.com/2693993651/images/master/images/20211028204830.png" srcset="/img/loading.gif" lazyload></p>
 <p>将配置文件中这一栏修改为</p>
-<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20211029204603.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://raw.githubusercontent.com/2693993651/images/master/images/20211029204603.png" srcset="/img/loading.gif" lazyload></p>
 <p>意思让服务器将<code>php3</code>类型的文件当作php类型来解析。</p>
-<h3 id="4–特殊文件之-htaccess配置文件"><a href="#4–特殊文件之-htaccess配置文件" class="headerlink" title="4–特殊文件之.htaccess配置文件"></a>4–特殊文件之.htaccess配置文件</h3><p>这关看提示，过滤了很多的文件类型。<img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20211028193733.png" srcset="/img/loading.gif" lazyload></p>
+<h3 id="4–特殊文件之-htaccess配置文件"><a href="#4–特殊文件之-htaccess配置文件" class="headerlink" title="4–特殊文件之.htaccess配置文件"></a>4–特殊文件之.htaccess配置文件</h3><p>这关看提示，过滤了很多的文件类型。<img src="https://raw.githubusercontent.com/2693993651/images/master/images/20211028193733.png" srcset="/img/loading.gif" lazyload></p>
 <p>但是没有过滤掉<code>.htaccess</code>。<strong>注意：当服务器是apache时才有作用</strong></p>
 <p><em><code>.htaccess</code>文件(或者”分布式配置文件”），全称是Hypertext Access(超文本入口)。提供了针对目录改变配置的方法， 即，在一个特定的文档目录中放置一个包含一个或多个指令的文件， 以作用于此目录及其所有子目录。<code>.htaccess</code>文件是Apache服务器中的一个配置文件，它负责相关目录下的网页配置。通过<code>.htaccess</code>文件，可以帮我们实现：网页301重定向、自定义404错误页面、改变文件扩展名、允许/阻止特定的用户或者目录的访问、禁止目录列表、配置默认文档等功能。</em></p>
 <p>我们就可以利用<code>.htaccess</code>文件的特性，上传一个具有目的性的<code>.htaccess</code>文件。创建一个txt文件，其内容如下，再将文件名改为.htaccess。</p>
@@ -289,62 +289,62 @@
 <p><strong>注意是文件名就为<code>.htaccess</code></strong></p>
 <p>这个文件的意思是让服务器将所有的文件都当作php文件来解析。</p>
 <p>这样的话我们上传一个包含php代码且类型不在黑名单中的就行了。（为了方便验证，所以上传的是包含phpinfo()函数的php文件）</p>
-<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20211030105921.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://raw.githubusercontent.com/2693993651/images/master/images/20211030105921.png" srcset="/img/loading.gif" lazyload></p>
 <p>可以看出访问.png类型的文件时，服务器依然按照php文件解析，证明我们成功了。</p>
 <p>另外上传<code>.htaccess</code>文件对这关配置文件<code>httpd_conf</code>文件也有要求，需要apache加载rewrite模块和允许重写。</p>
-<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20211030110424.png" srcset="/img/loading.gif" lazyload></p>
-<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20211030110509.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://raw.githubusercontent.com/2693993651/images/master/images/20211030110424.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://raw.githubusercontent.com/2693993651/images/master/images/20211030110509.png" srcset="/img/loading.gif" lazyload></p>
 <p>除了上传.htaccess之外，还可以针对apache的解析机制绕过黑名单的检测。</p>
 <p>Apache会将不认识的后缀，如muma.php.xxx.helloworld、test.php.iii等从右向左解析，不认识就往左移一个，最终移到php时apache认识了就会将该文件当作php文件来解析。</p>
 <p>所以我们还可以上传一个文件后缀为.php.xxxx的木马。</p>
-<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20211028210833.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://raw.githubusercontent.com/2693993651/images/master/images/20211028210833.png" srcset="/img/loading.gif" lazyload></p>
 <p>同时请注意：这需要前文中提到的配置文件<code>httpd_conf</code>中同样的地方，将最前面的#号注释符删去才会生效，如下图</p>
-<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20211029224135.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://raw.githubusercontent.com/2693993651/images/master/images/20211029224135.png" srcset="/img/loading.gif" lazyload></p>
 <h3 id="5–特殊文件之-user-ini配置文件"><a href="#5–特殊文件之-user-ini配置文件" class="headerlink" title="5–特殊文件之.user.ini配置文件"></a>5–特殊文件之.user.ini配置文件</h3><p>这关告诉了我们上传目录中存在着一个php文件以及该文件的名字。</p>
-<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20211030140412.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://raw.githubusercontent.com/2693993651/images/master/images/20211030140412.png" srcset="/img/loading.gif" lazyload></p>
 <p>我们可以上传.user.ini文件，其内容如下</p>
 <figure class="highlight angelscript"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs angelscript"><span class="hljs-built_in">auto</span>_prepend_file=info.jpg<br><span class="hljs-comment">//info.jpg是我们即将上传的包含php代码的文件</span><br></code></pre></div></td></tr></table></figure>
 
 <p>从名字大概可以看出这个<code>.user.ini</code>文件是个用户自定义的配置文件，和上一关的<code>.htaccess</code>好像有些像。他们的特点可以参考下面这篇文章<a target="_blank" rel="noopener" href="https://blog.csdn.net/since_2020/article/details/113781120?spm=1001.2101.3001.6650.2&utm_medium=distribute.pc_relevant.none-task-blog-2~default~CTRLIST~default-2.no_search_link&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2~default~CTRLIST~default-2.no_search_link">.htaccess文件和.user.ini文件_since_2020的博客-CSDN博客_user.ini是什么</a></p>
 <p>简单来说，可以借助<code>.user.ini</code>让所有php文件都“自动”包含某个文件，而这个文件可以是一个正常php文件，也可以是包含着php代码的非php文件。所以我们上传一个包含php代码的<code>jpg</code>文件，再访问站点中的一个php文件时，服务器在执行这个php文件时会自动包含并执行我们所上传的文件。（这和文件包含漏洞是类似的效果）而这个php文件即提示中的<code>readme.php</code>。</p>
-<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20211030150849.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://raw.githubusercontent.com/2693993651/images/master/images/20211030150849.png" srcset="/img/loading.gif" lazyload></p>
 <p>这样当我们访问某一个php文件时，自动执行了我们所上传的文件中的php代码。</p>
 <p>另外值得注意的是，这种配置文件好像是有缓存的。当我第一次上传<code>.user.ini</code>文件后，这个<code>.user.ini</code>文件中的内容会管用很长一段时间，哪怕我在服务器端删除了这个<code>.user.ini</code>或上传一个新的<code>.user.ini.</code>都不会立刻生效，还是原来的<code>.user.ini</code>在起作用。</p>
 <p>另外这一关我未能在低版本的环境中复现成功，也许是php或apache版本不对，也许是某个配置文件不对，总之换了一个环境才成功的。</p>
-<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20211030152156.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://raw.githubusercontent.com/2693993651/images/master/images/20211030152156.png" srcset="/img/loading.gif" lazyload></p>
 <h3 id="6–黑名单之大小写"><a href="#6–黑名单之大小写" class="headerlink" title="6–黑名单之大小写"></a>6–黑名单之大小写</h3><p>通常文件上传的源码中会有很多限制文件后缀的函数，经过这些限制再结合黑名单检测，就可能阻止恶意文件（如php类型）上传。</p>
 <p>黑名单需要全面考虑到才算安全，而全面考虑到几乎不可能，所谓智者千虑，必有一失。所以我们还要结合别的方式来防御，例如利用函数限制文件后缀。在这个靶场里即一些php自带的函数+作者创建的自定义函数。</p>
 <p>从第6关开始接下来几关都是源码文件中漏掉了一两个函数，针对这几个漏掉的函数，我们就可以来构造php后缀名进行绕过。</p>
 <p>先来看看一个较为全面的函数限制：</p>
-<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20211102210921.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://raw.githubusercontent.com/2693993651/images/master/images/20211102210921.png" srcset="/img/loading.gif" lazyload></p>
 <p>上面的步骤进行了以下操作：去除文件前后的空格，去除文件末尾的<code>.</code>，从右往左截取第一个.后面的字符串（截取文件的后缀），并将其转化为小写，去除字符串<code>::$data</code>，去除文件后的空格。</p>
-<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220124222954.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://raw.githubusercontent.com/2693993651/images/master/images/20220124222954.png" srcset="/img/loading.gif" lazyload></p>
 <p><strong>接着按照这里的源码规则，我们上传的文件后缀经过这些函数的转换，并通过黑名单检测以后作为新的后缀储存在服务器中。也就是说我们构造的文件后缀不仅需要通过黑名单检测，还需要使其转化后能被解析为php类型的文件，这与第8，10关不同，先在此强调以作对比</strong></p>
 <p>直接来看这几个限制的函数可能会有点奇怪，通过下面几个关卡我们就知道如果没有这些限制的话，我们就能采取哪些方法绕过了。所以大部分文件上传点都会写很多限制函数。</p>
 <p>至于第6关</p>
-<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20211106163644.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://raw.githubusercontent.com/2693993651/images/master/images/20211106163644.png" srcset="/img/loading.gif" lazyload></p>
 <p>这关黑名单黑名单忽略了大小写绕过，所以上传后缀为<code>Php</code>的就行了。</p>
-<h3 id="7–黑名单之空格"><a href="#7–黑名单之空格" class="headerlink" title="7–黑名单之空格"></a>7–黑名单之空格</h3><p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20211106164049.png" srcset="/img/loading.gif" lazyload></p>
+<h3 id="7–黑名单之空格"><a href="#7–黑名单之空格" class="headerlink" title="7–黑名单之空格"></a>7–黑名单之空格</h3><p><img src="https://raw.githubusercontent.com/2693993651/images/master/images/20211106164049.png" srcset="/img/loading.gif" lazyload></p>
 <p>因为没有去掉文件末尾的空格，这关可以采用添加空格绕过，上传后缀为<code>.php  </code>+一个空格即可，这样就匹配不到黑名单中的php了。同时该形式的文件在服务器上能被解析为php格式。</p>
-<h3 id="8–黑名单之忽略后缀型-（1）"><a href="#8–黑名单之忽略后缀型-（1）" class="headerlink" title="8–黑名单之忽略后缀型.（1）"></a>8–黑名单之忽略后缀型.（1）</h3><p>因为这里未用deldot函数来删除文件名末尾的点 ，我们可以上传<code>xx.php.</code>文件。截取的后缀为空，匹配不到黑名单。而如果按照前面几关的规则，我们上传的文件会被储存为<code>xx.</code>，因为我们的后缀变成了<code>.</code>。但是这关服务器在储存文件时与前面不同，这里是保留了原文件名（进行了一两步转化）进行储存，变成了<code>xx.php.</code>，我把这称为忽略后缀型的绕过黑名单，第十关也是这样。关于这点我将在第10关的部分详细展开。<img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220124223928.png" srcset="/img/loading.gif" lazyload></p>
+<h3 id="8–黑名单之忽略后缀型-（1）"><a href="#8–黑名单之忽略后缀型-（1）" class="headerlink" title="8–黑名单之忽略后缀型.（1）"></a>8–黑名单之忽略后缀型.（1）</h3><p>因为这里未用deldot函数来删除文件名末尾的点 ，我们可以上传<code>xx.php.</code>文件。截取的后缀为空，匹配不到黑名单。而如果按照前面几关的规则，我们上传的文件会被储存为<code>xx.</code>，因为我们的后缀变成了<code>.</code>。但是这关服务器在储存文件时与前面不同，这里是保留了原文件名（进行了一两步转化）进行储存，变成了<code>xx.php.</code>，我把这称为忽略后缀型的绕过黑名单，第十关也是这样。关于这点我将在第10关的部分详细展开。<img src="https://raw.githubusercontent.com/2693993651/images/master/images/20220124223928.png" srcset="/img/loading.gif" lazyload></p>
 <p>最后解析的时候利用了windows的特性，文件名最后的<code>.</code>会被忽略，所以<code>xx.php.</code>会被当作<code>xx.php</code>来解析。如果服务器是Linux的话就不会生效了。</p>
-<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20211106164737.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://raw.githubusercontent.com/2693993651/images/master/images/20211106164737.png" srcset="/img/loading.gif" lazyload></p>
 <p>另外这关依旧存在apache的解析漏洞，之前提到的</p>
-<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20211102210525.png" srcset="/img/loading.gif" lazyload></p>
-<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20211102210548.png" srcset="/img/loading.gif" lazyload></p>
-<h3 id="9–黑名单之windows特性-data"><a href="#9–黑名单之windows特性-data" class="headerlink" title="9–黑名单之windows特性::$data"></a>9–黑名单之windows特性::$data</h3><p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20211106165058.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://raw.githubusercontent.com/2693993651/images/master/images/20211102210525.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://raw.githubusercontent.com/2693993651/images/master/images/20211102210548.png" srcset="/img/loading.gif" lazyload></p>
+<h3 id="9–黑名单之windows特性-data"><a href="#9–黑名单之windows特性-data" class="headerlink" title="9–黑名单之windows特性::$data"></a>9–黑名单之windows特性::$data</h3><p><img src="https://raw.githubusercontent.com/2693993651/images/master/images/20211106165058.png" srcset="/img/loading.gif" lazyload></p>
 <p>这关在文件名后面加上<code>::$data</code>，构成<code>xx.php::$data</code>即可。（蚁剑连接的时候删掉后面的::$data)</p>
 <p>这同样是针对windos系统特性的方法。</p>
 <p>如果文件名+<code>&quot;::$DATA&quot;</code>会把<code>::$DATA</code>之后的数据当成文件流处理，不会检测后缀名，且保持<code>::$DATA</code>之前的文件名，这项操作的目的就是使windows主机不检查后缀名。</p>
-<h3 id="10–黑名单之忽略后缀型-（2）"><a href="#10–黑名单之忽略后缀型-（2）" class="headerlink" title="10–黑名单之忽略后缀型.（2）"></a>10–黑名单之忽略后缀型.（2）</h3><p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220124222313.png" srcset="/img/loading.gif" lazyload></p>
+<h3 id="10–黑名单之忽略后缀型-（2）"><a href="#10–黑名单之忽略后缀型-（2）" class="headerlink" title="10–黑名单之忽略后缀型.（2）"></a>10–黑名单之忽略后缀型.（2）</h3><p><img src="https://raw.githubusercontent.com/2693993651/images/master/images/20220124222313.png" srcset="/img/loading.gif" lazyload></p>
 <p>提醒：<strong>这部分我写的有点多，其实只要仔细分析源码就会明白了。</strong></p>
 <p>这关的限制函数可以说是最全面了，前面几关没有的函数它都有了，但我们可以针对源码构造<code>xx.php. .</code>绕过。</p>
 <p>根据源码，首先创建一个变量等于文件名<code>xx.php. .</code>，然后去除末尾的点，变为<code>xx.php.空格</code>再创建一个变量等于其从右往左第一个点后面的值，即为<code>.空格</code>，转为小写，不变，去除<code>::$DATA</code>，不变，去除空格，变为了<code>.</code>，这不会与黑名单中的<code>.xx</code>匹配。但显然这个结果<code>.</code>是不可能作为后缀使得文件解析成php的。</p>
 <p>因为如果按照前几关的源码，在服务中会被储存为<code>xx.</code>，整个后缀都没有了，连php字段都丢掉了。事实上在6、7和9关上传<code>xx.php. .</code>文件的确只会得到这个结果。</p>
 <p>而第十关不同点在这里：</p>
-<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220124223928.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://raw.githubusercontent.com/2693993651/images/master/images/20220124223928.png" srcset="/img/loading.gif" lazyload></p>
 <p>（顺便贴一下6、7和9关以作对比）</p>
-<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/image-20220124223950733.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://raw.githubusercontent.com/2693993651/images/master/images/image-20220124223950733.png" srcset="/img/loading.gif" lazyload></p>
 <p>区别就在$img_path，这也就是服务器储存的文件名。一个是上传路径+结合时间的随机数字+转化后的后缀（只体现了变量$file_ext的转化），一个是上传路径+原文件名（也就是只体现了变量 $file_name所经过的转化 ，不体现变量$file_ext的转化）</p>
 <p>也就是说对于第10关，网站的防御做了以下行为：</p>
 <p>去除文件名后空格，去除文件后面的点，经过这两步转化后的原文件名作为变量 <code>$file_name </code>，我们把这个变量放在一旁暂且不管。</p>
@@ -353,65 +353,65 @@
 <p>而6、7和9关中，我们所关心的后缀变成了转化后的<code>.</code>，所以拼接的时候是xxx+一个点，是没有后缀php的，也就解析不了。</p>
 <p>相比之下6、7和9在<code> $img_path</code> 这里的储存更为严格，生成一个新的文件名，使用通过黑名单检测的后缀来作为后缀储存，而第10关只要截取的后缀通过了黑名单检测，就直接使用整个原文件名（只经过了两步的转化）来储存。</p>
 <p>第10关就是利用这一点，构造出<code>xx.php. .</code>使得截取出一个假后缀<code>.</code>来通过黑名单检测，而其原文件名（经过一两步转化）又能被解析为php文件。</p>
-<h3 id="11–黑名单之双写"><a href="#11–黑名单之双写" class="headerlink" title="11–黑名单之双写"></a>11–黑名单之双写</h3><p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20211106174416.png" srcset="/img/loading.gif" lazyload></p>
+<h3 id="11–黑名单之双写"><a href="#11–黑名单之双写" class="headerlink" title="11–黑名单之双写"></a>11–黑名单之双写</h3><p><img src="https://raw.githubusercontent.com/2693993651/images/master/images/20211106174416.png" srcset="/img/loading.gif" lazyload></p>
 <p>上面函数的意思是，若文件后缀中带有$deny_ext数组中的值，则会被替换为空，构造<code>xx.pphphp. .</code>，双写绕过。</p>
 <p>可以看出这一个限制函数的出发点与之前不同，前面的关卡都是先用函数截取后缀，对你的文件后缀进行一些转化，然后进行黑名单匹配，如果匹配到了就拒绝上传，这里是没有用函数截取后缀，先直接对整个文件名（包括后缀）进行黑名单匹配，如果匹配到了就修改为空。（你都匹配到了为什么不直接拒绝上传啊🤔是怕误伤文件名带有php的嘛..）</p>
 <h3 id="12–-00截断之get类型"><a href="#12–-00截断之get类型" class="headerlink" title="12–%00截断之get类型"></a>12–%00截断之get类型</h3><p>先看源码，这关变成了白名单限制，先定义了白名单内容jpg，png，gif，然后截取文件名最后一个点后面的所有内容（截取文件后缀），接着用函数判断文件后缀是否在白名单中，符合条件即上传。</p>
-<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220111230241.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://raw.githubusercontent.com/2693993651/images/master/images/20220111230241.png" srcset="/img/loading.gif" lazyload></p>
 <p>突破的关键在于这一条语句:</p>
 <p><code> $img_path = $_GET[&#39;save_path&#39;].&quot;/&quot;.rand(10, 99).date(&quot;YmdHis&quot;).&quot;.&quot;.$file_ext;</code></p>
 <p>意思为将图片的储存地址设置为“save_path”+”/“+一个随机数+date+文件后缀。注意到这个”save_path”是用get方式请求得到的参数，结合这关的提示，我们可推测这关”save_path”即上传路径，且可以修改。即虽然我们无法在文件名上突破，但我们可以通过修改save_path这个参数来上传php文件。</p>
-<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220111233039.png" srcset="/img/loading.gif" lazyload></p>
-<p>在浏览器窗口中我们可以看到”save_path”的参数在这里<img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220125095622.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://raw.githubusercontent.com/2693993651/images/master/images/20220111233039.png" srcset="/img/loading.gif" lazyload></p>
+<p>在浏览器窗口中我们可以看到”save_path”的参数在这里<img src="https://raw.githubusercontent.com/2693993651/images/master/images/20220125095622.png" srcset="/img/loading.gif" lazyload></p>
 <p>在数据包中我们可以看到”save_path”的参数在这里</p>
-<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220111234431.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://raw.githubusercontent.com/2693993651/images/master/images/20220111234431.png" srcset="/img/loading.gif" lazyload></p>
 <p>这里就需要利用到文件上传中的一个技术——“%00”截断。</p>
 <p>需要注意的是，%00截断还有这两个要求；<br>（1）php版本必须小于5.3.4<br>（2）php的配置文件php-ini中，magic_quotes_gpc设置为Off</p>
 <p>如果我们将这个”save_path”改为<code>../upload/shell.php%00</code></p>
-<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220112002446.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://raw.githubusercontent.com/2693993651/images/master/images/20220112002446.png" srcset="/img/loading.gif" lazyload></p>
 <p>即可实现上传php文件。</p>
 <p>这项操作的原理就是，当拼接<code>save_path</code>与其它内容后，中间夹杂着<code>%00</code>，GET方式的<code>%00</code>会被服务器进行URL解码成<code>0x00</code>，而最后移动该文件储存时，会把其视为截止符，像汇编和c语言的规则一样。后面的内容被忽略，文件保留成xx.php。</p>
 <p>（下图即为源码中移动文件的代码）</p>
-<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220112000953.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://raw.githubusercontent.com/2693993651/images/master/images/20220112000953.png" srcset="/img/loading.gif" lazyload></p>
 <p>即save_path先被修改为<code>../upload/xx.php%00</code>，与其它东西拼接后形成了$img变量：<code>/upload/xx.php%00</code>+一段函数生成的数字（用来拼接的东西），而最后移动文件到该路径时，该路径被当作了：<code>/upload/xx.php</code>，%00后面的内容被忽略，最终我们成功上传的文件路径为<code>xx.php</code>，达成目的。</p>
 <p>(可以看到文件最终被储存为了a.php)</p>
-<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220112002011.png" srcset="/img/loading.gif" lazyload></p>
-<h3 id="13–-00截断之post类型"><a href="#13–-00截断之post类型" class="headerlink" title="13–%00截断之post类型"></a>13–%00截断之post类型</h3><p>这关我们的目的仍是在<code>save_path</code>，加上一个<code>0x00</code>。这关与第12关的区别就是<code>save_path</code>这个参数是用post类型来请求的，get与post一大区别就是浏览器会对get请求的数据进行url解码，而对post类型的数据不会。因为get类型的自动解码我们上传的是%00，而在上传post类型时我们添加的%00需要进行手动url解码，或是在二进制中进行修改<img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220125104533.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://raw.githubusercontent.com/2693993651/images/master/images/20220112002011.png" srcset="/img/loading.gif" lazyload></p>
+<h3 id="13–-00截断之post类型"><a href="#13–-00截断之post类型" class="headerlink" title="13–%00截断之post类型"></a>13–%00截断之post类型</h3><p>这关我们的目的仍是在<code>save_path</code>，加上一个<code>0x00</code>。这关与第12关的区别就是<code>save_path</code>这个参数是用post类型来请求的，get与post一大区别就是浏览器会对get请求的数据进行url解码，而对post类型的数据不会。因为get类型的自动解码我们上传的是%00，而在上传post类型时我们添加的%00需要进行手动url解码，或是在二进制中进行修改<img src="https://raw.githubusercontent.com/2693993651/images/master/images/20220125104533.png" srcset="/img/loading.gif" lazyload></p>
 <p>下面展示的是在数据包中对<code>save_path</code>后添加截断符</p>
-<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220125102524.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://raw.githubusercontent.com/2693993651/images/master/images/20220125102524.png" srcset="/img/loading.gif" lazyload></p>
 <p>先添加%00，接着选中%00然后对其进行url解码</p>
-<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220125102613.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://raw.githubusercontent.com/2693993651/images/master/images/20220125102613.png" srcset="/img/loading.gif" lazyload></p>
 <p>得到的<code>0x00</code>字符不会显示出来</p>
 <p>上传成功后我们复制图片链接地址会得到这样的数据</p>
 <p><code>http://192.168.111.145/upload-labs-master/upload/eggs.php%EF%BF%BD/6820220125102724.jpg</code></p>
 <p>其中<code>%EF%BF%BD</code>URL编码后的结果，后面的数字是源码中拼接文件路径时添加的内容。事实上,在这里我们上传的文件在服务器被储存为了<code>egg.php</code>，其之后的内容被截断了。用蚁剑链接时也是去掉后面的内容即可。</p>
-<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220125103453.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://raw.githubusercontent.com/2693993651/images/master/images/20220125103453.png" srcset="/img/loading.gif" lazyload></p>
 <h3 id="14–图片马之文件头检查"><a href="#14–图片马之文件头检查" class="headerlink" title="14–图片马之文件头检查"></a>14–图片马之文件头检查</h3><p>在14~17关中，我们通关上传图片马来达到上传木马文件的目的。与之前的不同，虽然关卡一直要求我们上传图片文件，但之前我们本质都是上传的包含木马的php文件，可以直接被服务器当作php代码执行的php文件。</p>
 <p>而这里我们上传的是“具有图片格式”的图片，是不能直接被服务器当作php代码执行的。所以当我们上传了图片马后往往还需要利用另一个漏洞——文件包含漏洞，在作者所强调的第二点这里可以看到。</p>
-<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220208154545.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://raw.githubusercontent.com/2693993651/images/master/images/20220208154545.png" srcset="/img/loading.gif" lazyload></p>
 <p>文件包含漏洞：被<code>include</code> 和<code>require </code>函数引用的文件会被当作php文件来执行，当该文件含有恶意代码时即可造成危险。所以当我们成功上传了包含php代码的图片时，可以利用这个漏洞来执行。下面是这关中关于该漏洞的代码部分。</p>
-<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220208154652.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://raw.githubusercontent.com/2693993651/images/master/images/20220208154652.png" srcset="/img/loading.gif" lazyload></p>
 <p>本关源码</p>
-<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220217090345.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://raw.githubusercontent.com/2693993651/images/master/images/20220217090345.png" srcset="/img/loading.gif" lazyload></p>
 <p>代码检查了文件的的前两个字节，现对数据包作如下修改：</p>
-<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220217091657.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://raw.githubusercontent.com/2693993651/images/master/images/20220217091657.png" srcset="/img/loading.gif" lazyload></p>
 <p>在这里添加gif98a,使其判断为gif文件。这样我们就成功在服务器端上传了一个gif类型的包含php代码的文件。</p>
 <p>然后是我们利用文件包含漏洞的步骤：复制图片链接，然后根据指示跳转到文件包含漏洞界面，通过源码得知参数为<code>file</code>，在该页面url<code>.../include.php</code>处添加图片地址，根据其相对文件路径保留只upload后面的部分。完整url:<code>192.168.191.129/upload-labs-master/include.php?file=upload/2220220330210320.png</code>，用蚁剑连接时也用这个地址</p>
-<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220330210431.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://raw.githubusercontent.com/2693993651/images/master/images/20220330210431.png" srcset="/img/loading.gif" lazyload></p>
 <p>下面是上传phpinfo()函数的实验结果。</p>
-<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220217083359.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://raw.githubusercontent.com/2693993651/images/master/images/20220217083359.png" srcset="/img/loading.gif" lazyload></p>
 <p>下面是另一种方法，利用cmd命令把php指令和一张常规图片合成一张新的图片，自然就得到了包含php木马的图片文件，检查文件头时符合要求，被当作php代码执行时也能发挥作用。</p>
 <p>制作图片马：cmd cd /d切换工作目录到 进入图片所在路径</p>
 <p>输入指令<code>copy egg.jpg/b+shell.php/a shell.jpg</code></p>
-<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220217073313.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://raw.githubusercontent.com/2693993651/images/master/images/20220217073313.png" srcset="/img/loading.gif" lazyload></p>
 <p>有时新生成的图片能够正常打开而有时不能，经过我的测试这里中能正常打开的图片似乎不能使其中的php代码发挥作用。不过我看到别人的博客中是成功了的。我个人猜测可能是因为新生成的图片虽然包含了完整的php代码，但原本图片的数据残留使得php语法产生冲突导致php代码无法生效。</p>
 <p>另外经过我的测试，执行<code> copy  x + y z</code>这个命令时，x如果是图片则z可以作为图片打开，y如果是图片则z不能作为图片打开。</p>
 <p>其中/b是指以二进制方式打开，/a是以ascii方式打开，shell.jpg即为生成的图片马，在这张图片中藏有php代码，如果将该文件当作php代码执行即可实现其后门作用。</p>
 <p>（也可以上传正常图片，同时用burpsuite抓包后直接在数据后添加php代码，这样也是在服务器端上传了一个包含php代码的图片马，此方法不再赘述。）</p>
 <h3 id="15–图片马之getimagesize"><a href="#15–图片马之getimagesize" class="headerlink" title="15–图片马之getimagesize()"></a>15–图片马之getimagesize()</h3><p>这关提示我们使用了<code>getimagesize()</code>来检查是否是图片。<code>getimagesize()</code>的作用是读取目标图片的大小。即我们上传的图片需要具有图片“大小”的这个属性。而上一关中用cmd合成图片马可以得到正常打开的图片，即具备这样的属性。但就像上一关末尾我提到的一样，我个人尝试后一直不行。结合我之前的猜想，也许因为图片太复杂导致合成的图片数据太多影响php代码的生效。于是我截了个像素为60×60的图，以此代替之前的caat.jpg来作为合成图片木马的素材。·下面是两图属性对比。</p>
-<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220219233420.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://raw.githubusercontent.com/2693993651/images/master/images/20220219233420.png" srcset="/img/loading.gif" lazyload></p>
 <p>重复之前的步骤，即合成，上传，访问漏洞页面</p>
-<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220219233517.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://raw.githubusercontent.com/2693993651/images/master/images/20220219233517.png" srcset="/img/loading.gif" lazyload></p>
 <p>竟然成功了。</p>
 <h3 id="16–图片马之exif-imagetype"><a href="#16–图片马之exif-imagetype" class="headerlink" title="16–图片马之exif_imagetype()"></a>16–图片马之exif_imagetype()</h3><p>这关提示我们使用了exif_imagetype()函数来检查图片，该函数读取图像的第一个字节并检查其签名，用于确定图片类型。同样可以利用前文提到的cmd合成的图片马。根据前几次的经验，我总结出<strong>在cmd窗口使用copy命令合成图片时,前一位为图片且图片像素不宜过高。</strong></p>
 <p>另外这关需要先在php配置文件（php.ini）中开启有关php_exif的设置。</p>
@@ -420,11 +420,11 @@
 <p>详细步骤：</p>
 <p>上传GIF图片，并再下载上传后的图片。</p>
 <p>然后用16进制编辑器打开这两张图片(我这里用的是winhex)，找到一片数据相同处</p>
-<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220223214931.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://raw.githubusercontent.com/2693993651/images/master/images/20220223214931.png" srcset="/img/loading.gif" lazyload></p>
 <p>将php代码插在中间</p>
-<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220223215711.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://raw.githubusercontent.com/2693993651/images/master/images/20220223215711.png" srcset="/img/loading.gif" lazyload></p>
 <p>重新上传，验证</p>
-<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220223215759.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://raw.githubusercontent.com/2693993651/images/master/images/20220223215759.png" srcset="/img/loading.gif" lazyload></p>
 <p>而png和jpg的有些复杂，不过都可以利用别人写好的脚本来实现绕过，详见：<a target="_blank" rel="noopener" href="https://xz.aliyun.com/t/2657">upload-labs之pass 16详细分析 - 先知社区 (aliyun.com)</a></p>
 <p><em>PNG定义了两种类型的数据块，一种是称为关键数据块(critical chunk)，这是标准的数据块，另一种叫做辅助数据块(ancillary chunks)，这是可选的数据块。关键数据块定义了3个标准数据块(IHDR,IDAT, IEND)，每个PNG文件都必须包含它们。</em></p>
 <p><em>IDAT:<br>图像数据块IDAT(image data chunk)：它存储实际的数据，在数据流中可包含多个连续顺序的图像数据块。<br>IDAT存放着图像真正的数据信息，因此，如果能够了解IDAT的结构，我们就可以很方便的生成PNG图像</em></p>
@@ -437,75 +437,75 @@
 <h3 id="18–条件竞争-1"><a href="#18–条件竞争-1" class="headerlink" title="18–条件竞争(1)"></a>18–条件竞争(1)</h3><p>所谓条件竞争漏洞，是一种服务器端的漏洞，由于服务器端在处理不同的请求时是并发进行的，因此如果并发处理不当或相关操作顺序设计的不合理时，将会导致此类问题的发生。</p>
 <p>参考：<a target="_blank" rel="noopener" href="http://www.javashuo.com/article/p-shhvqipp-kb.html">http://www.javashuo.com/article/p-shhvqipp-kb.html</a></p>
 <p>18关源码</p>
-<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220221210214.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://raw.githubusercontent.com/2693993651/images/master/images/20220221210214.png" srcset="/img/loading.gif" lazyload></p>
 <p>从源码可以看出，在上传图片后，该图片会直接先在服务器端储存，接着再进行检查，如果不符合条件则再删除该图片。那么我们只需要再服务器储存木马文件后，在其被删除之前访问即可触发php代码的执行。若是我们上传的php的功能是创建另一个php木马文件，那我们成功访问该文件后，就会生成一个一句话木马，以此来获得<code>webshell</code>。<strong>用多个线程上传文件，同时用多个线程访问上传后的文件，这样就存在竞争，就有可能在删除以前执行我们上传的文件。</strong></p>
 <p>具体操作如下：</p>
 <p>先上传包含如下代码的php文件，同时用bp抓取该数据包</p>
 <figure class="highlight php"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs php"><span class="hljs-meta">&lt;?php</span><br><span class="hljs-variable">$f</span>=fopen(<span class="hljs-string">&quot;info.php&quot;</span>,<span class="hljs-string">&quot;w&quot;</span>);<br>fputs(<span class="hljs-variable">$f</span>,<span class="hljs-string">&#x27;&lt;?php phpinfo(); ?&gt;&#x27;</span>);<br><span class="hljs-meta">?&gt;</span><br><span class="hljs-comment">//该代码功能为创建一个名为info.php的文件，该文件包含了phpinfo()函数</span><br></code></pre></div></td></tr></table></figure>
 
 <p>把该数据包放到<code>intruder</code>模块</p>
-<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220220162747.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://raw.githubusercontent.com/2693993651/images/master/images/20220220162747.png" srcset="/img/loading.gif" lazyload></p>
 <p>然后清除所有变量，设置相关payload，因为我们不需要爆破某个参数，只需要不停发包即可。</p>
-<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220220163030.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://raw.githubusercontent.com/2693993651/images/master/images/20220220163030.png" srcset="/img/loading.gif" lazyload></p>
 <p>然后点击<code>start attack</code></p>
 <p>同时抓取访问该php文件的数据包，重复上述步骤，这样即形成了不停上传php文件又不停地访问该php文件的动作，就有机会在该文件删除前访问并执行一次php代码，达成创建php木马的目的</p>
 <p>也可以只用bp发送上传的数据包，重新用另一个浏览器手动访问该文件，不停刷新即可，实际上我就是这样才成功的，同时用bp发送这两个数据包反而都没用成功。</p>
-<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220220165421.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://raw.githubusercontent.com/2693993651/images/master/images/20220220165421.png" srcset="/img/loading.gif" lazyload></p>
 <p>不停访问我们上传的php文件直至成功。</p>
 <p>此时服务器已执行了我们的php代码，创建了<code>info.php</code>文件</p>
-<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220220165505.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://raw.githubusercontent.com/2693993651/images/master/images/20220220165505.png" srcset="/img/loading.gif" lazyload></p>
 <p>成功访问<code>info.php</code></p>
 <h3 id="19–条件竞争-2"><a href="#19–条件竞争-2" class="headerlink" title="19–条件竞争(2)"></a>19–条件竞争(2)</h3><p>注意：这关的文件上传路径有点问题，上传的文件会上传到网站根目录。建议按以下方式修改19关文件夹中的<code>myuoload.php</code>，重启服务后生效。</p>
-<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220227141931.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://raw.githubusercontent.com/2693993651/images/master/images/20220227141931.png" srcset="/img/loading.gif" lazyload></p>
 <p>19关源码关键处</p>
-<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220227141420.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://raw.githubusercontent.com/2693993651/images/master/images/20220227141420.png" srcset="/img/loading.gif" lazyload></p>
 <p>这关上传文件后，会先对文件进行一系列检查。接着储存文件，然后对文件重命名。</p>
 <p>另外我看到网上很多教程说上传图片马然后利用文件包含漏洞…然而我个人认为这跟条件竞争一点关系都没有，只是重复了前面卡的步骤。<strong>我个人认为下图的过关方法是错误的</strong></p>
-<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220227144546.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://raw.githubusercontent.com/2693993651/images/master/images/20220227144546.png" srcset="/img/loading.gif" lazyload></p>
 <p>网上许多关于这关的教程都是这样。首先这关没有说能使用文件包含漏洞，其次是上传图片马也只需要发包一次就行了，服务器也不会拦截，重命名对原本就是<code>jpg</code>形式的图片马也没有任何影响。这关本意应该是条件竞争，即在文件重命名前访问该文件。</p>
 <p>思路仍然应该是不停上传<code>php</code>文件，然后在其被重命名为前访问该文件使其php代码生效。</p>
 <p>该<code>php</code>文件同上一关，原理不再赘述。</p>
 <p>这关的问题是上传后缀为php的文件的话会被拦截。我们只能根据白名单上传白名单内的文件，但又需要我们访问该文件时服务器能把其当作<code>php</code>文件解析。</p>
-<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220227145820.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://raw.githubusercontent.com/2693993651/images/master/images/20220227145820.png" srcset="/img/loading.gif" lazyload></p>
 <p>这里就利用了之前用到过的apache解析漏洞(需要注意修改配置文件<code>httpd_conf</code>)</p>
-<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220227150807.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://raw.githubusercontent.com/2693993651/images/master/images/20220227150807.png" srcset="/img/loading.gif" lazyload></p>
 <p>因为apache不能解析白名单中的<code>7z</code>，所以我们可以上传<code>xx.php.7z</code>,该文件能成功上传，同时我们需要在其被重命名前访问一次。如果我们在其重命名前访问到了该文件，那么该文件会按php解析，执行php代码后产生一个新的php后门文件。</p>
 <p>我本意觉得如果不停发送上传数据包的话我的虚拟机可能会被上传的大量文件弄得很卡，于是先尝试用bp不停重复发送访问该文件的数据包，同时手动上传一次这个文件，结果没能成功。</p>
 <p>所以接下来我还是发送大量上传数据包，同时不停刷新浏览器来尝试访问该文件。</p>
-<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220227155738.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://raw.githubusercontent.com/2693993651/images/master/images/20220227155738.png" srcset="/img/loading.gif" lazyload></p>
 <p>最终成功执行了一次php代码，服务器生成了另一个新的php文件。同时也看到了一个原上传文件。这是因为我们成功访该文件使其被占用，暂时不能进行重命名。</p>
-<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220227155931.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://raw.githubusercontent.com/2693993651/images/master/images/20220227155931.png" srcset="/img/loading.gif" lazyload></p>
 <p>当我们停止访问，原上传文件被删除。</p>
-<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220227160322.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://raw.githubusercontent.com/2693993651/images/master/images/20220227160322.png" srcset="/img/loading.gif" lazyload></p>
 <p>最后访问…/info.php验证,成功。</p>
 <h3 id="20–多种方法"><a href="#20–多种方法" class="headerlink" title="20–多种方法"></a>20–多种方法</h3><p>个人觉得这关用来总结和复习很适合,因为漏洞似乎都是前面遇到过的，仔细看源码，就能发现。</p>
-<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220221224321.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://raw.githubusercontent.com/2693993651/images/master/images/20220221224321.png" srcset="/img/loading.gif" lazyload></p>
 <p>大致思路是抓取数据包，修改<code>save_name</code>这个参数。</p>
 <p>从正常角度来想，怎么也要重点关注<code>save_name</code>这个参数。可发现<code>save_name</code>用来拼接其它参数，来得到一串地址，再把该文件移动到该地址处。这就与之前的上传路径可控时用的<code>%00</code>截断是一个情况，所以此处也可以使用该方法。注意需php版本小于5.3。</p>
 <p>另一个容易注意到的是这关使用了<code>parhinfo</code>函数来截取文件后缀后，直接进行黑名单匹配。而我们之前所做过的黑名单匹配的关卡中，在截取了后缀之后都有好几个检查的函数，用来去除空格，点，全转小写等等，这样才来匹配黑名单。所以我们可以针对黑名单漏洞还可以上传后缀为php，后缀加<code>.</code>，后缀加空格，加<code>::$data</code>等方法来绕过。</p>
 <h3 id="21–ctf题型数组绕过"><a href="#21–ctf题型数组绕过" class="headerlink" title="21–ctf题型数组绕过"></a>21–ctf题型数组绕过</h3><p>先看源码</p>
-<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220227172326.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://raw.githubusercontent.com/2693993651/images/master/images/20220227172326.png" srcset="/img/loading.gif" lazyload></p>
 <p>可以看到有个检查MIME，这是第二关的内容，很容易绕过。</p>
 <p>接下来是很多个新函数，网上搜一下便可知道作用是什么。这里源码也不复杂，一定要读懂源码。</p>
 <p>从源码上看，若我们上传的文件名不是数组的形式，则会被<code>.</code>分成数组的形式。比如说正常情况下，用户上传了<code>cat.jpg</code>格式的文件，这里<code>.</code>前面的<code>cat</code>作为一个数组的第一个元素,<code>.</code>分割的<code>jpg</code>作为数组第二个元素。关于文件的最终命名形式的代码在这一行：</p>
-<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220227173442.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://raw.githubusercontent.com/2693993651/images/master/images/20220227173442.png" srcset="/img/loading.gif" lazyload></p>
 <p>意思为得到该数组的第一个元素+<code>.</code>+该数组下标为（元素个数-1）的元素（正常情况下即最后一个元素），以此作为文件名来储存。</p>
 <p>最开始我想尝试%00截断，因为涉及到了文件路径移动，并且其拼接参数可控，但最终无果。因为这里拼接的方式是取一头一尾，所以类似<code>xx.php%00.jpg</code>的形式的文件名会被分成三个元素，再去除头尾拼接，变为<code>xx.jpg</code>，没有作用。</p>
 <p>同理想构造特殊的文件名来绕过也不行，必须保证结尾是<code>.jpg</code>来通过白名单，但最终拼接的时候也是取这个结尾来形成文件后缀。</p>
 <p>这关的突破点在下图中</p>
-<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220227174558.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://raw.githubusercontent.com/2693993651/images/master/images/20220227174558.png" srcset="/img/loading.gif" lazyload></p>
 <p>首先是如果上传的文件名就是数组的形式的话，那么我们的这个数组的元素形式就不一定要按照每一个<code>.</code>来分元素，变数就多了。</p>
 <p>其次是源码中两次取数组中最后一个元素的操作不同。一个是用了函数<code>end()</code>,一个是用了函数<code>count()</code>。<code>end()</code>返回数组中最后一个元素，而<code>count()</code>是返回数组元素的个数。这里是通过返回值-1取下标来得到最后一个元素。正常情况下效果是一样的，但这么多花费些功夫，也许其中就藏有玄机。</p>
 <p>以下为破解过程(MIME部分略)：</p>
 <p>在上传文件的数据包中复制一份有关接收<code>save_name</code>参数的数据，并在其后分别加上下标<code>[0]</code>和<code>[2]</code></p>
 <p>并在第一段后设置文件名为<code>xx.php</code>,第二段后设置为<code>jpg</code>。</p>
-<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220227192902.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://raw.githubusercontent.com/2693993651/images/master/images/20220227192902.png" srcset="/img/loading.gif" lazyload></p>
 <p>这样做的目的是使得我们的文件名变成了<code>info.php</code>+<code>空</code>+<code>.jpg</code></p>
 <p>所以<code>reset($file)</code>返回值为<code>info.php</code>，<code>end($file)</code>获取的是<code>.jpg</code>，能够通过白名单，而<code>count($file)</code>返回的值是2，<code>$file[(count)-1]</code></p>
 <p>返回的值是<code>$file[1]</code>，即为空。</p>
 <p>所以最后的<code>$file_name</code>拼接后变成了<code>info.php.</code>，根据Windows特性末尾的<code>.</code>被忽略，解析时被当作php文件处理。</p>
 <p>上传成功，复制图片地址访问，成功解析。</p>
-<p><img src="https://gitee.com/manyeggs/drawing-bed-picgo/raw/master/images/20220227191647.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://raw.githubusercontent.com/2693993651/images/master/images/20220227191647.png" srcset="/img/loading.gif" lazyload></p>
 <hr>
 <p>完结 : )🐣</p>
 
